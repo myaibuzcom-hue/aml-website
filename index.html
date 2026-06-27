@@ -455,10 +455,10 @@
 
   <!-- Scripts -->
   <script>
-    // --- Supabase Initialization ---
+    // --- Supabase Initialization (FIXED: renamed variable) ---
     const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // --- Mobile Menu ---
     (function() {
@@ -602,7 +602,6 @@
           return;
         }
 
-        // Gather form data
         const applicationData = {
           first_name: document.getElementById('firstName').value.trim(),
           last_name: document.getElementById('lastName').value.trim(),
@@ -613,12 +612,11 @@
           purpose: document.getElementById('purpose').value.trim() || null
         };
 
-        // Disable button to prevent double submission
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
-        // Insert into Supabase
-        const { data, error } = await supabase
+        // Fixed: use supabaseClient instead of supabase
+        const { data, error } = await supabaseClient
           .from('applications')
           .insert([applicationData]);
 
@@ -631,14 +629,12 @@
           return;
         }
 
-        // Success
         modalOverlay.style.display = 'block';
         successModal.style.display = 'block';
         form.reset();
         form.querySelectorAll('.form-group').forEach(group => group.classList.remove('error'));
       });
 
-      // Close modal
       closeModalBtn.addEventListener('click', () => {
         modalOverlay.style.display = 'none';
         successModal.style.display = 'none';
