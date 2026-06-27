@@ -196,7 +196,7 @@
     .badge-approved { background: #d4edda; color: #155724; }
     .badge-rejected { background: #f8d7da; color: #721c24; }
 
-    /* Client Portal (new) */
+    /* Client Portal */
     .client-portal-container { max-width: 500px; margin: 0 auto; background: var(--white); border-radius: 16px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; text-align: center; }
     .client-result { margin-top: 2rem; text-align: left; background: var(--gray-light); padding: 1.5rem; border-radius: 12px; display: none; }
     .client-result p { margin-bottom: 0.5rem; }
@@ -406,12 +406,12 @@
       </div>
     </section>
 
-    <!-- Client Portal (New) -->
+    <!-- Client Portal -->
     <section class="section" id="status" style="background: var(--gray-light);">
       <div class="container">
         <div class="section-title">
           <h2>Check Your <span class="gold-text">Application Status</span></h2>
-          <p>Enter your email and application ID to see your current status.</p>
+          <p>Enter your email and the reference number you received after applying.</p>
         </div>
         <div class="client-portal-container">
           <form id="statusForm" onsubmit="return false;">
@@ -420,8 +420,8 @@
               <input type="email" id="statusEmail" required>
             </div>
             <div class="form-group">
-              <label for="statusId">Application ID *</label>
-              <input type="number" id="statusId" required placeholder="e.g., 1">
+              <label for="statusRef">Reference Number *</label>
+              <input type="text" id="statusRef" required placeholder="e.g., AML-ABC123">
             </div>
             <button type="submit" class="btn" style="width:100%;">Check Status</button>
           </form>
@@ -561,7 +561,8 @@
   <div class="success-modal" id="successModal">
     <i class="fas fa-check-circle"></i>
     <h3>Application Submitted!</h3>
-    <p>Thank you for your application. Your Application ID is: <strong id="applicationIdDisplay"></strong>. Please save it to check your status later.</p>
+    <p>Your reference number: <strong id="applicationRefDisplay"></strong></p>
+    <p style="font-size:0.9rem;">Keep this number to check your application status.</p>
     <button class="btn" id="closeModalBtn">Close</button>
   </div>
 
@@ -585,6 +586,16 @@
     const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // --- Helper to generate a secure random reference ---
+    function generateRef() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = 'AML-';
+      for (let i = 0; i < 6; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
 
     // --- Mobile Menu ---
     (function() {
@@ -657,7 +668,7 @@
       const successModal = document.getElementById('successModal');
       const closeModalBtn = document.getElementById('closeModalBtn');
       const submitBtn = document.getElementById('submitBtn');
-      const applicationIdDisplay = document.getElementById('applicationIdDisplay');
+      const applicationRefDisplay = document.getElementById('applicationRefDisplay');
 
       function showError(input, message) {
         const formGroup = input.closest('.form-group');
@@ -714,6 +725,8 @@
           if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
           return;
         }
+
+        const newRef = generateRef();
         const applicationData = {
           first_name: document.getElementById('firstName').value.trim(),
           last_name: document.getElementById('lastName').value.trim(),
@@ -721,19 +734,25 @@
           phone: document.getElementById('phone').value.trim(),
           loan_type: document.getElementById('loanType').value,
           requested_amount: parseFloat(document.getElementById('requestedAmount').value),
-          purpose: document.getElementById('purpose').value.trim() || null
+          purpose: document.getElementById('purpose').value.trim() || null,
+          application_ref: newRef
         };
+
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-        const { data, error } = await supabaseClient.from('applications').insert([applicationData]).select('id');
+
+        const { error } = await supabaseClient.from('applications').insert([applicationData]);
+
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+
         if (error) {
           alert('Something went wrong. Please try again later.');
+          console.error('Insert error:', error);
           return;
         }
-        const newId = data[0].id;
-        applicationIdDisplay.textContent = newId;
+
+        applicationRefDisplay.textContent = newRef;
         modalOverlay.style.display = 'block';
         successModal.style.display = 'block';
         form.reset();
@@ -873,7 +892,7 @@
       checkSession();
     })();
 
-    // --- Client Portal ---
+    // --- Client Portal (using RPC) ---
     (function() {
       const statusForm = document.getElementById('statusForm');
       const statusError = document.getElementById('statusError');
@@ -887,36 +906,34 @@
       statusForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('statusEmail').value.trim();
-        const id = parseInt(document.getElementById('statusId').value);
+        const ref = document.getElementById('statusRef').value.trim();
         clientResult.style.display = 'none';
         statusError.style.display = 'none';
 
-        if (!email || !id) {
+        if (!email || !ref) {
           statusError.textContent = 'Please fill in both fields.';
           statusError.style.display = 'block';
           return;
         }
 
-        const { data, error } = await supabaseClient
-          .from('applications')
-          .select('*')
-          .eq('id', id)
-          .eq('email', email)
-          .single();
+        const { data, error } = await supabaseClient.rpc('check_application_status', {
+          p_email: email,
+          p_ref: ref
+        });
 
-        if (error || !data) {
-          statusError.textContent = 'Application not found. Check your email and Application ID.';
+        if (error || !data || data.length === 0) {
+          statusError.textContent = 'Application not found. Check your email and reference number.';
           statusError.style.display = 'block';
           return;
         }
 
-        clientName.textContent = `${data.first_name} ${data.last_name}`;
-        clientLoanType.textContent = data.loan_type;
-        clientAmount.textContent = `$${parseFloat(data.requested_amount).toLocaleString()}`;
-        clientStatus.textContent = data.status;
-        clientDate.textContent = new Date(data.created_at).toLocaleDateString();
+        const app = data[0];
+        clientName.textContent = `${app.first_name} ${app.last_name}`;
+        clientLoanType.textContent = app.loan_type;
+        clientAmount.textContent = `$${parseFloat(app.requested_amount).toLocaleString()}`;
+        clientStatus.textContent = app.status;
+        clientDate.textContent = new Date(app.created_at).toLocaleDateString();
         clientResult.style.display = 'block';
-        statusError.style.display = 'none';
       });
     })();
   </script>
