@@ -65,6 +65,13 @@
     .btn:hover { background-color: #d4b05d; transform: translateY(-1px); }
     .btn-outline { background-color: transparent; border: 2px solid var(--gold); color: var(--gold); }
     .btn-outline:hover { background-color: var(--gold); color: var(--dark); }
+    .btn-sm { padding: 0.4rem 1rem; font-size: 0.85rem; }
+    .btn-success { background-color: var(--green); color: white; }
+    .btn-success:hover { background-color: #1c9e7e; }
+    .btn-danger { background-color: #e74c3c; color: white; }
+    .btn-danger:hover { background-color: #c0392b; }
+    .btn-gray { background-color: #bdc3c7; color: var(--dark); }
+    .btn-gray:hover { background-color: #a0aab5; }
 
     /* Header */
     .site-header {
@@ -149,6 +156,8 @@
     .error-message { color: #e74c3c; font-size: 0.85rem; margin-top: 0.25rem; display: none; }
     .form-group.error input, .form-group.error select, .form-group.error textarea { border-color: #e74c3c; }
     .form-group.error .error-message { display: block; }
+
+    /* Success Modal */
     .success-modal {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
       background: var(--white); border-radius: 16px; padding: 3rem; text-align: center;
@@ -157,6 +166,36 @@
     .success-modal h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
     .success-modal i { font-size: 3rem; color: var(--green); margin-bottom: 1rem; }
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1999; display: none; }
+
+    /* Admin Login Modal */
+    .login-modal {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: var(--white); border-radius: 16px; padding: 3rem; width: 90%; max-width: 400px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.2); z-index: 2000; display: none;
+    }
+    .login-modal h3 { font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center; }
+    .login-modal input { width: 100%; padding: 0.75rem 1rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 6px; font-family: var(--font-body); }
+
+    /* Admin Dashboard */
+    #adminDashboard { display: none; padding: 2rem 0; background: var(--gray-light); min-height: 80vh; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .admin-header h2 { font-size: 2rem; }
+    .admin-controls { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .admin-controls input, .admin-controls select {
+      padding: 0.6rem 1rem; border: 1px solid #e2e8f0; border-radius: 6px;
+      font-family: var(--font-body); font-size: 0.9rem;
+    }
+    .admin-controls input { flex: 1; min-width: 200px; }
+    .app-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .app-table th, .app-table td { padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    .app-table th { background: var(--dark); color: white; font-family: var(--font-heading); font-weight: 500; }
+    .app-table tr:hover { background: #f8fafc; }
+    .badge {
+      padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+    }
+    .badge-pending { background: #fff3cd; color: #856404; }
+    .badge-approved { background: #d4edda; color: #155724; }
+    .badge-rejected { background: #f8d7da; color: #721c24; }
 
     /* About, Testimonials, FAQ, Contact */
     .about-flex { display: flex; align-items: center; gap: 3rem; flex-wrap: wrap; }
@@ -199,6 +238,7 @@
       .hero-buttons .btn { width: 80%; justify-content: center; }
       .calculator-container, .application-container { padding: 1.5rem; }
       .result-item .value { font-size: 1.4rem; }
+      .admin-controls { flex-direction: column; }
     }
     @media (max-width: 480px) {
       .container { padding: 0 1rem; }
@@ -231,7 +271,7 @@
   </header>
   <div class="menu-overlay" id="menuOverlay"></div>
 
-  <main>
+  <main id="mainContent">
     <!-- Hero -->
     <section class="hero" id="home">
       <video class="hero-video" autoplay muted loop playsinline poster="hero-bg.jpg">
@@ -428,21 +468,60 @@
     </section>
   </main>
 
-  <footer class="site-footer">
+  <!-- Admin Dashboard (hidden by default) -->
+  <div id="adminDashboard">
+    <div class="container">
+      <div class="admin-header">
+        <h2><span class="gold-text">Admin</span> Dashboard</h2>
+        <button class="btn btn-danger btn-sm" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+      <div class="admin-controls">
+        <input type="text" id="searchInput" placeholder="Search by name or email...">
+        <select id="statusFilter">
+          <option value="">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+      <div style="overflow-x: auto;">
+        <table class="app-table" id="appTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Amount</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="appTableBody">
+            <tr><td colspan="7">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer" id="mainFooter">
     <div class="container">
       <div class="footer-grid">
         <div><h4>AML Lending Group</h4><p>Your trusted partner for loans and investments.</p></div>
         <div><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#services">Services</a></li><li><a href="#calculator">Calculator</a></li><li><a href="#apply">Apply</a></li><li><a href="#contact">Contact</a></li></ul></div>
         <div><h4>Contact</h4><ul><li>+1 713 587 6261</li><li>info@amllending.com</li><li>Houston, TX</li></ul></div>
       </div>
-      <div class="footer-bottom"><p>&copy; 2026 AML Lending Group. All rights reserved.</p></div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 AML Lending Group. All rights reserved. | <a href="#" id="adminLink" style="color: var(--gray);">Admin</a></p>
+      </div>
     </div>
   </footer>
 
   <a href="https://wa.me/17135876261" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
 
-  <!-- Success Modal -->
-  <div class="modal-overlay" id="modalOverlay"></div>
+  <!-- Application Success Modal -->
+  <div class="modal-overlay" id="appModalOverlay"></div>
   <div class="success-modal" id="successModal">
     <i class="fas fa-check-circle"></i>
     <h3>Application Submitted!</h3>
@@ -450,12 +529,23 @@
     <button class="btn" id="closeModalBtn">Close</button>
   </div>
 
+  <!-- Admin Login Modal -->
+  <div class="modal-overlay" id="loginModalOverlay"></div>
+  <div class="login-modal" id="loginModal">
+    <h3>Admin Login</h3>
+    <form id="loginForm" onsubmit="return false;">
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button type="submit" class="btn" style="width:100%;">Log In</button>
+    </form>
+    <p id="loginError" style="color: red; text-align: center; margin-top: 1rem; display: none;"></p>
+  </div>
+
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- Scripts -->
   <script>
-    // --- Supabase Initialization (FIXED: renamed variable) ---
+    // --- Supabase Initialization ---
     const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -527,7 +617,7 @@
     // --- Application Form Validation & Submission ---
     (function() {
       const form = document.getElementById('applicationForm');
-      const modalOverlay = document.getElementById('modalOverlay');
+      const modalOverlay = document.getElementById('appModalOverlay');
       const successModal = document.getElementById('successModal');
       const closeModalBtn = document.getElementById('closeModalBtn');
       const submitBtn = document.getElementById('submitBtn');
@@ -538,12 +628,10 @@
         formGroup.classList.add('error');
         if (errorSpan) errorSpan.textContent = message;
       }
-
       function clearError(input) {
         const formGroup = input.closest('.form-group');
         formGroup.classList.remove('error');
       }
-
       function validateField(input) {
         let valid = true;
         if (input.required && !input.value.trim()) {
@@ -554,31 +642,22 @@
           if (!emailPattern.test(input.value.trim())) {
             showError(input, 'Please enter a valid email address.');
             valid = false;
-          } else {
-            clearError(input);
-          }
+          } else { clearError(input); }
         } else if (input.id === 'phone' && input.value.trim()) {
           const phonePattern = /^[\d\s\-\(\)\+]+$/;
           if (!phonePattern.test(input.value.trim()) || input.value.trim().length < 7) {
             showError(input, 'Enter a valid phone number.');
             valid = false;
-          } else {
-            clearError(input);
-          }
+          } else { clearError(input); }
         } else if (input.id === 'requestedAmount') {
           const amount = parseFloat(input.value);
           if (isNaN(amount) || amount < 500) {
             showError(input, 'Minimum loan amount is $500.');
             valid = false;
-          } else {
-            clearError(input);
-          }
-        } else {
-          clearError(input);
-        }
+          } else { clearError(input); }
+        } else { clearError(input); }
         return valid;
       }
-
       form.querySelectorAll('input, select, textarea').forEach(input => {
         input.addEventListener('blur', () => validateField(input));
         input.addEventListener('input', () => {
@@ -587,21 +666,17 @@
           }
         });
       });
-
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         let isFormValid = true;
-        const requiredFields = form.querySelectorAll('[required]');
-        requiredFields.forEach(input => {
+        form.querySelectorAll('[required]').forEach(input => {
           if (!validateField(input)) isFormValid = false;
         });
-
         if (!isFormValid) {
           const firstError = form.querySelector('.form-group.error');
           if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
           return;
         }
-
         const applicationData = {
           first_name: document.getElementById('firstName').value.trim(),
           last_name: document.getElementById('lastName').value.trim(),
@@ -611,30 +686,20 @@
           requested_amount: parseFloat(document.getElementById('requestedAmount').value),
           purpose: document.getElementById('purpose').value.trim() || null
         };
-
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-
-        // Fixed: use supabaseClient instead of supabase
-        const { data, error } = await supabaseClient
-          .from('applications')
-          .insert([applicationData]);
-
+        const { error } = await supabaseClient.from('applications').insert([applicationData]);
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
-
         if (error) {
           alert('Something went wrong. Please try again later.');
-          console.error('Supabase insert error:', error);
           return;
         }
-
         modalOverlay.style.display = 'block';
         successModal.style.display = 'block';
         form.reset();
         form.querySelectorAll('.form-group').forEach(group => group.classList.remove('error'));
       });
-
       closeModalBtn.addEventListener('click', () => {
         modalOverlay.style.display = 'none';
         successModal.style.display = 'none';
@@ -643,6 +708,134 @@
         modalOverlay.style.display = 'none';
         successModal.style.display = 'none';
       });
+    })();
+
+    // --- Admin Authentication & Dashboard ---
+    (function() {
+      const mainContent = document.getElementById('mainContent');
+      const adminDashboard = document.getElementById('adminDashboard');
+      const mainFooter = document.getElementById('mainFooter');
+      const adminLink = document.getElementById('adminLink');
+      const loginModal = document.getElementById('loginModal');
+      const loginModalOverlay = document.getElementById('loginModalOverlay');
+      const loginForm = document.getElementById('loginForm');
+      const loginError = document.getElementById('loginError');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const searchInput = document.getElementById('searchInput');
+      const statusFilter = document.getElementById('statusFilter');
+      const appTableBody = document.getElementById('appTableBody');
+      const whatsappFloat = document.querySelector('.whatsapp-float');
+
+      let currentUser = null;
+
+      // Check existing session
+      async function checkSession() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session) {
+          currentUser = session.user;
+          showDashboard();
+        }
+      }
+
+      function showDashboard() {
+        mainContent.style.display = 'none';
+        mainFooter.style.display = 'none';
+        adminDashboard.style.display = 'block';
+        loginModal.style.display = 'none';
+        loginModalOverlay.style.display = 'none';
+        loadApplications();
+      }
+
+      function hideDashboard() {
+        mainContent.style.display = '';
+        mainFooter.style.display = '';
+        adminDashboard.style.display = 'none';
+        currentUser = null;
+      }
+
+      adminLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (currentUser) {
+          showDashboard();
+        } else {
+          loginModal.style.display = 'block';
+          loginModalOverlay.style.display = 'block';
+        }
+      });
+
+      loginModalOverlay.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+        loginModalOverlay.style.display = 'none';
+      });
+
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        loginError.style.display = 'none';
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          loginError.textContent = error.message;
+          loginError.style.display = 'block';
+          return;
+        }
+        currentUser = data.user;
+        showDashboard();
+        loginForm.reset();
+      });
+
+      logoutBtn.addEventListener('click', async () => {
+        await supabaseClient.auth.signOut();
+        hideDashboard();
+      });
+
+      async function loadApplications(search = '', status = '') {
+        if (!currentUser) return;
+        let query = supabaseClient.from('applications').select('*').order('created_at', { ascending: false });
+        if (status) query = query.eq('status', status);
+        if (search) query = query.or(`first_name.ilike.%${search}%,last_name.ilike.%${search}%,email.ilike.%${search}%`);
+        const { data, error } = await query;
+        if (error) {
+          appTableBody.innerHTML = '<tr><td colspan="7">Error loading applications.</td></tr>';
+          return;
+        }
+        if (data.length === 0) {
+          appTableBody.innerHTML = '<tr><td colspan="7">No applications found.</td></tr>';
+          return;
+        }
+        appTableBody.innerHTML = data.map(app => `
+          <tr>
+            <td>${app.first_name} ${app.last_name}</td>
+            <td>${app.email}</td>
+            <td>$${parseFloat(app.requested_amount).toLocaleString()}</td>
+            <td>${app.loan_type}</td>
+            <td><span class="badge badge-${app.status}">${app.status}</span></td>
+            <td>${new Date(app.created_at).toLocaleDateString()}</td>
+            <td>
+              ${app.status === 'pending' ? `
+                <button class="btn btn-sm btn-success" onclick="updateStatus(${app.id}, 'approved')">Approve</button>
+                <button class="btn btn-sm btn-danger" onclick="updateStatus(${app.id}, 'rejected')">Reject</button>
+              ` : ''}
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Global function for buttons
+      window.updateStatus = async (id, status) => {
+        const { error } = await supabaseClient.from('applications').update({ status }).eq('id', id);
+        if (error) {
+          alert('Update failed.');
+          return;
+        }
+        loadApplications(searchInput.value, statusFilter.value);
+      };
+
+      searchInput.addEventListener('input', () => loadApplications(searchInput.value, statusFilter.value));
+      statusFilter.addEventListener('change', () => loadApplications(searchInput.value, statusFilter.value));
+
+      // Initial session check
+      checkSession();
     })();
   </script>
 </body>
