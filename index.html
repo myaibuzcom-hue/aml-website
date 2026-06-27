@@ -13,6 +13,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
   <style>
     :root {
       --gold: #c9a44c;
@@ -562,7 +565,7 @@
     <i class="fas fa-check-circle"></i>
     <h3>Application Submitted!</h3>
     <p>Your reference number: <strong id="applicationRefDisplay"></strong></p>
-    <p style="font-size:0.9rem;">Keep this number to check your application status.</p>
+    <p style="font-size:0.9rem;">Keep this number to check your application status. A confirmation email has been sent.</p>
     <button class="btn" id="closeModalBtn">Close</button>
   </div>
 
@@ -582,12 +585,16 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    // --- Supabase Initialization ---
+    // --- Supabase & EmailJS Initialization ---
     const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
+    const EMAILJS_PUBLIC_KEY = '3ScenjU80QSOfq1_-';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    (function() {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    })();
 
-    // --- Helper to generate a secure random reference ---
+    // --- Generate reference number ---
     function generateRef() {
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       let result = 'AML-';
@@ -661,7 +668,7 @@
       calculateLoan();
     })();
 
-    // --- Application Form ---
+    // --- Application Form with Email ---
     (function() {
       const form = document.getElementById('applicationForm');
       const modalOverlay = document.getElementById('appModalOverlay');
@@ -741,17 +748,52 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
+        // Insert into Supabase
         const { error } = await supabaseClient.from('applications').insert([applicationData]);
 
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
-
         if (error) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
           alert('Something went wrong. Please try again later.');
           console.error('Insert error:', error);
           return;
         }
 
+        // Send emails (non-blocking – we won't block on failure)
+        const emailParams = {
+          first_name: applicationData.first_name,
+          last_name: applicationData.last_name,
+          email: applicationData.email,
+          phone: applicationData.phone,
+          loan_type: applicationData.loan_type,
+          requested_amount: applicationData.requested_amount,
+          application_ref: newRef,
+          purpose: applicationData.purpose || 'N/A'
+        };
+
+        // Client confirmation
+        try {
+          await emailjs.send('service_a9lvwkn', 'template_qnh9ouz', {
+            to_email: applicationData.email,
+            ...emailParams
+          });
+        } catch (err) {
+          console.warn('Client email failed:', err);
+        }
+
+        // Admin notification
+        try {
+          await emailjs.send('service_a9lvwkn', 'template_muxh2qa', {
+            to_email: 'support@amllending.com',
+            ...emailParams
+          });
+        } catch (err) {
+          console.warn('Admin email failed:', err);
+        }
+
+        // Success UI
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
         applicationRefDisplay.textContent = newRef;
         modalOverlay.style.display = 'block';
         successModal.style.display = 'block';
@@ -892,7 +934,7 @@
       checkSession();
     })();
 
-    // --- Client Portal (using RPC) ---
+    // --- Client Portal (RPC) ---
     (function() {
       const statusForm = document.getElementById('statusForm');
       const statusError = document.getElementById('statusError');
