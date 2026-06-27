@@ -900,18 +900,16 @@
           application_ref: newRef,
           purpose: applicationData.purpose || 'N/A'
         };
-        try {
-          await emailjs.send('service_l7ouze8', 'template_qnh9ouz', {
-            to_email: applicationData.email,
-            ...emailParams
-          });
-        } catch (err) { console.warn('Client email failed:', err); }
-        try {
-          await emailjs.send('service_l7ouze8', 'template_muxh2qa', {
-            to_email: 'support@amllending.com',
-            ...emailParams
-          });
-        } catch (err) { console.warn('Admin email failed:', err); }
+                // Send emails in background (fire-and-forget)
+        emailjs.send('service_l7ouze8', 'template_qnh9ouz', {
+          to_email: applicationData.email,
+          ...emailParams
+        }).catch(err => console.warn('Client email failed:', err));
+
+        emailjs.send('service_l7ouze8', 'template_muxh2qa', {
+          to_email: 'support@amllending.com',
+          ...emailParams
+        }).catch(err => console.warn('Admin email failed:', err));
 
         // Success UI
         submitBtn.disabled = false;
