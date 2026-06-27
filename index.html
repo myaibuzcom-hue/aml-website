@@ -494,7 +494,7 @@
           <div class="contact-info">
             <p><i class="fas fa-map-marker-alt"></i> 3050 Post Oak Blvd Unit 510, Houston, TX 77056</p>
             <p><i class="fas fa-phone"></i> +1 713 587 6261</p>
-            <p><i class="fas fa-envelope"></i> info@amllending.com</p>
+            <p><i class="fas fa-envelope"></i> help@amllending.com</p>
           </div>
           <form class="contact-form" action="#" method="post">
             <input type="text" placeholder="Your Name" required>
@@ -773,7 +773,7 @@
     
         // Client confirmation
         try {
-          await emailjs.send('service_a9lvwkn', 'template_qnh9ouz', {
+          await emailjs.send('service_l7ouze8', 'template_qnh9ouz', {
             to_email: applicationData.email,
             ...emailParams
           });
@@ -783,8 +783,8 @@
 
         // Admin notification
         try {
-          await emailjs.send('service_a9lvwkn', 'template_muxh2qa', {
-            to_email: 'amllg.notifications@gmail.com',
+          await emailjs.send('service_l7ouze8', 'template_muxh2qa', {
+            to_email: 'support@amllending.com',
             ...emailParams
           });
         } catch (err) {
