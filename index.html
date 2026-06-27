@@ -160,6 +160,27 @@
     .form-group.error input, .form-group.error select, .form-group.error textarea { border-color: #e74c3c; }
     .form-group.error .error-message { display: block; }
 
+    /* File Upload */
+    .file-upload-area {
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      transition: var(--transition);
+      background: var(--gray-light);
+    }
+    .file-upload-area:hover { border-color: var(--gold); background: #f8fafc; }
+    .file-upload-area input[type="file"] { display: none; }
+    .file-list { margin-top: 1rem; text-align: left; }
+    .file-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.5rem 0.75rem; background: white; border-radius: 4px;
+      margin-bottom: 0.5rem; border: 1px solid #e2e8f0;
+    }
+    .file-item .remove-file {
+      cursor: pointer; color: #e74c3c; font-size: 0.9rem;
+    }
+
     /* Success / Info modals */
     .success-modal {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -354,7 +375,7 @@
       <div class="container">
         <div class="section-title">
           <h2>Apply for a <span class="gold-text">Loan</span></h2>
-          <p>Complete the form below and we'll get back to you within 24 hours.</p>
+          <p>Complete the form below. You can also upload supporting documents.</p>
         </div>
         <div class="application-container">
           <form id="applicationForm" novalidate>
@@ -398,7 +419,20 @@
                 <label for="purpose">Loan Purpose</label>
                 <textarea id="purpose" placeholder="Briefly describe how you intend to use the funds..."></textarea>
               </div>
+
+              <!-- File Upload -->
+              <div class="form-group full-width">
+                <label>Supporting Documents</label>
+                <div class="file-upload-area" id="fileDropZone">
+                  <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--gold);"></i>
+                  <p>Drag & drop files here or <span style="color: var(--gold); text-decoration: underline; cursor: pointer;">browse</span></p>
+                  <small style="color: var(--text-secondary);">Accepted: JPG, PNG, PDF (max 5MB each)</small>
+                  <input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,.pdf">
+                </div>
+                <div class="file-list" id="fileList"></div>
+              </div>
             </div>
+
             <div style="text-align: center; margin-top: 2rem;">
               <button type="submit" class="btn" style="padding: 1rem 3rem; font-size: 1.1rem;" id="submitBtn">
                 <i class="fas fa-paper-plane"></i> Submit Application
@@ -549,7 +583,7 @@
       <div class="footer-grid">
         <div><h4>AML Lending Group</h4><p>Your trusted partner for loans and investments.</p></div>
         <div><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#services">Services</a></li><li><a href="#calculator">Calculator</a></li><li><a href="#apply">Apply</a></li><li><a href="#status">Check Status</a></li><li><a href="#contact">Contact</a></li></ul></div>
-        <div><h4>Contact</h4><ul><li>+1 713 587 6261</li><li>info@amllending.com</li><li>Houston, TX</li></ul></div>
+        <div><h4>Contact</h4><ul><li>+1 713 587 6261</li><li>help@amllending.com</li><li>Houston, TX</li></ul></div>
       </div>
       <div class="footer-bottom">
         <p>&copy; 2026 AML Lending Group. All rights reserved. | <a href="#" id="adminLink" style="color: var(--gray);">Admin</a></p>
@@ -565,7 +599,7 @@
     <i class="fas fa-check-circle"></i>
     <h3>Application Submitted!</h3>
     <p>Your reference number: <strong id="applicationRefDisplay"></strong></p>
-    <p style="font-size:0.9rem;">Keep this number to check your application status. A confirmation email has been sent.</p>
+    <p style="font-size:0.9rem;">A confirmation email has been sent. Keep this number to check your status.</p>
     <button class="btn" id="closeModalBtn">Close</button>
   </div>
 
@@ -668,7 +702,7 @@
       calculateLoan();
     })();
 
-    // --- Application Form with Email ---
+    // --- Application Form with File Upload & Email ---
     (function() {
       const form = document.getElementById('applicationForm');
       const modalOverlay = document.getElementById('appModalOverlay');
@@ -677,6 +711,13 @@
       const submitBtn = document.getElementById('submitBtn');
       const applicationRefDisplay = document.getElementById('applicationRefDisplay');
 
+      // File handling
+      const fileInput = document.getElementById('fileInput');
+      const fileDropZone = document.getElementById('fileDropZone');
+      const fileList = document.getElementById('fileList');
+      let selectedFiles = []; // Array of File objects
+
+      // Validation helpers
       function showError(input, message) {
         const formGroup = input.closest('.form-group');
         const errorSpan = formGroup.querySelector('.error-message');
@@ -713,7 +754,8 @@
         } else { clearError(input); }
         return valid;
       }
-      form.querySelectorAll('input, select, textarea').forEach(input => {
+
+      form.querySelectorAll('input:not([type="file"]), select, textarea').forEach(input => {
         input.addEventListener('blur', () => validateField(input));
         input.addEventListener('input', () => {
           if (input.closest('.form-group').classList.contains('error')) {
@@ -721,10 +763,73 @@
           }
         });
       });
+
+      // File upload UI
+      function updateFileList() {
+        fileList.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+          const div = document.createElement('div');
+          div.className = 'file-item';
+          div.innerHTML = `<span>${file.name} (${(file.size / 1024).toFixed(1)} KB)</span> <span class="remove-file" data-index="${index}">&times;</span>`;
+          fileList.appendChild(div);
+        });
+        // Add remove listeners
+        fileList.querySelectorAll('.remove-file').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            selectedFiles.splice(idx, 1);
+            updateFileList();
+          });
+        });
+      }
+
+      fileInput.addEventListener('change', (e) => {
+        const newFiles = Array.from(e.target.files);
+        // Validate types and sizes
+        const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+        let validFiles = newFiles.filter(file => {
+          if (!allowedTypes.includes(file.type)) {
+            alert(`File ${file.name} is not allowed. Only JPG, PNG, PDF accepted.`);
+            return false;
+          }
+          if (file.size > 5 * 1024 * 1024) {
+            alert(`File ${file.name} exceeds 5MB limit.`);
+            return false;
+          }
+          return true;
+        });
+        selectedFiles = [...selectedFiles, ...validFiles];
+        updateFileList();
+        fileInput.value = ''; // reset so same file can be re-selected
+      });
+
+      // Drag & Drop
+      fileDropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileDropZone.style.borderColor = 'var(--gold)';
+      });
+      fileDropZone.addEventListener('dragleave', () => {
+        fileDropZone.style.borderColor = '#cbd5e1';
+      });
+      fileDropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileDropZone.style.borderColor = '#cbd5e1';
+        const droppedFiles = Array.from(e.dataTransfer.files);
+        fileInput.files = droppedFiles; // not really needed, but triggers change via manual dispatch
+        // Simulate change
+        const event = new Event('change', { bubbles: true });
+        Object.defineProperty(event, 'target', { value: { files: droppedFiles } });
+        fileInput.dispatchEvent(event);
+      });
+
+      // Click on drop zone triggers file input
+      fileDropZone.addEventListener('click', () => fileInput.click());
+
+      // Form submission
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         let isFormValid = true;
-        form.querySelectorAll('[required]').forEach(input => {
+        form.querySelectorAll('[required]:not([type="file"])').forEach(input => {
           if (!validateField(input)) isFormValid = false;
         });
         if (!isFormValid) {
@@ -742,24 +847,49 @@
           loan_type: document.getElementById('loanType').value,
           requested_amount: parseFloat(document.getElementById('requestedAmount').value),
           purpose: document.getElementById('purpose').value.trim() || null,
-          application_ref: newRef
+          application_ref: newRef,
+          documents: [] // will be filled after upload
         };
 
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
-        // Insert into Supabase
+        // Upload files first
+        const uploadedPaths = [];
+        if (selectedFiles.length > 0) {
+          for (const file of selectedFiles) {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${newRef}/${Date.now()}-${Math.random().toString(36).substring(2,8)}.${fileExt}`;
+            const { data, error } = await supabaseClient.storage
+              .from('application-documents')
+              .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: false
+              });
+            if (error) {
+              console.error('File upload error:', error);
+              alert(`Failed to upload ${file.name}. Please try again.`);
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+              return;
+            }
+            uploadedPaths.push(fileName);
+          }
+        }
+        applicationData.documents = uploadedPaths;
+
+        // Insert application into Supabase
         const { error } = await supabaseClient.from('applications').insert([applicationData]);
 
         if (error) {
+          console.error('Insert error:', error);
+          alert('Something went wrong saving your application. Please try again.');
           submitBtn.disabled = false;
           submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
-          alert('Something went wrong. Please try again later.');
-          console.error('Insert error:', error);
           return;
         }
 
-        // Send emails (non-blocking – we won't block on failure)
+        // Send emails (non-blocking)
         const emailParams = {
           first_name: applicationData.first_name,
           last_name: applicationData.last_name,
@@ -770,26 +900,18 @@
           application_ref: newRef,
           purpose: applicationData.purpose || 'N/A'
         };
-    
-        // Client confirmation
         try {
           await emailjs.send('service_l7ouze8', 'template_qnh9ouz', {
             to_email: applicationData.email,
             ...emailParams
           });
-        } catch (err) {
-          console.warn('Client email failed:', err);
-        }
-
-        // Admin notification
+        } catch (err) { console.warn('Client email failed:', err); }
         try {
           await emailjs.send('service_l7ouze8', 'template_muxh2qa', {
             to_email: 'support@amllending.com',
             ...emailParams
           });
-        } catch (err) {
-          console.warn('Admin email failed:', err);
-        }
+        } catch (err) { console.warn('Admin email failed:', err); }
 
         // Success UI
         submitBtn.disabled = false;
@@ -798,8 +920,11 @@
         modalOverlay.style.display = 'block';
         successModal.style.display = 'block';
         form.reset();
+        selectedFiles = [];
+        updateFileList();
         form.querySelectorAll('.form-group').forEach(group => group.classList.remove('error'));
       });
+
       closeModalBtn.addEventListener('click', () => {
         modalOverlay.style.display = 'none';
         successModal.style.display = 'none';
