@@ -157,7 +157,7 @@
     .form-group.error input, .form-group.error select, .form-group.error textarea { border-color: #e74c3c; }
     .form-group.error .error-message { display: block; }
 
-    /* Success Modal */
+    /* Success / Info modals */
     .success-modal {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
       background: var(--white); border-radius: 16px; padding: 3rem; text-align: center;
@@ -167,7 +167,6 @@
     .success-modal i { font-size: 3rem; color: var(--green); margin-bottom: 1rem; }
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1999; display: none; }
 
-    /* Admin Login Modal */
     .login-modal {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
       background: var(--white); border-radius: 16px; padding: 3rem; width: 90%; max-width: 400px;
@@ -196,6 +195,11 @@
     .badge-pending { background: #fff3cd; color: #856404; }
     .badge-approved { background: #d4edda; color: #155724; }
     .badge-rejected { background: #f8d7da; color: #721c24; }
+
+    /* Client Portal (new) */
+    .client-portal-container { max-width: 500px; margin: 0 auto; background: var(--white); border-radius: 16px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; text-align: center; }
+    .client-result { margin-top: 2rem; text-align: left; background: var(--gray-light); padding: 1.5rem; border-radius: 12px; display: none; }
+    .client-result p { margin-bottom: 0.5rem; }
 
     /* About, Testimonials, FAQ, Contact */
     .about-flex { display: flex; align-items: center; gap: 3rem; flex-wrap: wrap; }
@@ -260,6 +264,7 @@
           <li><a href="#services">Services</a></li>
           <li><a href="#calculator">Calculator</a></li>
           <li><a href="#apply">Apply</a></li>
+          <li><a href="#status">Status</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#testimonials">Testimonials</a></li>
           <li><a href="#faq">FAQ</a></li>
@@ -401,6 +406,37 @@
       </div>
     </section>
 
+    <!-- Client Portal (New) -->
+    <section class="section" id="status" style="background: var(--gray-light);">
+      <div class="container">
+        <div class="section-title">
+          <h2>Check Your <span class="gold-text">Application Status</span></h2>
+          <p>Enter your email and application ID to see your current status.</p>
+        </div>
+        <div class="client-portal-container">
+          <form id="statusForm" onsubmit="return false;">
+            <div class="form-group">
+              <label for="statusEmail">Email Address *</label>
+              <input type="email" id="statusEmail" required>
+            </div>
+            <div class="form-group">
+              <label for="statusId">Application ID *</label>
+              <input type="number" id="statusId" required placeholder="e.g., 1">
+            </div>
+            <button type="submit" class="btn" style="width:100%;">Check Status</button>
+          </form>
+          <div class="client-result" id="clientResult">
+            <p><strong>Name:</strong> <span id="clientName"></span></p>
+            <p><strong>Loan Type:</strong> <span id="clientLoanType"></span></p>
+            <p><strong>Amount:</strong> <span id="clientAmount"></span></p>
+            <p><strong>Status:</strong> <span id="clientStatus"></span></p>
+            <p><strong>Date Submitted:</strong> <span id="clientDate"></span></p>
+          </div>
+          <div id="statusError" style="color: red; margin-top: 1rem; display: none;"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- About -->
     <section class="section" id="about" style="background: var(--gray-light);">
       <div class="container">
@@ -468,7 +504,7 @@
     </section>
   </main>
 
-  <!-- Admin Dashboard (hidden by default) -->
+  <!-- Admin Dashboard -->
   <div id="adminDashboard">
     <div class="container">
       <div class="admin-header">
@@ -509,7 +545,7 @@
     <div class="container">
       <div class="footer-grid">
         <div><h4>AML Lending Group</h4><p>Your trusted partner for loans and investments.</p></div>
-        <div><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#services">Services</a></li><li><a href="#calculator">Calculator</a></li><li><a href="#apply">Apply</a></li><li><a href="#contact">Contact</a></li></ul></div>
+        <div><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#services">Services</a></li><li><a href="#calculator">Calculator</a></li><li><a href="#apply">Apply</a></li><li><a href="#status">Check Status</a></li><li><a href="#contact">Contact</a></li></ul></div>
         <div><h4>Contact</h4><ul><li>+1 713 587 6261</li><li>info@amllending.com</li><li>Houston, TX</li></ul></div>
       </div>
       <div class="footer-bottom">
@@ -525,7 +561,7 @@
   <div class="success-modal" id="successModal">
     <i class="fas fa-check-circle"></i>
     <h3>Application Submitted!</h3>
-    <p>Thank you for your application. Our team will review it and contact you within 24 hours.</p>
+    <p>Thank you for your application. Your Application ID is: <strong id="applicationIdDisplay"></strong>. Please save it to check your status later.</p>
     <button class="btn" id="closeModalBtn">Close</button>
   </div>
 
@@ -614,13 +650,14 @@
       calculateLoan();
     })();
 
-    // --- Application Form Validation & Submission ---
+    // --- Application Form ---
     (function() {
       const form = document.getElementById('applicationForm');
       const modalOverlay = document.getElementById('appModalOverlay');
       const successModal = document.getElementById('successModal');
       const closeModalBtn = document.getElementById('closeModalBtn');
       const submitBtn = document.getElementById('submitBtn');
+      const applicationIdDisplay = document.getElementById('applicationIdDisplay');
 
       function showError(input, message) {
         const formGroup = input.closest('.form-group');
@@ -688,13 +725,15 @@
         };
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-        const { error } = await supabaseClient.from('applications').insert([applicationData]);
+        const { data, error } = await supabaseClient.from('applications').insert([applicationData]).select('id');
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
         if (error) {
           alert('Something went wrong. Please try again later.');
           return;
         }
+        const newId = data[0].id;
+        applicationIdDisplay.textContent = newId;
         modalOverlay.style.display = 'block';
         successModal.style.display = 'block';
         form.reset();
@@ -724,11 +763,9 @@
       const searchInput = document.getElementById('searchInput');
       const statusFilter = document.getElementById('statusFilter');
       const appTableBody = document.getElementById('appTableBody');
-      const whatsappFloat = document.querySelector('.whatsapp-float');
 
       let currentUser = null;
 
-      // Check existing session
       async function checkSession() {
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (session) {
@@ -821,7 +858,6 @@
         `).join('');
       }
 
-      // Global function for buttons
       window.updateStatus = async (id, status) => {
         const { error } = await supabaseClient.from('applications').update({ status }).eq('id', id);
         if (error) {
@@ -834,8 +870,54 @@
       searchInput.addEventListener('input', () => loadApplications(searchInput.value, statusFilter.value));
       statusFilter.addEventListener('change', () => loadApplications(searchInput.value, statusFilter.value));
 
-      // Initial session check
       checkSession();
+    })();
+
+    // --- Client Portal ---
+    (function() {
+      const statusForm = document.getElementById('statusForm');
+      const statusError = document.getElementById('statusError');
+      const clientResult = document.getElementById('clientResult');
+      const clientName = document.getElementById('clientName');
+      const clientLoanType = document.getElementById('clientLoanType');
+      const clientAmount = document.getElementById('clientAmount');
+      const clientStatus = document.getElementById('clientStatus');
+      const clientDate = document.getElementById('clientDate');
+
+      statusForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('statusEmail').value.trim();
+        const id = parseInt(document.getElementById('statusId').value);
+        clientResult.style.display = 'none';
+        statusError.style.display = 'none';
+
+        if (!email || !id) {
+          statusError.textContent = 'Please fill in both fields.';
+          statusError.style.display = 'block';
+          return;
+        }
+
+        const { data, error } = await supabaseClient
+          .from('applications')
+          .select('*')
+          .eq('id', id)
+          .eq('email', email)
+          .single();
+
+        if (error || !data) {
+          statusError.textContent = 'Application not found. Check your email and Application ID.';
+          statusError.style.display = 'block';
+          return;
+        }
+
+        clientName.textContent = `${data.first_name} ${data.last_name}`;
+        clientLoanType.textContent = data.loan_type;
+        clientAmount.textContent = `$${parseFloat(data.requested_amount).toLocaleString()}`;
+        clientStatus.textContent = data.status;
+        clientDate.textContent = new Date(data.created_at).toLocaleDateString();
+        clientResult.style.display = 'block';
+        statusError.style.display = 'none';
+      });
     })();
   </script>
 </body>
