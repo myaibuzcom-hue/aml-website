@@ -158,7 +158,7 @@
     .success-modal i { font-size: 3rem; color: var(--green); margin-bottom: 1rem; }
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1999; display: none; }
 
-    /* About, Testimonials, FAQ, Contact (unchanged styles, kept for completeness) */
+    /* About, Testimonials, FAQ, Contact */
     .about-flex { display: flex; align-items: center; gap: 3rem; flex-wrap: wrap; }
     .about-text { flex: 1; }
     .about-image { flex: 1; background: var(--gray-light); border-radius: 12px; min-height: 300px; display: flex; align-items: center; justify-content: center; color: var(--gray); font-size: 0.9rem; }
@@ -352,7 +352,7 @@
               </div>
             </div>
             <div style="text-align: center; margin-top: 2rem;">
-              <button type="submit" class="btn" style="padding: 1rem 3rem; font-size: 1.1rem;">
+              <button type="submit" class="btn" style="padding: 1rem 3rem; font-size: 1.1rem;" id="submitBtn">
                 <i class="fas fa-paper-plane"></i> Submit Application
               </button>
             </div>
@@ -447,12 +447,20 @@
     <i class="fas fa-check-circle"></i>
     <h3>Application Submitted!</h3>
     <p>Thank you for your application. Our team will review it and contact you within 24 hours.</p>
-    <button class="btn" onclick="document.getElementById('modalOverlay').style.display='none'; document.getElementById('successModal').style.display='none';">Close</button>
+    <button class="btn" id="closeModalBtn">Close</button>
   </div>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Scripts -->
   <script>
-    // Mobile menu
+    // --- Supabase Initialization ---
+    const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // --- Mobile Menu ---
     (function() {
       const hamburger = document.getElementById('hamburger');
       const navLinks = document.getElementById('navLinks');
@@ -480,7 +488,7 @@
       });
     })();
 
-    // Loan Calculator
+    // --- Loan Calculator ---
     (function() {
       const loanAmount = document.getElementById('loanAmount');
       const interestRate = document.getElementById('interestRate');
@@ -516,11 +524,13 @@
       calculateLoan();
     })();
 
-    // Application Form Validation
+    // --- Application Form Validation & Submission ---
     (function() {
       const form = document.getElementById('applicationForm');
       const modalOverlay = document.getElementById('modalOverlay');
       const successModal = document.getElementById('successModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const submitBtn = document.getElementById('submitBtn');
 
       function showError(input, message) {
         const formGroup = input.closest('.form-group');
@@ -569,7 +579,6 @@
         return valid;
       }
 
-      // Real-time validation on blur
       form.querySelectorAll('input, select, textarea').forEach(input => {
         input.addEventListener('blur', () => validateField(input));
         input.addEventListener('input', () => {
@@ -579,30 +588,64 @@
         });
       });
 
-      form.addEventListener('submit', (e) => {
+      form.addEventListener('submit', async (e) => {
         e.preventDefault();
         let isFormValid = true;
         const requiredFields = form.querySelectorAll('[required]');
         requiredFields.forEach(input => {
-          if (!validateField(input)) {
-            isFormValid = false;
-          }
+          if (!validateField(input)) isFormValid = false;
         });
 
-        if (isFormValid) {
-          // For now, show success modal (backend integration later)
-          modalOverlay.style.display = 'block';
-          successModal.style.display = 'block';
-          form.reset();
-          // Clear all error states
-          form.querySelectorAll('.form-group').forEach(group => group.classList.remove('error'));
-        } else {
-          // Scroll to first error
+        if (!isFormValid) {
           const firstError = form.querySelector('.form-group.error');
-          if (firstError) {
-            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
+          if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
         }
+
+        // Gather form data
+        const applicationData = {
+          first_name: document.getElementById('firstName').value.trim(),
+          last_name: document.getElementById('lastName').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          loan_type: document.getElementById('loanType').value,
+          requested_amount: parseFloat(document.getElementById('requestedAmount').value),
+          purpose: document.getElementById('purpose').value.trim() || null
+        };
+
+        // Disable button to prevent double submission
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+        // Insert into Supabase
+        const { data, error } = await supabase
+          .from('applications')
+          .insert([applicationData]);
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+
+        if (error) {
+          alert('Something went wrong. Please try again later.');
+          console.error('Supabase insert error:', error);
+          return;
+        }
+
+        // Success
+        modalOverlay.style.display = 'block';
+        successModal.style.display = 'block';
+        form.reset();
+        form.querySelectorAll('.form-group').forEach(group => group.classList.remove('error'));
+      });
+
+      // Close modal
+      closeModalBtn.addEventListener('click', () => {
+        modalOverlay.style.display = 'none';
+        successModal.style.display = 'none';
+      });
+      modalOverlay.addEventListener('click', () => {
+        modalOverlay.style.display = 'none';
+        successModal.style.display = 'none';
       });
     })();
   </script>
