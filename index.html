@@ -608,12 +608,13 @@
               <th>Amount</th>
               <th>Type</th>
               <th>Status</th>
+              <th>Documents</th>
               <th>Date</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="appTableBody">
-            <tr><td colspan="7">Loading...</td></tr>
+            <tr><td colspan="8">Loading...</td></tr>
           </tbody>
         </table>
       </div>
@@ -966,11 +967,9 @@
       const paymentSuccess = document.getElementById('paymentSuccess');
       const transactionRef = document.getElementById('transactionRef');
 
-      // Predefined amount buttons
       document.querySelectorAll('.amount-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           payAmount.value = btn.dataset.amount;
-          // Highlight selected button
           document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
         });
@@ -983,7 +982,6 @@
           alert('Please enter a valid email and amount.');
           return;
         }
-        // Convert to kobo (Paystack expects amount in kobo for NGN, but for USD you can use the amount directly)
         const amountInKobo = Math.round(amountInNaira * 100);
         const ref = 'AML-PAY-' + Date.now();
 
@@ -991,12 +989,10 @@
           key: PAYSTACK_PUBLIC_KEY,
           email: email,
           amount: amountInKobo,
-          currency: 'NGN', // change to 'USD' if you're using USD
+          currency: 'NGN',
           ref: ref,
           callback: async function(response) {
-            // Verify transaction on the client side (optional, but we can trust Paystack for now)
             const reference = response.reference;
-            // Store payment record in Supabase
             const { error } = await supabaseClient.from('payments').insert([{
               reference: reference,
               email: email,
@@ -1018,7 +1014,7 @@
       });
     })();
 
-    // --- Admin Authentication & Dashboard ---
+    // --- Admin Authentication & Dashboard (with document viewer) ---
     (function() {
       const mainContent = document.getElementById('mainContent');
       const adminDashboard = document.getElementById('adminDashboard');
@@ -1102,29 +1098,49 @@
         if (search) query = query.or(`first_name.ilike.%${search}%,last_name.ilike.%${search}%,email.ilike.%${search}%`);
         const { data, error } = await query;
         if (error) {
-          appTableBody.innerHTML = '<tr><td colspan="7">Error loading applications.</td></tr>';
+          appTableBody.innerHTML = '<tr><td colspan="8">Error loading applications.</td></tr>';
           return;
         }
         if (data.length === 0) {
-          appTableBody.innerHTML = '<tr><td colspan="7">No applications found.</td></tr>';
+          appTableBody.innerHTML = '<tr><td colspan="8">No applications found.</td></tr>';
           return;
         }
-        appTableBody.innerHTML = data.map(app => `
-          <tr>
-            <td>${app.first_name} ${app.last_name}</td>
-            <td>${app.email}</td>
-            <td>$${parseFloat(app.requested_amount).toLocaleString()}</td>
-            <td>${app.loan_type}</td>
-            <td><span class="badge badge-${app.status}">${app.status}</span></td>
-            <td>${new Date(app.created_at).toLocaleDateString()}</td>
-            <td>
-              ${app.status === 'pending' ? `
-                <button class="btn btn-sm btn-success" onclick="updateStatus(${app.id}, 'approved')">Approve</button>
-                <button class="btn btn-sm btn-danger" onclick="updateStatus(${app.id}, 'rejected')">Reject</button>
-              ` : ''}
-            </td>
-          </tr>
-        `).join('');
+
+        // Render rows with document links
+        const rows = await Promise.all(data.map(async app => {
+          let docsHtml = '—';
+          if (app.documents && app.documents.length > 0) {
+            const links = await Promise.all(app.documents.map(async (docPath) => {
+              const { data: signedData, error: signedError } = await supabaseClient.storage
+                .from('application-documents')
+                .createSignedUrl(docPath, 60);
+              if (signedError || !signedData) {
+                return `<span style="color: red;" title="${docPath}">Error</span>`;
+              }
+              return `<a href="${signedData.signedUrl}" target="_blank" rel="noopener">View</a>`;
+            }));
+            docsHtml = links.join('<br>');
+          }
+
+          return `
+            <tr>
+              <td>${app.first_name} ${app.last_name}</td>
+              <td>${app.email}</td>
+              <td>$${parseFloat(app.requested_amount).toLocaleString()}</td>
+              <td>${app.loan_type}</td>
+              <td><span class="badge badge-${app.status}">${app.status}</span></td>
+              <td>${docsHtml}</td>
+              <td>${new Date(app.created_at).toLocaleDateString()}</td>
+              <td>
+                ${app.status === 'pending' ? `
+                  <button class="btn btn-sm btn-success" onclick="updateStatus(${app.id}, 'approved')">Approve</button>
+                  <button class="btn btn-sm btn-danger" onclick="updateStatus(${app.id}, 'rejected')">Reject</button>
+                ` : ''}
+              </td>
+            </tr>
+          `;
+        }));
+        appTableBody.innerHTML = rows.join('');
       }
 
       window.updateStatus = async (id, status) => {
