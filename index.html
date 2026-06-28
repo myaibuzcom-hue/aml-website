@@ -1295,6 +1295,17 @@
         clientResult.style.display = 'block';
       });
     })();
+    // Auto-open admin login if URL has ?admin=true
+(function() {
+  if (window.location.search.includes('admin=true')) {
+    const loginModal = document.getElementById('loginModal');
+    const loginModalOverlay = document.getElementById('loginModalOverlay');
+    if (loginModal && loginModalOverlay) {
+      loginModal.style.display = 'block';
+      loginModalOverlay.style.display = 'block';
+    }
+  }
+})();
   </script>
 </body>
 </html>
