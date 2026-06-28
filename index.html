@@ -15,6 +15,8 @@
 
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <!-- Paystack SDK -->
+  <script src="https://js.paystack.co/v1/inline.js"></script>
 
   <style>
     :root {
@@ -177,9 +179,12 @@
       padding: 0.5rem 0.75rem; background: white; border-radius: 4px;
       margin-bottom: 0.5rem; border: 1px solid #e2e8f0;
     }
-    .file-item .remove-file {
-      cursor: pointer; color: #e74c3c; font-size: 0.9rem;
-    }
+    .file-item .remove-file { cursor: pointer; color: #e74c3c; font-size: 0.9rem; }
+
+    /* Payment Section */
+    .payment-container { max-width: 500px; margin: 0 auto; background: var(--white); border-radius: 16px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+    .payment-amount-buttons { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .payment-amount-buttons .btn { flex: 1; min-width: 80px; }
 
     /* Success / Info modals */
     .success-modal {
@@ -289,6 +294,7 @@
           <li><a href="#calculator">Calculator</a></li>
           <li><a href="#apply">Apply</a></li>
           <li><a href="#status">Status</a></li>
+          <li><a href="#payment">Pay</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#testimonials">Testimonials</a></li>
           <li><a href="#faq">FAQ</a></li>
@@ -312,7 +318,7 @@
         <p>Fast, transparent loans and high‑yield investment plans tailored to your goals. Trusted by thousands across Texas.</p>
         <div class="hero-buttons">
           <a href="#apply" class="btn"><i class="fas fa-file-invoice"></i> Apply Now</a>
-          <a href="#calculator" class="btn btn-outline"><i class="fas fa-calculator"></i> Loan Calculator</a>
+          <a href="#payment" class="btn btn-outline"><i class="fas fa-credit-card"></i> Make a Payment</a>
         </div>
       </div>
     </section>
@@ -443,8 +449,44 @@
       </div>
     </section>
 
+    <!-- Payment Section -->
+    <section class="section" id="payment" style="background: var(--gray-light);">
+      <div class="container">
+        <div class="section-title">
+          <h2>Make a <span class="gold-text">Payment</span></h2>
+          <p>Pay your loan application fee or installment securely with Paystack.</p>
+        </div>
+        <div class="payment-container">
+          <form id="paymentForm" onsubmit="return false;">
+            <div class="form-group">
+              <label for="payEmail">Email Address *</label>
+              <input type="email" id="payEmail" required>
+            </div>
+            <div class="form-group">
+              <label>Select Amount</label>
+              <div class="payment-amount-buttons">
+                <button type="button" class="btn btn-outline amount-btn" data-amount="50">$50</button>
+                <button type="button" class="btn btn-outline amount-btn" data-amount="100">$100</button>
+                <button type="button" class="btn btn-outline amount-btn" data-amount="200">$200</button>
+                <button type="button" class="btn btn-outline amount-btn" data-amount="500">$500</button>
+              </div>
+              <input type="number" id="payAmount" placeholder="Or enter custom amount" min="1" step="any">
+            </div>
+            <button type="submit" class="btn" style="width:100%; padding: 1rem;">
+              <i class="fas fa-lock"></i> Pay Now
+            </button>
+          </form>
+          <div id="paymentSuccess" style="text-align: center; margin-top: 2rem; display: none;">
+            <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--green);"></i>
+            <h3>Payment Successful!</h3>
+            <p>Your transaction reference is: <strong id="transactionRef"></strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Client Portal -->
-    <section class="section" id="status" style="background: var(--gray-light);">
+    <section class="section" id="status" style="background: var(--white);">
       <div class="container">
         <div class="section-title">
           <h2>Check Your <span class="gold-text">Application Status</span></h2>
@@ -582,7 +624,7 @@
     <div class="container">
       <div class="footer-grid">
         <div><h4>AML Lending Group</h4><p>Your trusted partner for loans and investments.</p></div>
-        <div><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#services">Services</a></li><li><a href="#calculator">Calculator</a></li><li><a href="#apply">Apply</a></li><li><a href="#status">Check Status</a></li><li><a href="#contact">Contact</a></li></ul></div>
+        <div><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#services">Services</a></li><li><a href="#calculator">Calculator</a></li><li><a href="#apply">Apply</a></li><li><a href="#status">Check Status</a></li><li><a href="#payment">Make a Payment</a></li><li><a href="#contact">Contact</a></li></ul></div>
         <div><h4>Contact</h4><ul><li>+1 713 587 6261</li><li>help@amllending.com</li><li>Houston, TX</li></ul></div>
       </div>
       <div class="footer-bottom">
@@ -619,10 +661,11 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    // --- Supabase & EmailJS Initialization ---
+    // --- Supabase, EmailJS, Paystack Initialization ---
     const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
     const EMAILJS_PUBLIC_KEY = '3ScenjU80QSOfq1_-';
+    const PAYSTACK_PUBLIC_KEY = 'YOUR_PAYSTACK_PUBLIC_KEY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     (function() {
       emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -711,13 +754,11 @@
       const submitBtn = document.getElementById('submitBtn');
       const applicationRefDisplay = document.getElementById('applicationRefDisplay');
 
-      // File handling
       const fileInput = document.getElementById('fileInput');
       const fileDropZone = document.getElementById('fileDropZone');
       const fileList = document.getElementById('fileList');
-      let selectedFiles = []; // Array of File objects
+      let selectedFiles = [];
 
-      // Validation helpers
       function showError(input, message) {
         const formGroup = input.closest('.form-group');
         const errorSpan = formGroup.querySelector('.error-message');
@@ -764,7 +805,6 @@
         });
       });
 
-      // File upload UI
       function updateFileList() {
         fileList.innerHTML = '';
         selectedFiles.forEach((file, index) => {
@@ -773,7 +813,6 @@
           div.innerHTML = `<span>${file.name} (${(file.size / 1024).toFixed(1)} KB)</span> <span class="remove-file" data-index="${index}">&times;</span>`;
           fileList.appendChild(div);
         });
-        // Add remove listeners
         fileList.querySelectorAll('.remove-file').forEach(btn => {
           btn.addEventListener('click', (e) => {
             const idx = parseInt(e.target.dataset.index);
@@ -785,7 +824,6 @@
 
       fileInput.addEventListener('change', (e) => {
         const newFiles = Array.from(e.target.files);
-        // Validate types and sizes
         const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
         let validFiles = newFiles.filter(file => {
           if (!allowedTypes.includes(file.type)) {
@@ -800,10 +838,9 @@
         });
         selectedFiles = [...selectedFiles, ...validFiles];
         updateFileList();
-        fileInput.value = ''; // reset so same file can be re-selected
+        fileInput.value = '';
       });
 
-      // Drag & Drop
       fileDropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
         fileDropZone.style.borderColor = 'var(--gold)';
@@ -815,17 +852,14 @@
         e.preventDefault();
         fileDropZone.style.borderColor = '#cbd5e1';
         const droppedFiles = Array.from(e.dataTransfer.files);
-        fileInput.files = droppedFiles; // not really needed, but triggers change via manual dispatch
-        // Simulate change
+        fileInput.files = droppedFiles;
         const event = new Event('change', { bubbles: true });
         Object.defineProperty(event, 'target', { value: { files: droppedFiles } });
         fileInput.dispatchEvent(event);
       });
 
-      // Click on drop zone triggers file input
       fileDropZone.addEventListener('click', () => fileInput.click());
 
-      // Form submission
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         let isFormValid = true;
@@ -848,13 +882,12 @@
           requested_amount: parseFloat(document.getElementById('requestedAmount').value),
           purpose: document.getElementById('purpose').value.trim() || null,
           application_ref: newRef,
-          documents: [] // will be filled after upload
+          documents: []
         };
 
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
-        // Upload files first
         const uploadedPaths = [];
         if (selectedFiles.length > 0) {
           for (const file of selectedFiles) {
@@ -862,10 +895,7 @@
             const fileName = `${newRef}/${Date.now()}-${Math.random().toString(36).substring(2,8)}.${fileExt}`;
             const { data, error } = await supabaseClient.storage
               .from('application-documents')
-              .upload(fileName, file, {
-                cacheControl: '3600',
-                upsert: false
-              });
+              .upload(fileName, file, { cacheControl: '3600', upsert: false });
             if (error) {
               console.error('File upload error:', error);
               alert(`Failed to upload ${file.name}. Please try again.`);
@@ -878,9 +908,7 @@
         }
         applicationData.documents = uploadedPaths;
 
-        // Insert application into Supabase
         const { error } = await supabaseClient.from('applications').insert([applicationData]);
-
         if (error) {
           console.error('Insert error:', error);
           alert('Something went wrong saving your application. Please try again.');
@@ -889,7 +917,7 @@
           return;
         }
 
-        // Send emails (non-blocking)
+        // Send emails (fire-and-forget)
         const emailParams = {
           first_name: applicationData.first_name,
           last_name: applicationData.last_name,
@@ -900,18 +928,15 @@
           application_ref: newRef,
           purpose: applicationData.purpose || 'N/A'
         };
-                // Send emails in background (fire-and-forget)
         emailjs.send('service_l7ouze8', 'template_qnh9ouz', {
           to_email: applicationData.email,
           ...emailParams
         }).catch(err => console.warn('Client email failed:', err));
-
         emailjs.send('service_l7ouze8', 'template_muxh2qa', {
           to_email: 'support@amllending.com',
           ...emailParams
         }).catch(err => console.warn('Admin email failed:', err));
 
-        // Success UI
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
         applicationRefDisplay.textContent = newRef;
@@ -930,6 +955,66 @@
       modalOverlay.addEventListener('click', () => {
         modalOverlay.style.display = 'none';
         successModal.style.display = 'none';
+      });
+    })();
+
+    // --- Payment Form ---
+    (function() {
+      const payAmount = document.getElementById('payAmount');
+      const payEmail = document.getElementById('payEmail');
+      const paymentForm = document.getElementById('paymentForm');
+      const paymentSuccess = document.getElementById('paymentSuccess');
+      const transactionRef = document.getElementById('transactionRef');
+
+      // Predefined amount buttons
+      document.querySelectorAll('.amount-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          payAmount.value = btn.dataset.amount;
+          // Highlight selected button
+          document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+
+      paymentForm.addEventListener('submit', () => {
+        const email = payEmail.value.trim();
+        const amountInNaira = parseFloat(payAmount.value);
+        if (!email || !amountInNaira || amountInNaira <= 0) {
+          alert('Please enter a valid email and amount.');
+          return;
+        }
+        // Convert to kobo (Paystack expects amount in kobo for NGN, but for USD you can use the amount directly)
+        const amountInKobo = Math.round(amountInNaira * 100);
+        const ref = 'AML-PAY-' + Date.now();
+
+        const handler = PaystackPop.setup({
+          key: PAYSTACK_PUBLIC_KEY,
+          email: email,
+          amount: amountInKobo,
+          currency: 'NGN', // change to 'USD' if you're using USD
+          ref: ref,
+          callback: async function(response) {
+            // Verify transaction on the client side (optional, but we can trust Paystack for now)
+            const reference = response.reference;
+            // Store payment record in Supabase
+            const { error } = await supabaseClient.from('payments').insert([{
+              reference: reference,
+              email: email,
+              amount: amountInNaira,
+              status: 'success'
+            }]);
+            if (error) {
+              console.error('Failed to save payment:', error);
+            }
+            paymentForm.style.display = 'none';
+            paymentSuccess.style.display = 'block';
+            transactionRef.textContent = reference;
+          },
+          onClose: function() {
+            alert('Payment window closed. You can try again when ready.');
+          }
+        });
+        handler.openIframe();
       });
     })();
 
