@@ -757,9 +757,9 @@
 
   <script>
     // --- Supabase, EmailJS, Paystack Initialization ---
-    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
-    const EMAILJS_PUBLIC_KEY = 'YOUR_EMAILJS_PUBLIC_KEY';
+    const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
+    const EMAILJS_PUBLIC_KEY = '3ScenjU80QSOfq1_-';
     const PAYSTACK_PUBLIC_KEY = 'YOUR_PAYSTACK_PUBLIC_KEY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     (function() {
@@ -1023,11 +1023,11 @@
           application_ref: newRef,
           purpose: applicationData.purpose || 'N/A'
         };
-        emailjs.send('YOUR_SERVICE_ID', 'YOUR_CLIENT_TEMPLATE_ID', {
+        emailjs.send('service_l7ouze8', 'template_qnh9ouz', {
           to_email: applicationData.email,
           ...emailParams
         }).catch(err => console.warn('Client email failed:', err));
-        emailjs.send('YOUR_SERVICE_ID', 'YOUR_ADMIN_TEMPLATE_ID', {
+        emailjs.send('service_l7ouze8', 'template_muxh2qa', {
           to_email: 'support@amllending.com',
           ...emailParams
         }).catch(err => console.warn('Admin email failed:', err));
