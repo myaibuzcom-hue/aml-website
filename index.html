@@ -186,6 +186,13 @@
     .payment-amount-buttons { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .payment-amount-buttons .btn { flex: 1; min-width: 80px; }
 
+    /* Legal pages */
+    .legal-content { max-width: 800px; margin: 0 auto; line-height: 1.8; }
+    .legal-content h3 { margin-top: 2rem; margin-bottom: 0.5rem; font-size: 1.4rem; }
+    .legal-content p, .legal-content ul { margin-bottom: 1rem; color: var(--text-secondary); }
+    .legal-content ul { padding-left: 1.5rem; }
+    .legal-content ul li { list-style: disc; margin-bottom: 0.5rem; }
+
     /* Success / Info modals */
     .success-modal {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -526,8 +533,8 @@
             <p style="margin-top:1rem;">We believe everyone deserves access to capital – whether you're an individual with a dream or a business ready to scale.</p>
           </div>
           <div class="about-image">
-  <img src="about-company.jpg" alt="AML Lending Group office" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
-</div>
+            <img src="about-company.jpg" alt="AML Lending Group office" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+          </div>
         </div>
       </div>
     </section>
@@ -583,6 +590,91 @@
         </div>
       </div>
     </section>
+
+    <!-- Terms of Service -->
+    <section class="section" id="terms" style="background: var(--white);">
+      <div class="container">
+        <div class="section-title">
+          <h2>Terms of <span class="gold-text">Service</span></h2>
+        </div>
+        <div class="legal-content">
+          <p><strong>Last updated: 1 January 2026</strong></p>
+          <p>Welcome to AML Lending Group. By accessing or using our website and services, you agree to be bound by these Terms of Service. If you do not agree, please do not use our services.</p>
+
+          <h3>1. Services</h3>
+          <p>AML Lending Group provides loan brokerage, investment placement, and related financial services. All services are subject to eligibility, approval, and applicable laws. We reserve the right to modify or discontinue any service at any time.</p>
+
+          <h3>2. User Obligations</h3>
+          <p>You agree to provide accurate, complete, and up‑to‑date information during any application or transaction. You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account.</p>
+
+          <h3>3. Intellectual Property</h3>
+          <p>All content, logos, and trademarks on this site are the property of AML Lending Group or its licensors. You may not reproduce, distribute, or create derivative works without our prior written consent.</p>
+
+          <h3>4. Limitation of Liability</h3>
+          <p>AML Lending Group shall not be liable for any indirect, incidental, or consequential damages arising from your use of our services. Our total liability is limited to the fees you have paid us, if any, in the 12 months preceding the claim.</p>
+
+          <h3>5. Governing Law</h3>
+          <p>These terms are governed by the laws of the State of Texas, USA. Any disputes shall be resolved in the courts of Houston, Texas.</p>
+
+          <h3>6. Changes to Terms</h3>
+          <p>We may update these Terms of Service from time to time. The revised version will be posted on this page with an updated date. Continued use of the services after changes constitutes acceptance.</p>
+
+          <h3>7. Contact</h3>
+          <p>If you have any questions, contact us at <a href="mailto:help@amllending.com" style="color:var(--gold);">help@amllending.com</a> or call +1 713 587 6261.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy Policy -->
+    <section class="section" id="privacy" style="background: var(--gray-light);">
+      <div class="container">
+        <div class="section-title">
+          <h2>Privacy <span class="gold-text">Policy</span></h2>
+        </div>
+        <div class="legal-content">
+          <p><strong>Last updated: 1 January 2026</strong></p>
+          <p>AML Lending Group respects your privacy. This policy explains how we collect, use, and protect your personal data when you use our website and services.</p>
+
+          <h3>1. Information We Collect</h3>
+          <ul>
+            <li><strong>Personal identification data:</strong> Name, email address, phone number, and documents you upload.</li>
+            <li><strong>Financial data:</strong> Loan amount requested, loan type, and purpose.</li>
+            <li><strong>Technical data:</strong> IP address, browser type, and usage data via cookies.</li>
+          </ul>
+
+          <h3>2. How We Use Your Information</h3>
+          <ul>
+            <li>Process and evaluate loan applications</li>
+            <li>Communicate with you about your application status</li>
+            <li>Comply with legal obligations</li>
+            <li>Improve our services and user experience</li>
+          </ul>
+
+          <h3>3. Data Storage & Security</h3>
+          <p>Your data is stored securely on <strong>Supabase</strong> (PostgreSQL database) and its file storage system. We use Row Level Security (RLS) policies and encryption in transit (HTTPS). Only authorized personnel can access your full application data.</p>
+
+          <h3>4. Third‑Party Services</h3>
+          <p>We use the following services to operate our business:</p>
+          <ul>
+            <li><strong>EmailJS</strong> – to send you confirmation and notification emails. They process your email address and application details.</li>
+            <li><strong>Paystack</strong> – to handle payments. They receive your email and payment amount; they do not have access to your loan application documents.</li>
+          </ul>
+          <p>These providers have their own privacy policies.</p>
+
+          <h3>5. Cookies</h3>
+          <p>We do not use tracking cookies for advertising. Essential session cookies may be used for security and functionality.</p>
+
+          <h3>6. Your Rights</h3>
+          <p>You have the right to access, correct, or delete your personal data. To exercise these rights, please contact us. We will respond within 30 days.</p>
+
+          <h3>7. Changes to This Policy</h3>
+          <p>We may update this Privacy Policy. The latest version will always be on this page.</p>
+
+          <h3>8. Contact</h3>
+          <p>For privacy concerns, email us at <a href="mailto:help@amllending.com" style="color:var(--gold);">help@amllending.com</a> or write to: AML Lending Group, 3050 Post Oak Blvd Unit 510, Houston, TX 77056.</p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- Admin Dashboard -->
@@ -631,7 +723,7 @@
         <div><h4>Contact</h4><ul><li>+1 713 587 6261</li><li>help@amllending.com</li><li>Houston, TX</li></ul></div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 AML Lending Group. All rights reserved. | <a href="#" id="adminLink" style="color: var(--gray);">Admin</a></p>
+        <p>&copy; 2026 AML Lending Group. All rights reserved. | <a href="#terms">Terms</a> | <a href="#privacy">Privacy</a> | <a href="#" id="adminLink" style="color: var(--gray);">Admin</a></p>
       </div>
     </div>
   </footer>
@@ -665,9 +757,9 @@
 
   <script>
     // --- Supabase, EmailJS, Paystack Initialization ---
-    const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
-    const EMAILJS_PUBLIC_KEY = '3ScenjU80QSOfq1_-';
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const EMAILJS_PUBLIC_KEY = 'YOUR_EMAILJS_PUBLIC_KEY';
     const PAYSTACK_PUBLIC_KEY = 'YOUR_PAYSTACK_PUBLIC_KEY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     (function() {
@@ -931,11 +1023,11 @@
           application_ref: newRef,
           purpose: applicationData.purpose || 'N/A'
         };
-        emailjs.send('service_l7ouze8', 'template_qnh9ouz', {
+        emailjs.send('YOUR_SERVICE_ID', 'YOUR_CLIENT_TEMPLATE_ID', {
           to_email: applicationData.email,
           ...emailParams
         }).catch(err => console.warn('Client email failed:', err));
-        emailjs.send('service_l7ouze8', 'template_muxh2qa', {
+        emailjs.send('YOUR_SERVICE_ID', 'YOUR_ADMIN_TEMPLATE_ID', {
           to_email: 'support@amllending.com',
           ...emailParams
         }).catch(err => console.warn('Admin email failed:', err));
@@ -1108,7 +1200,6 @@
           return;
         }
 
-        // Render rows with document links
         const rows = await Promise.all(data.map(async app => {
           let docsHtml = '—';
           if (app.documents && app.documents.length > 0) {
