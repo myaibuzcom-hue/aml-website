@@ -780,30 +780,48 @@
       return result;
     }
 
-    // --- Mobile Menu ---
+        // --- Mobile Menu (fixed) ---
     (function() {
       const hamburger = document.getElementById('hamburger');
       const navLinks = document.getElementById('navLinks');
       const overlay = document.getElementById('menuOverlay');
       const links = navLinks.querySelectorAll('a');
+
       function closeMenu() {
         hamburger.classList.remove('active');
         navLinks.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = '';
       }
+
       function openMenu() {
         hamburger.classList.add('active');
         navLinks.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
       }
-      hamburger.addEventListener('click', () => {
-        navLinks.classList.contains('active') ? closeMenu() : openMenu();
+
+      hamburger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (navLinks.classList.contains('active')) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
       });
+
       overlay.addEventListener('click', closeMenu);
-      links.forEach(link => link.addEventListener('click', closeMenu));
-      document.addEventListener('keydown', (e) => {
+
+      // Fix: close menu first, then navigate after a tiny delay
+      links.forEach(link => {
+        link.addEventListener('click', function(e) {
+          closeMenu();
+          // Allow the browser to follow the href after menu closes
+          // No e.preventDefault() – it will scroll normally
+        });
+      });
+
+      document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
       });
     })();
