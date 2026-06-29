@@ -780,7 +780,7 @@
       return result;
     }
 
-              // --- Mobile Menu (final – always scrolls) ---
+                 // --- Mobile Menu (guaranteed scroll) ---
     (function() {
       const hamburger = document.getElementById('hamburger');
       const navLinks = document.getElementById('navLinks');
@@ -808,32 +808,26 @@
 
       overlay.addEventListener('click', closeMenu);
 
-      // Link clicks – close menu, then scroll reliably
+      // Link clicks
       links.forEach(function(link) {
         link.addEventListener('click', function(e) {
           e.preventDefault();
 
-          // Highlight the clicked link
+          // Highlight active link
           links.forEach(function(l) { l.classList.remove('active'); });
           link.classList.add('active');
 
-          // Get target id
           const targetId = link.getAttribute('href');
           if (!targetId || targetId === '#') return;
 
-          // Close menu
+          // Close menu immediately
           closeMenu();
 
-          // Wait for menu to fully close, then scroll
+          // Use a short delay to let the menu close visually, then scroll
           setTimeout(function() {
-            const targetSection = document.querySelector(targetId);
-            if (targetSection) {
-              targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-              // Fallback: use hash
-              window.location.hash = targetId;
-            }
-          }, 300);  // 300ms delay ensures the menu is visually closed
+            // Force scroll by setting the URL hash
+            window.location.hash = targetId;
+          }, 150);
         });
       });
 
@@ -841,7 +835,6 @@
         if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
       });
     })();
-
         // Highlight active nav link on click
     (function() {
       const navLinksContainer = document.getElementById('navLinks');
@@ -1107,7 +1100,7 @@
       });
     })();
 
-    // --- Payment Form ---
+       // --- Payment Form (fixed callback) ---
     (function() {
       const payAmount = document.getElementById('payAmount');
       const payEmail = document.getElementById('payEmail');
@@ -1115,49 +1108,65 @@
       const paymentSuccess = document.getElementById('paymentSuccess');
       const transactionRef = document.getElementById('transactionRef');
 
+      // Predefined amount buttons
       document.querySelectorAll('.amount-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', function() {
           payAmount.value = btn.dataset.amount;
           document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
         });
       });
 
-      paymentForm.addEventListener('submit', () => {
+      // Submit handler
+      paymentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
         const email = payEmail.value.trim();
         const amountInNaira = parseFloat(payAmount.value);
         if (!email || !amountInNaira || amountInNaira <= 0) {
           alert('Please enter a valid email and amount.');
           return;
         }
+
         const amountInKobo = Math.round(amountInNaira * 100);
         const ref = 'AML-PAY-' + Date.now();
 
+        // Define the callback as a standalone function
+        function onPaymentSuccess(response) {
+          // Save payment record to Supabase
+          supabaseClient.from('payments').insert([{
+            reference: response.reference,
+            email: email,
+            amount: amountInNaira,
+            status: 'success'
+          }]).then(function() {
+            paymentForm.style.display = 'none';
+            paymentSuccess.style.display = 'block';
+            transactionRef.textContent = response.reference;
+          }).catch(function(err) {
+            console.error('Failed to save payment:', err);
+            // Still show success even if saving fails
+            paymentForm.style.display = 'none';
+            paymentSuccess.style.display = 'block';
+            transactionRef.textContent = response.reference;
+          });
+        }
+
+        function onPaymentClose() {
+          alert('Payment window closed. You can try again when ready.');
+        }
+
+        // Initialize Paystack
         const handler = PaystackPop.setup({
           key: PAYSTACK_PUBLIC_KEY,
           email: email,
           amount: amountInKobo,
           currency: 'NGN',
           ref: ref,
-          callback: async function(response) {
-            const reference = response.reference;
-            const { error } = await supabaseClient.from('payments').insert([{
-              reference: reference,
-              email: email,
-              amount: amountInNaira,
-              status: 'success'
-            }]);
-            if (error) {
-              console.error('Failed to save payment:', error);
-            }
-            paymentForm.style.display = 'none';
-            paymentSuccess.style.display = 'block';
-            transactionRef.textContent = reference;
-          },
-          onClose: function() {
-            alert('Payment window closed. You can try again when ready.');
-          }
+          callback: onPaymentSuccess,
+          onClose: onPaymentClose
         });
+
         handler.openIframe();
       });
     })();
