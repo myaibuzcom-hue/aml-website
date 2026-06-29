@@ -583,14 +583,14 @@
           <div class="contact-info">
             <p><i class="fas fa-map-marker-alt"></i> 3050 Post Oak Blvd Unit 510, Houston, TX 77056</p>
             <p><i class="fas fa-phone"></i> +1 713 587 6261</p>
-            <p><i class="fas fa-envelope"></i> help@amllending.com</p>
+            <p><i class="fas fa-envelope"></i> support@amllending.com</p>
           </div>
-          <form class="contact-form" action="#" method="post">
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Email Address" required>
-            <textarea placeholder="Your Message" required></textarea>
-            <button type="submit" class="btn">Send Message</button>
-          </form>
+          <form class="contact-form" id="contactForm" novalidate>
+  <input type="text" id="contactName" placeholder="Your Name" required>
+  <input type="email" id="contactEmail" placeholder="Email Address" required>
+  <textarea id="contactMessage" placeholder="Your Message" required></textarea>
+  <button type="submit" class="btn">Send Message</button>
+</form>
         </div>
       </div>
     </section>
@@ -624,7 +624,7 @@
           <p>We may update these Terms of Service from time to time. The revised version will be posted on this page with an updated date. Continued use of the services after changes constitutes acceptance.</p>
 
           <h3>7. Contact</h3>
-          <p>If you have any questions, contact us at <a href="mailto:help@amllending.com" style="color:var(--gold);">help@amllending.com</a> or call +1 713 587 6261.</p>
+          <p>If you have any questions, contact us at <a href="mailto:support@amllending.com" style="color:var(--gold);">support@amllending.com</a> or call +1 713 587 6261.</p>
         </div>
       </div>
     </section>
@@ -675,7 +675,7 @@
           <p>We may update this Privacy Policy. The latest version will always be on this page.</p>
 
           <h3>8. Contact</h3>
-          <p>For privacy concerns, email us at <a href="mailto:help@amllending.com" style="color:var(--gold);">help@amllending.com</a> or write to: AML Lending Group, 3050 Post Oak Blvd Unit 510, Houston, TX 77056.</p>
+          <p>For privacy concerns, email us at <a href="mailto:support@amllending.com" style="color:var(--gold);">support@amllending.com</a> or write to: AML Lending Group, 3050 Post Oak Blvd Unit 510, Houston, TX 77056.</p>
         </div>
       </div>
     </section>
@@ -724,7 +724,7 @@
       <div class="footer-grid">
         <div><h4>AML Lending Group</h4><p>Your trusted partner for loans and investments.</p></div>
         <div><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#services">Services</a></li><li><a href="#calculator">Calculator</a></li><li><a href="#apply">Apply</a></li><li><a href="#status">Check Status</a></li><li><a href="#payment">Make a Payment</a></li><li><a href="#contact">Contact</a></li></ul></div>
-        <div><h4>Contact</h4><ul><li>+1 713 587 6261</li><li>help@amllending.com</li><li>Houston, TX</li></ul></div>
+        <div><h4>Contact</h4><ul><li>+1 713 587 6261</li><li>support@amllending.com</li><li>Houston, TX</li></ul></div>
       </div>
       <div class="footer-bottom">
         <p>&copy; 2026 AML Lending Group. All rights reserved. | <a href="#terms">Terms</a> | <a href="#privacy">Privacy</a> | <a href="#" id="adminLink" style="color: var(--gray);">Admin</a></p>
@@ -1033,6 +1033,7 @@
         }).catch(err => console.warn('Client email failed:', err));
         emailjs.send('service_l7ouze8', 'template_muxh2qa', {
           to_email: 'support@amllending.com',
+          subject: `New Loan Application – ${applicationData.first_name} ${applicationData.last_name}`,
           ...emailParams
         }).catch(err => console.warn('Admin email failed:', err));
 
@@ -1310,6 +1311,43 @@
     }
   }
 })();
+        // --- Contact Form (reuses admin template) ---
+    (function() {
+      const contactForm = document.getElementById('contactForm');
+      if (!contactForm) return;
+
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('contactName').value.trim();
+        const email = document.getElementById('contactEmail').value.trim();
+        const message = document.getElementById('contactMessage').value.trim();
+
+        if (!name || !email || !message) {
+          alert('Please fill in all fields.');
+          return;
+        }
+
+        emailjs.send('service_l7ouze8', 'template_muxh2qa', {
+          to_email: 'support@amllending.com',
+          subject: 'New Contact Message from Website',
+          first_name: name,
+          last_name: '',
+          email: email,
+          phone: '',
+          loan_type: '',
+          requested_amount: '',
+          application_ref: '',
+          purpose: message
+        }).then(function() {
+          alert('Message sent successfully! We will respond shortly.');
+          contactForm.reset();
+        }).catch(function(err) {
+          console.error('Contact form error:', err);
+          alert('Failed to send message. Please try again later.');
+        });
+      });
+    })();
   </script>
 </body>
 </html>
