@@ -790,10 +790,10 @@
 
   <script>
     // --- Supabase, EmailJS, Paystack Initialization ---
-    const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
-    const EMAILJS_PUBLIC_KEY = '3ScenjU80QSOfq1_-';
-    const PAYSTACK_PUBLIC_KEY = 'pk_test_4fa71351f6824e03577c72b0ab0e29297c48ca63';
+    const SUPABASE_URL = 'SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'SUPABASE_ANON_KEY';
+    const EMAILJS_PUBLIC_KEY = 'EMAILJS_PUBLIC_KEY';
+    const PAYSTACK_PUBLIC_KEY = 'PAYSTACK_PUBLIC_KEY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     (function() {
       emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -840,24 +840,16 @@
 
       overlay.addEventListener('click', closeMenu);
 
-      // Handle link clicks with guaranteed scroll
+            // Handle link clicks – close menu, then scroll via hash
       links.forEach(function (link) {
-        link.addEventListener('click', function (e) {
-          e.preventDefault();  // we will scroll ourselves
-
-          // Highlight active link
+        link.addEventListener('click', function () {
+          // Highlight the active link
           links.forEach(function (l) { l.classList.remove('active'); });
           link.classList.add('active');
 
-          // Get target section
+          // Get the target section
           const targetId = link.getAttribute('href');
           if (!targetId || targetId === '#') {
-            closeMenu();
-            return;
-          }
-
-          const target = document.querySelector(targetId);
-          if (!target) {
             closeMenu();
             return;
           }
@@ -865,13 +857,8 @@
           // Close the menu first
           closeMenu();
 
-          // Wait for the menu close animation (350ms) then scroll
-          setTimeout(function () {
-            const header = document.querySelector('.site-header');
-            const headerHeight = header ? header.offsetHeight : 70;
-            const targetTop = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 10;
-            window.scrollTo({ top: targetTop, behavior: 'smooth' });
-          }, 350);
+          // Use hash to navigate – smooth because of CSS scroll-behavior
+          window.location.hash = targetId;
         });
       });
 
@@ -1098,11 +1085,11 @@
           application_ref: newRef,
           purpose: applicationData.purpose || 'N/A'
         };
-        emailjs.send('service_l7ouze8', 'template_qnh9ouz', {
+        emailjs.send('service_ID', 'template_ID', {
           to_email: applicationData.email,
           ...emailParams
         }).catch(err => console.warn('Client email failed:', err));
-        emailjs.send('service_l7ouze8', 'template_muxh2qa', {
+        emailjs.send('service_ID', 'template_ID', {
           to_email: 'support@amllending.com',
           subject: `New Loan Application – ${applicationData.first_name} ${applicationData.last_name}`,
           ...emailParams
@@ -1415,7 +1402,7 @@
           return;
         }
 
-        emailjs.send('service_l7ouze8', 'template_muxh2qa', {
+        emailjs.send('service_ID', 'template_ID', {
           to_email: 'support@amllending.com',
           subject: 'New Contact Message from Website',
           first_name: name,
