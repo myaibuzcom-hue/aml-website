@@ -812,7 +812,7 @@
       return result;
     }
 
-         // --- Mobile Menu (overlay never blocks taps) ---
+        // --- Mobile Menu (clean, no syntax errors) ---
     document.addEventListener('DOMContentLoaded', function () {
       const hamburger = document.getElementById('hamburger');
       const navLinks  = document.getElementById('navLinks');
@@ -845,9 +845,9 @@
         }
       });
 
-      // Close menu when clicking OUTSIDE the menu (and not on the hamburger)
+      // Close menu when clicking outside the menu (not on hamburger)
       document.addEventListener('click', function (e) {
-        if (!navLinks.classList.contains('active')) return; // menu already closed
+        if (!navLinks.classList.contains('active')) return;
         const clickedInsideMenu = navLinks.contains(e.target);
         const clickedHamburger = hamburger.contains(e.target);
         if (!clickedInsideMenu && !clickedHamburger) {
@@ -855,7 +855,7 @@
         }
       });
 
-      // Link clicks – close menu, then navigate with hash
+      // Link clicks – close menu, then scroll
       links.forEach(function (link) {
         link.addEventListener('click', function (e) {
           const targetId = link.getAttribute('href');
@@ -867,8 +867,7 @@
           closeMenu();
 
           if (targetId && targetId.startsWith('#')) {
-            e.preventDefault(); // we'll handle scrolling ourselves
-            // Small delay so the menu close can start, then scroll
+            e.preventDefault();
             setTimeout(function () {
               const target = document.querySelector(targetId);
               if (target) {
@@ -876,34 +875,6 @@
               } else {
                 window.location.hash = targetId;
               }
-            }, 50);
-          }
-        });
-      });
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
-      });
-    });
-
-      // Link clicks – close menu, then navigate
-      links.forEach(function (link) {
-        link.addEventListener('click', function (e) {
-          e.preventDefault();   // we'll handle navigation manually
-
-          const targetId = link.getAttribute('href');
-          console.log('🔗 Link clicked:', targetId);
-
-          // Highlight active link
-          links.forEach(function (l) { l.classList.remove('active'); });
-          link.classList.add('active');
-
-          closeMenu();
-
-          if (targetId && targetId.startsWith('#')) {
-            // Delay the hash change slightly so the menu can start closing
-            setTimeout(function () {
-              window.location.hash = targetId;
             }, 50);
           }
         });
