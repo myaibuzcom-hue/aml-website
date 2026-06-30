@@ -783,74 +783,86 @@
 
                         // --- Mobile Menu (final – overlay no longer blocks taps) ---
     document.addEventListener('DOMContentLoaded', function () {
-      const hamburger = document.getElementById('hamburger');
-      const navLinks  = document.getElementById('navLinks');
-      const overlay   = document.getElementById('menuOverlay');
 
-      if (!hamburger || !navLinks || !overlay) return;
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  const overlay   = document.getElementById('menuOverlay');
 
-      const links = navLinks.querySelectorAll('a');
+  // Safety check — if any element is missing, bail out silently
+  if (!hamburger || !navLinks || !overlay) return;
 
-      function closeMenu() {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
+  const links = navLinks.querySelectorAll('a');
+
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function openMenu() {
+    hamburger.classList.add('active');
+    navLinks.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Toggle on hamburger click
+  hamburger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    navLinks.classList.contains('active') ? closeMenu() : openMenu();
+  });
+
+  // Click outside (overlay) closes menu
+  overlay.addEventListener('click', closeMenu);
+
+  // Handle nav link clicks
+  links.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      const href = link.getAttribute('href');
+
+      // Non-hash links — just close the menu and let them navigate
+      if (!href || !href.startsWith('#') || href === '#') {
+        closeMenu();
+        return;
       }
 
-      function openMenu() {
-        hamburger.classList.add('active');
-        navLinks.classList.add('active');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
+      e.preventDefault();
+
+      const target = document.querySelector(href);
+      if (!target) {
+        closeMenu();
+        return;
       }
 
-      hamburger.addEventListener('click', function (e) {
-        e.stopPropagation();
-        navLinks.classList.contains('active') ? closeMenu() : openMenu();
-      });
+      // Mark this link as active
+      links.forEach(function (l) { l.classList.remove('active'); });
+      link.classList.add('active');
 
-      // Click outside the menu (on the overlay) closes it
-      overlay.addEventListener('click', closeMenu);
+      // Close menu first
+      closeMenu();
 
-      // Handle link clicks
-      links.forEach(function (link) {
-        link.addEventListener('click', function (e) {
-          const href = link.getAttribute('href');
-          if (!href || !href.startsWith('#') || href === '#') {
-            closeMenu();
-            return;
-          }
+      // Wait for the menu close animation (0.3s transition + small buffer)
+      // before scrolling so the scroll lands in the right place
+      setTimeout(function () {
+        const header     = document.querySelector('.site-header');
+        const headerH    = header ? header.offsetHeight : 70;
+        const sectionTop = target.getBoundingClientRect().top + window.pageYOffset;
+        const scrollTo   = Math.max(0, sectionTop - headerH - 10);
 
-          e.preventDefault();
-          const target = document.querySelector(href);
-          if (!target) {
-            closeMenu();
-            return;
-          }
-
-          // Highlight active link
-          links.forEach(function (l) { l.classList.remove('active'); });
-          link.classList.add('active');
-
-          closeMenu();
-
-          // Scroll after menu close animation
-          setTimeout(function () {
-            const header   = document.querySelector('.site-header');
-            const headerH  = header ? header.offsetHeight : 70;
-            const sectionTop = target.getBoundingClientRect().top + window.pageYOffset;
-            const scrollTo = Math.max(0, sectionTop - headerH - 10);
-            window.scrollTo({ top: scrollTo, behavior: 'smooth' });
-          }, 350);
-        });
-      });
-
-      // Close on Escape
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
-      });
+        window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+      }, 350); // must be >= menu transition duration (300ms)
     });
+  });
+
+  // Escape key closes menu
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+      closeMenu();
+    }
+  });
+
+});
     // --- Loan Calculator ---
     (function() {
       const loanAmount = document.getElementById('loanAmount');
