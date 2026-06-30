@@ -82,7 +82,7 @@
     /* Header */
     .site-header {
       background-color: var(--dark); border-bottom: 1px solid rgba(201, 164, 76, 0.2);
-      position: sticky; top: 0; z-index: 1000; padding: 0;
+      position: sticky; top: 0; z-index: 1060; padding: 0;
     }
     .navbar { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 0; }
     .logo { display: flex; align-items: center; gap: 0.3rem; font-family: var(--font-heading); font-weight: 700; font-size: 1.5rem; color: var(--white); flex-shrink: 0; }
@@ -101,10 +101,10 @@
 
     @media (max-width: 992px) {
       .hamburger { display: flex; }
-      .nav-links { position: fixed; top: 0; right: -100%; width: 70%; max-width: 320px; height: 100vh; background-color: var(--dark); flex-direction: column; align-items: flex-start; justify-content: center; padding: 4rem 2rem; gap: 2rem; transition: right 0.3s ease; box-shadow: -10px 0 30px rgba(0,0,0,0.5); z-index: 1050; }
+      .nav-links { position: fixed; top: 0; right: -100%; width: 70%; max-width: 320px; height: 100vh; background-color: var(--dark); flex-direction: column; align-items: flex-start; justify-content: center; padding: 4rem 2rem; gap: 2rem; transition: right 0.3s ease; box-shadow: -10px 0 30px rgba(0,0,0,0.5); z-index: 1100; }
       .nav-links.active { right: 0; }
       .nav-links a { font-size: 1.1rem; opacity: 1; }
-      .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1040; display: none; }
+      .menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1060; display: none; }
       .menu-overlay.active { display: block; }
     }
 
@@ -780,95 +780,87 @@
       return result;
     }
 
-                      // --- DIAGNOSTIC Mobile Menu ---
-    document.addEventListener('DOMContentLoaded', function () {
-      const hamburger = document.getElementById('hamburger');
-      const navLinks  = document.getElementById('navLinks');
-      const overlay   = document.getElementById('menuOverlay');
+                     document.addEventListener('DOMContentLoaded', function () {
 
-      console.log('🔍 Hamburger found:', !!hamburger);
-      console.log('🔍 navLinks found:', !!navLinks);
-      console.log('🔍 overlay found:', !!overlay);
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  const overlay   = document.getElementById('menuOverlay');
 
-      if (!hamburger || !navLinks || !overlay) {
-        console.error('❌ One or more menu elements missing!');
+  // Safety check — if any element is missing, bail out silently
+  if (!hamburger || !navLinks || !overlay) return;
+
+  const links = navLinks.querySelectorAll('a');
+
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function openMenu() {
+    hamburger.classList.add('active');
+    navLinks.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // Toggle on hamburger click
+  hamburger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    navLinks.classList.contains('active') ? closeMenu() : openMenu();
+  });
+
+  // Click outside (overlay) closes menu
+  overlay.addEventListener('click', closeMenu);
+
+  // Handle nav link clicks
+  links.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      const href = link.getAttribute('href');
+
+      // Non-hash links — just close the menu and let them navigate
+      if (!href || !href.startsWith('#') || href === '#') {
+        closeMenu();
         return;
       }
 
-      const links = navLinks.querySelectorAll('a');
-      console.log('🔍 Number of nav links:', links.length);
+      e.preventDefault();
 
-      function closeMenu() {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
-        console.log('📤 Menu closed');
+      const target = document.querySelector(href);
+      if (!target) {
+        closeMenu();
+        return;
       }
 
-      function openMenu() {
-        hamburger.classList.add('active');
-        navLinks.classList.add('active');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        console.log('📥 Menu opened');
-      }
+      // Mark this link as active
+      links.forEach(function (l) { l.classList.remove('active'); });
+      link.classList.add('active');
 
-      hamburger.addEventListener('click', function (e) {
-        e.stopPropagation();
-        navLinks.classList.contains('active') ? closeMenu() : openMenu();
-      });
+      // Close menu first
+      closeMenu();
 
-      overlay.addEventListener('click', closeMenu);
+      // Wait for the menu close animation (0.3s transition + small buffer)
+      // before scrolling so the scroll lands in the right place
+      setTimeout(function () {
+        const header     = document.querySelector('.site-header');
+        const headerH    = header ? header.offsetHeight : 70;
+        const sectionTop = target.getBoundingClientRect().top + window.pageYOffset;
+        const scrollTo   = Math.max(0, sectionTop - headerH - 10);
 
-      links.forEach(function (link) {
-        link.addEventListener('click', function (e) {
-          const href = link.getAttribute('href');
-          console.log('🖱️ Link clicked, href:', href);
-
-          if (!href || !href.startsWith('#') || href === '#') {
-            console.log('⏭️ Not a hash link, closing menu.');
-            closeMenu();
-            return;
-          }
-
-          e.preventDefault();
-
-          const target = document.querySelector(href);
-          console.log('🎯 Target section found:', !!target);
-
-          if (!target) {
-            console.error('❌ Target section not found for:', href);
-            closeMenu();
-            return;
-          }
-
-          // Highlight active
-          links.forEach(function (l) { l.classList.remove('active'); });
-          link.classList.add('active');
-
-          closeMenu();
-
-          setTimeout(function () {
-            const header = document.querySelector('.site-header');
-            const headerH = header ? header.offsetHeight : 70;
-            const sectionTop = target.getBoundingClientRect().top + window.pageYOffset;
-            const scrollTo = Math.max(0, sectionTop - headerH - 10);
-
-            console.log('📏 Header height:', headerH);
-            console.log('📏 Section top:', sectionTop);
-            console.log('📏 Scroll target:', scrollTo);
-            console.log('🚀 Scrolling now...');
-
-            window.scrollTo({ top: scrollTo, behavior: 'smooth' });
-          }, 350);
-        });
-      });
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
-      });
+        window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+      }, 350); // must be >= menu transition duration (300ms)
     });
+  });
+
+  // Escape key closes menu
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+      closeMenu();
+    }
+  });
+
+});
     // --- Loan Calculator ---
     (function() {
       const loanAmount = document.getElementById('loanAmount');
