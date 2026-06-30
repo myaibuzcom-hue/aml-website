@@ -809,45 +809,47 @@
       return result;
     }
 
-        // --- Mobile Menu (manual scroll fix) ---
-    (function() {
+            // --- Mobile Menu (clean, no preventDefault) ---
+    document.addEventListener('DOMContentLoaded', function () {
       const hamburger = document.getElementById('hamburger');
-      const navLinks = document.getElementById('navLinks');
-      const overlay = document.getElementById('menuOverlay');
+      const navLinks  = document.getElementById('navLinks');
+      const overlay   = document.getElementById('menuOverlay');
+
+      if (!hamburger || !navLinks || !overlay) return;
+
       const links = navLinks.querySelectorAll('a');
+
       function closeMenu() {
         hamburger.classList.remove('active');
         navLinks.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = '';
       }
+
       function openMenu() {
         hamburger.classList.add('active');
         navLinks.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
       }
-      hamburger.addEventListener('click', function(e) {
+
+      hamburger.addEventListener('click', function (e) {
         e.stopPropagation();
         navLinks.classList.contains('active') ? closeMenu() : openMenu();
       });
+
       overlay.addEventListener('click', closeMenu);
-      // Handle link clicks – manual scroll
-            links.forEach(function (link) {
-        link.addEventListener('click', function (e) {
-          // Highlight the clicked link
+
+      // Link clicks – close the menu and let the browser navigate
+      links.forEach(function (link) {
+        link.addEventListener('click', function () {
           links.forEach(function (l) { l.classList.remove('active'); });
           link.classList.add('active');
-
-          // Close the menu immediately
           closeMenu();
-
-          // Do NOT prevent default – let the browser navigate to the href naturally.
-          // The smooth scrolling is handled by the CSS scroll-behavior: smooth on <html>
         });
       });
-      });
-      document.addEventListener('keydown', function(e) {
+
+      document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
       });
     });
