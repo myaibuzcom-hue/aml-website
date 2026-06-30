@@ -809,7 +809,7 @@
       return result;
     }
 
-            // --- Mobile Menu (clean, no preventDefault) ---
+               // --- Mobile Menu (final, manual scroll) ---
     document.addEventListener('DOMContentLoaded', function () {
       const hamburger = document.getElementById('hamburger');
       const navLinks  = document.getElementById('navLinks');
@@ -840,12 +840,38 @@
 
       overlay.addEventListener('click', closeMenu);
 
-      // Link clicks – close the menu and let the browser navigate
+      // Handle link clicks with guaranteed scroll
       links.forEach(function (link) {
-        link.addEventListener('click', function () {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();  // we will scroll ourselves
+
+          // Highlight active link
           links.forEach(function (l) { l.classList.remove('active'); });
           link.classList.add('active');
+
+          // Get target section
+          const targetId = link.getAttribute('href');
+          if (!targetId || targetId === '#') {
+            closeMenu();
+            return;
+          }
+
+          const target = document.querySelector(targetId);
+          if (!target) {
+            closeMenu();
+            return;
+          }
+
+          // Close the menu first
           closeMenu();
+
+          // Wait for the menu close animation (350ms) then scroll
+          setTimeout(function () {
+            const header = document.querySelector('.site-header');
+            const headerHeight = header ? header.offsetHeight : 70;
+            const targetTop = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 10;
+            window.scrollTo({ top: targetTop, behavior: 'smooth' });
+          }, 350);
         });
       });
 
