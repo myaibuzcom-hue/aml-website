@@ -99,10 +99,9 @@
     .hamburger.active span:nth-child(2) { opacity: 0; }
     .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
-    @media (max-width: 992px) {
+        @media (max-width: 992px) {
       .hamburger { display: flex; }
 
-      /* Remove stacking context so the fixed menu sits above the overlay */
       .site-header { z-index: auto !important; }
 
       .nav-links {
@@ -121,7 +120,7 @@
         transition: right 0.3s ease;
         box-shadow: -10px 0 30px rgba(0,0,0,0.5);
         z-index: 1100;
-     }
+      }
       .nav-links.active { right: 0; }
       .nav-links a { font-size: 1.1rem; opacity: 1; }
 
@@ -134,8 +133,12 @@
         background: rgba(0,0,0,0.6);
         z-index: 1050;
         display: none;
+        pointer-events: none;   /* ← allows taps to pass through when hidden */
       }
-      .menu-overlay.active { display: block; }
+      .menu-overlay.active {
+        display: block;
+        pointer-events: auto;   /* ← only captures clicks when menu is open */
+      }
     }
     /* Hero */
     .hero { position: relative; height: 100vh; min-height: 650px; display: flex; align-items: center; justify-content: center; color: var(--white); overflow: hidden; background-color: var(--dark); }
@@ -809,13 +812,18 @@
       return result;
     }
 
-                  // --- Mobile Menu (clean, always works) ---
+        // --- Mobile Menu (guaranteed working) ---
     document.addEventListener('DOMContentLoaded', function () {
+      console.log('📱 Mobile menu script loaded');
+
       const hamburger = document.getElementById('hamburger');
       const navLinks  = document.getElementById('navLinks');
       const overlay   = document.getElementById('menuOverlay');
 
-      if (!hamburger || !navLinks || !overlay) return;
+      if (!hamburger || !navLinks || !overlay) {
+        console.error('❌ Missing elements:', { hamburger, navLinks, overlay });
+        return;
+      }
 
       const links = navLinks.querySelectorAll('a');
 
@@ -824,6 +832,7 @@
         navLinks.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = '';
+        console.log('📤 Menu closed');
       }
 
       function openMenu() {
@@ -831,6 +840,7 @@
         navLinks.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
+        console.log('📥 Menu opened');
       }
 
       hamburger.addEventListener('click', function (e) {
@@ -844,19 +854,25 @@
 
       overlay.addEventListener('click', closeMenu);
 
-      // Link clicks – close menu, then navigate with hash
+      // Link clicks – close menu, then navigate
       links.forEach(function (link) {
-        link.addEventListener('click', function () {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();   // we'll handle navigation manually
+
           const targetId = link.getAttribute('href');
-          // Highlight the clicked link
+          console.log('🔗 Link clicked:', targetId);
+
+          // Highlight active link
           links.forEach(function (l) { l.classList.remove('active'); });
           link.classList.add('active');
 
           closeMenu();
 
           if (targetId && targetId.startsWith('#')) {
-            // Use hash navigation – smooth because CSS scroll-behavior: smooth
-            window.location.hash = targetId;
+            // Delay the hash change slightly so the menu can start closing
+            setTimeout(function () {
+              window.location.hash = targetId;
+            }, 50);
           }
         });
       });
