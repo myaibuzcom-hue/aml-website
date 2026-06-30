@@ -812,18 +812,13 @@
       return result;
     }
 
-        // --- Mobile Menu (guaranteed working) ---
+         // --- Mobile Menu (overlay never blocks taps) ---
     document.addEventListener('DOMContentLoaded', function () {
-      console.log('📱 Mobile menu script loaded');
-
       const hamburger = document.getElementById('hamburger');
       const navLinks  = document.getElementById('navLinks');
       const overlay   = document.getElementById('menuOverlay');
 
-      if (!hamburger || !navLinks || !overlay) {
-        console.error('❌ Missing elements:', { hamburger, navLinks, overlay });
-        return;
-      }
+      if (!hamburger || !navLinks || !overlay) return;
 
       const links = navLinks.querySelectorAll('a');
 
@@ -832,7 +827,6 @@
         navLinks.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = '';
-        console.log('📤 Menu closed');
       }
 
       function openMenu() {
@@ -840,7 +834,6 @@
         navLinks.classList.add('active');
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
-        console.log('📥 Menu opened');
       }
 
       hamburger.addEventListener('click', function (e) {
@@ -852,7 +845,46 @@
         }
       });
 
-      overlay.addEventListener('click', closeMenu);
+      // Close menu when clicking OUTSIDE the menu (and not on the hamburger)
+      document.addEventListener('click', function (e) {
+        if (!navLinks.classList.contains('active')) return; // menu already closed
+        const clickedInsideMenu = navLinks.contains(e.target);
+        const clickedHamburger = hamburger.contains(e.target);
+        if (!clickedInsideMenu && !clickedHamburger) {
+          closeMenu();
+        }
+      });
+
+      // Link clicks – close menu, then navigate with hash
+      links.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          const targetId = link.getAttribute('href');
+
+          // Highlight active link
+          links.forEach(function (l) { l.classList.remove('active'); });
+          link.classList.add('active');
+
+          closeMenu();
+
+          if (targetId && targetId.startsWith('#')) {
+            e.preventDefault(); // we'll handle scrolling ourselves
+            // Small delay so the menu close can start, then scroll
+            setTimeout(function () {
+              const target = document.querySelector(targetId);
+              if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              } else {
+                window.location.hash = targetId;
+              }
+            }, 50);
+          }
+        });
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
+      });
+    });
 
       // Link clicks – close menu, then navigate
       links.forEach(function (link) {
