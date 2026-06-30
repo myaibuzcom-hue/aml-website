@@ -780,7 +780,7 @@
       return result;
     }
 
-                 // --- Mobile Menu (guaranteed scroll) ---
+                    // --- Mobile Menu (manual scroll fix) ---
     (function() {
       const hamburger = document.getElementById('hamburger');
       const navLinks = document.getElementById('navLinks');
@@ -808,26 +808,35 @@
 
       overlay.addEventListener('click', closeMenu);
 
-      // Link clicks
+      // Handle link clicks – manual scroll
       links.forEach(function(link) {
         link.addEventListener('click', function(e) {
-          e.preventDefault();
-
-          // Highlight active link
-          links.forEach(function(l) { l.classList.remove('active'); });
-          link.classList.add('active');
-
+          e.preventDefault();                       // stop default jump
           const targetId = link.getAttribute('href');
           if (!targetId || targetId === '#') return;
 
-          // Close menu immediately
+          const targetSection = document.querySelector(targetId);
+          if (!targetSection) return;
+
+          // Highlight the link
+          links.forEach(function(l) { l.classList.remove('active'); });
+          link.classList.add('active');
+
+          // Close menu first
           closeMenu();
 
-          // Use a short delay to let the menu close visually, then scroll
+          // Get the section's exact position
+          const headerHeight = document.querySelector('.site-header').offsetHeight || 70;
+          const sectionTop = targetSection.getBoundingClientRect().top + window.pageYOffset;
+          const scrollTo = sectionTop - headerHeight - 10; // 10px breathing room
+
+          // Scroll after a tiny delay so the menu has time to visually close
           setTimeout(function() {
-            // Force scroll by setting the URL hash
-            window.location.hash = targetId;
-          }, 150);
+            window.scrollTo({
+              top: scrollTo,
+              behavior: 'smooth'
+            });
+          }, 50);
         });
       });
 
