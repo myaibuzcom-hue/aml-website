@@ -3,21 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AML Lending Group – Premium loans and investment services in Houston, TX. Fast approvals, competitive rates, trusted financial partner.">
+  <meta name="description" content="AML Lending Group – Business loans and investment services in Houston, TX. Term loans, lines of credit, equipment financing, and commercial real estate.">
   <meta name="theme-color" content="#0a0e17">
-  <title>AML Lending Group | Loans &amp; Investments</title>
+  <title>AML Lending Group | Business Loans &amp; Investments</title>
   <link rel="icon" type="image/png" href="favicon-32x32.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  <!-- EmailJS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <!-- Paystack SDK -->
-  <script src="https://js.paystack.co/v1/inline.js"></script>
 
   <style>
     :root {
@@ -71,18 +65,11 @@
     .btn:hover { background-color: #d4b05d; transform: translateY(-1px); }
     .btn-outline { background-color: transparent; border: 2px solid var(--gold); color: var(--gold); }
     .btn-outline:hover { background-color: var(--gold); color: var(--dark); }
-    .btn-sm { padding: 0.4rem 1rem; font-size: 0.85rem; }
-    .btn-success { background-color: var(--green); color: white; }
-    .btn-success:hover { background-color: #1c9e7e; }
-    .btn-danger { background-color: #e74c3c; color: white; }
-    .btn-danger:hover { background-color: #c0392b; }
-    .btn-gray { background-color: #bdc3c7; color: var(--dark); }
-    .btn-gray:hover { background-color: #a0aab5; }
 
     /* Header */
     .site-header {
       background-color: var(--dark); border-bottom: 1px solid rgba(201, 164, 76, 0.2);
-      position: sticky; top: 0; z-index: 1060; padding: 0;
+      position: sticky; top: 0; z-index: 1000; padding: 0;
     }
     .navbar { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 0; }
     .logo { display: flex; align-items: center; gap: 0.3rem; font-family: var(--font-heading); font-weight: 700; font-size: 1.5rem; color: var(--white); flex-shrink: 0; }
@@ -95,268 +82,128 @@
 
     .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1100; padding: 5px; }
     .hamburger span { display: block; width: 25px; height: 2px; background-color: var(--white); transition: var(--transition); transform-origin: center; }
-    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .hamburger.active span:nth-child(2) { opacity: 0; }
-    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
-              @media (max-width: 992px) {
+    @media (max-width: 992px) {
       .hamburger { display: flex; }
-
-      .site-header { z-index: auto !important; }
-
       .nav-links {
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 70%;
-        max-width: 320px;
-        height: 100vh;
-        background-color: var(--dark);
-        align-items: flex-start;
-        justify-content: center;
-        padding: 4rem 2rem;
-        gap: 2rem;
-        transition: right 0.1s ease;
-        box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-        z-index: 1100;
+        position: fixed; top: 0; right: -100%; width: 70%; max-width: 320px;
+        height: 100vh; background-color: var(--dark); flex-direction: column;
+        align-items: flex-start; justify-content: center; padding: 4rem 2rem;
+        gap: 2rem; transition: right 0.15s ease;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.5); z-index: 1100;
       }
-
-      #menuToggle:checked ~ .container .navbar .nav-links {
-        right: 0;
-      }
-
+      .nav-links.active { right: 0; }
+      .nav-links a { font-size: 1.1rem; opacity: 1; }
       .menu-overlay {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6);
-        z-index: 1050;
-        cursor: pointer;
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6); z-index: 1050; display: none;
       }
-
-      #menuToggle:checked ~ .menu-overlay {
-        display: block;
-      }
-
-      .nav-links a {
-        font-size: 1.1rem;
-        opacity: 1;
-      }
+      .menu-overlay.active { display: block; }
     }
+
     /* Hero */
-    .hero { position: relative; height: 100vh; min-height: 650px; display: flex; align-items: center; justify-content: center; color: var(--white); overflow: hidden; background-color: var(--dark); }
-    .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
-    .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(10,14,23,0.85) 0%, rgba(10,14,23,0.4) 100%); z-index: 1; }
-    .hero-content { position: relative; z-index: 2; text-align: center; max-width: 800px; padding: 0 1.5rem; animation: fadeInUp 0.8s ease-out; }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    .hero-content h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; line-height: 1.2; margin-bottom: 1.25rem; color: var(--white); }
+    .hero {
+      position: relative; height: 100vh; min-height: 650px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white); overflow: hidden; background-color: var(--dark);
+    }
+    .hero-video {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(10,14,23,0.85) 0%, rgba(10,14,23,0.4) 100%);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative; z-index: 2; text-align: center;
+      max-width: 800px; padding: 0 1.5rem; animation: fadeInUp 0.8s ease-out;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700;
+      line-height: 1.2; margin-bottom: 1.25rem; color: var(--white);
+    }
     .hero-content h1 .gold { color: var(--gold); }
-    .hero-content p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem; opacity: 0.9; color: #e2e8f0; }
+    .hero-content p {
+      font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem;
+      opacity: 0.9; color: #e2e8f0;
+    }
     .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
     .hero-buttons .btn { font-size: 1rem; padding: 0.9rem 2rem; }
 
     /* Services */
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-    .service-card { background: var(--gray-light); padding: 2rem; border-radius: 12px; transition: var(--transition); border: 1px solid transparent; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+    .service-card {
+      background: var(--gray-light); padding: 2rem; border-radius: 12px;
+      transition: var(--transition); border: 1px solid transparent; text-align: center;
+    }
     .service-card:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
     .service-card i { font-size: 2rem; color: var(--gold); margin-bottom: 1rem; }
     .service-card h3 { margin-bottom: 0.5rem; }
     .service-card p { color: var(--text-secondary); }
 
-    /* Loan Calculator */
-    .calculator-container { max-width: 800px; margin: 0 auto; background: var(--white); border-radius: 16px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
-    .calculator-form { display: grid; gap: 1.5rem; }
-    .input-group { display: flex; flex-direction: column; gap: 0.5rem; }
-    .input-group label { font-weight: 600; color: var(--text-primary); font-size: 0.95rem; }
-    .input-group input, .input-group select {
-      padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 6px;
-      font-family: var(--font-body); font-size: 1rem; transition: var(--transition);
-    }
-    .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201, 164, 76, 0.15); }
-    .calc-results {
-      margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem;
-    }
-    .result-item { text-align: center; }
-    .result-item .label { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.25rem; }
-    .result-item .value { font-size: 1.8rem; font-weight: 700; color: var(--dark); font-family: var(--font-heading); }
-    .result-item .value.gold { color: var(--gold); }
+    /* About Excerpt */
+    .about-excerpt { display: flex; align-items: center; gap: 3rem; flex-wrap: wrap; }
+    .about-excerpt .about-text { flex: 1; }
+    .about-excerpt .about-image { flex: 1; min-height: 300px; background: var(--gray-light); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
 
-    /* Application Form */
-    .application-container { max-width: 800px; margin: 0 auto; background: var(--white); border-radius: 16px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    .form-grid .full-width { grid-column: 1 / -1; }
-    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-    .form-group label { font-weight: 600; color: var(--text-primary); font-size: 0.95rem; }
-    .form-group input, .form-group select, .form-group textarea {
-      padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 6px;
-      font-family: var(--font-body); font-size: 1rem; transition: var(--transition);
-    }
-    .form-group textarea { resize: vertical; height: 100px; }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201, 164, 76, 0.15); }
-    .error-message { color: #e74c3c; font-size: 0.85rem; margin-top: 0.25rem; display: none; }
-    .form-group.error input, .form-group.error select, .form-group.error textarea { border-color: #e74c3c; }
-    .form-group.error .error-message { display: block; }
-
-    /* File Upload */
-    .file-upload-area {
-      border: 2px dashed #cbd5e1;
-      border-radius: 8px;
-      padding: 2rem;
-      text-align: center;
-      transition: var(--transition);
-      background: var(--gray-light);
-    }
-    .file-upload-area:hover { border-color: var(--gold); background: #f8fafc; }
-    .file-upload-area input[type="file"] { display: none; }
-    .file-list { margin-top: 1rem; text-align: left; }
-    .file-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 0.5rem 0.75rem; background: white; border-radius: 4px;
-      margin-bottom: 0.5rem; border: 1px solid #e2e8f0;
-    }
-    .file-item .remove-file { cursor: pointer; color: #e74c3c; font-size: 0.9rem; }
-
-    /* Payment Section */
-    .payment-container { max-width: 500px; margin: 0 auto; background: var(--white); border-radius: 16px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
-    .payment-amount-buttons { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .payment-amount-buttons .btn { flex: 1; min-width: 80px; }
-
-    /* Legal pages */
-    .legal-content { max-width: 800px; margin: 0 auto; line-height: 1.8; }
-    .legal-content h3 { margin-top: 2rem; margin-bottom: 0.5rem; font-size: 1.4rem; }
-    .legal-content p, .legal-content ul { margin-bottom: 1rem; color: var(--text-secondary); }
-    .legal-content ul { padding-left: 1.5rem; }
-    .legal-content ul li { list-style: disc; margin-bottom: 0.5rem; }
-
-    /* Success / Info modals */
-    .success-modal {
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: var(--white); border-radius: 16px; padding: 3rem; text-align: center;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.2); z-index: 2000; display: none;
-    }
-    .success-modal h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
-    .success-modal i { font-size: 3rem; color: var(--green); margin-bottom: 1rem; }
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1999; display: none; }
-
-    .login-modal {
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: var(--white); border-radius: 16px; padding: 3rem; width: 90%; max-width: 400px;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.2); z-index: 2000; display: none;
-    }
-    .login-modal h3 { font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center; }
-    .login-modal input { width: 100%; padding: 0.75rem 1rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 6px; font-family: var(--font-body); }
-
-    /* Admin Dashboard */
-    #adminDashboard { display: none; padding: 2rem 0; background: var(--gray-light); min-height: 80vh; }
-    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .admin-header h2 { font-size: 2rem; }
-    .admin-controls { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .admin-controls input, .admin-controls select {
-      padding: 0.6rem 1rem; border: 1px solid #e2e8f0; border-radius: 6px;
-      font-family: var(--font-body); font-size: 0.9rem;
-    }
-    .admin-controls input { flex: 1; min-width: 200px; }
-    .app-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-    .app-table th, .app-table td { padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
-    .app-table th { background: var(--dark); color: white; font-family: var(--font-heading); font-weight: 500; }
-    .app-table tr:hover { background: #f8fafc; }
-    .badge {
-      padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
-    }
-    .badge-pending { background: #fff3cd; color: #856404; }
-    .badge-approved { background: #d4edda; color: #155724; }
-    .badge-rejected { background: #f8d7da; color: #721c24; }
-
-    /* Client Portal */
-    .client-portal-container { max-width: 500px; margin: 0 auto; background: var(--white); border-radius: 16px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; text-align: center; }
-    .client-result { margin-top: 2rem; text-align: left; background: var(--gray-light); padding: 1.5rem; border-radius: 12px; display: none; }
-    .client-result p { margin-bottom: 0.5rem; }
-
-    /* About, Testimonials, FAQ, Contact */
-    .about-flex { display: flex; align-items: center; gap: 3rem; flex-wrap: wrap; }
-    .about-text { flex: 1; }
-    .about-image { flex: 1; background: var(--gray-light); border-radius: 12px; min-height: 300px; display: flex; align-items: center; justify-content: center; color: var(--gray); font-size: 0.9rem; }
-
-    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-    .testimonial-card { background: var(--white); border: 1px solid #e2e8f0; padding: 2rem; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); }
-    .testimonial-card .quote { font-style: italic; margin-bottom: 1rem; color: var(--text-secondary); }
-    .testimonial-card .author { font-weight: 600; color: var(--text-primary); }
-
-    .faq-list { max-width: 800px; margin: 0 auto; }
-    .faq-item { border-bottom: 1px solid #e2e8f0; padding: 1.5rem 0; }
-    .faq-item h3 { cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; }
-    .faq-item p { margin-top: 0.5rem; color: var(--text-secondary); display: block; }
-
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 1000px; margin: 0 auto; }
-    .contact-info i { color: var(--gold); width: 24px; margin-right: 0.5rem; }
-    .contact-info p { margin-bottom: 1rem; }
-    .contact-form input, .contact-form textarea { width: 100%; padding: 0.75rem 1rem; margin-bottom: 1rem; border: 1px solid #e2e8f0; border-radius: 6px; font-family: var(--font-body); }
-    .contact-form textarea { height: 120px; resize: vertical; }
-
+    /* Footer */
     .site-footer { background-color: var(--dark); color: var(--gray-light); padding: 3rem 0; font-size: 0.9rem; }
     .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
     .footer-grid h4 { color: var(--white); margin-bottom: 1rem; }
     .footer-grid ul li { margin-bottom: 0.5rem; }
     .footer-grid a:hover { color: var(--gold); }
     .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    .footer-bottom a { color: var(--gold); }
 
-    .whatsapp-float { position: fixed; bottom: 2rem; right: 2rem; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 999; transition: var(--transition); }
+    .whatsapp-float {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background-color: #25D366; color: white; width: 60px; height: 60px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      z-index: 999; transition: var(--transition);
+    }
     .whatsapp-float:hover { transform: scale(1.1); }
 
     @media (max-width: 768px) {
       .section { padding: 3rem 0; }
       .section-title h2 { font-size: 1.8rem; }
-      .contact-grid, .form-grid { grid-template-columns: 1fr; }
-      .about-flex { flex-direction: column; }
-      .about-image { min-height: 200px; width: 100%; }
-      .hero-buttons { flex-direction: column; align-items: center; }
-      .hero-buttons .btn { width: 80%; justify-content: center; }
-      .calculator-container, .application-container { padding: 1.5rem; }
-      .result-item .value { font-size: 1.4rem; }
-      .admin-controls { flex-direction: column; }
-    }
-    @media (max-width: 480px) {
-      .container { padding: 0 1rem; }
-      .hero-content h1 { font-size: 2rem; }
-      .hero-content p { font-size: 1rem; }
+      .about-excerpt { flex-direction: column; }
     }
   </style>
 </head>
 <body>
-    <header class="site-header">
-    <input type="checkbox" id="menuToggle" style="display:none;">
+  <header class="site-header">
     <div class="container">
       <nav class="navbar">
-        <a href="#" class="logo">
-          <img src="logo.png" alt="AML" style="height:50px; width:auto; vertical-align:middle;">
-          Lending Group
+        <a href="index.html" class="logo">
+          <img src="logo.png" alt="AML" style="height:40px; width:auto; vertical-align:middle;">
+          <span><span class="gold">AML</span> Lending Group</span>
         </a>
-        <label for="menuToggle" class="hamburger" id="hamburger" aria-label="Menu" role="button" tabindex="0">
+        <div class="hamburger" id="hamburger" aria-label="Menu" role="button" tabindex="0">
           <span></span><span></span><span></span>
-        </label>
+        </div>
         <ul class="nav-links" id="navLinks">
-          <li><a href="#home" class="active">Home</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#calculator">Calculator</a></li>
-          <li><a href="#apply">Apply</a></li>
-          <li><a href="#status">Status</a></li>
-          <li><a href="#payment">Pay</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#testimonials">Testimonials</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="#apply" class="btn">Apply Now</a></li>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="business-loans.html">Business Loans</a></li>
+          <li><a href="apply.html">Apply</a></li>
+          <li><a href="brokers.html">Brokers</a></li>
+          <li><a href="testimonials.html">Testimonials</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </div>
   </header>
-  <label for="menuToggle" class="menu-overlay" id="menuOverlay"></label>
+  <div class="menu-overlay" id="menuOverlay"></div>
 
-  <main id="mainContent">
+  <main>
     <!-- Hero -->
     <section class="hero" id="home">
       <video class="hero-video" autoplay muted loop playsinline poster="hero-bg.jpg">
@@ -364,11 +211,11 @@
       </video>
       <div class="hero-overlay"></div>
       <div class="hero-content">
-        <h1><span class="gold">Smart Funding</span><br>for Ambitious Futures</h1>
-        <p>Fast, transparent loans and high‑yield investment plans tailored to your goals. Trusted by thousands across Texas.</p>
+        <h1><span class="gold">Business Funding</span><br>Tailored for Growth</h1>
+        <p>Term loans, lines of credit, equipment financing, and commercial real estate solutions designed for ambitious businesses across Texas.</p>
         <div class="hero-buttons">
-          <a href="#apply" class="btn"><i class="fas fa-file-invoice"></i> Apply Now</a>
-          <a href="#payment" class="btn btn-outline"><i class="fas fa-credit-card"></i> Make a Payment</a>
+          <a href="apply.html" class="btn"><i class="fas fa-file-invoice"></i> Apply Now</a>
+          <a href="business-loans.html" class="btn btn-outline"><i class="fas fa-briefcase"></i> Explore Loans</a>
         </div>
       </div>
     </section>
@@ -377,203 +224,42 @@
     <section class="section" id="services">
       <div class="container">
         <div class="section-title">
-          <h2>Our <span class="gold-text">Services</span></h2>
-          <p>We offer tailored financial solutions designed to help you grow.</p>
+          <h2>Our <span class="gold-text">Business Loan Products</span></h2>
+          <p>Flexible financing solutions to power your business.</p>
         </div>
         <div class="services-grid">
-          <div class="service-card"><i class="fas fa-hand-holding-usd"></i><h3>Personal Loans</h3><p>Quick approval personal loans for any need – home, education, or emergency.</p></div>
-          <div class="service-card"><i class="fas fa-building"></i><h3>Business Loans</h3><p>Flexible financing to expand your business or manage cash flow.</p></div>
-          <div class="service-card"><i class="fas fa-chart-pie"></i><h3>Investment Plans</h3><p>High‑yield investment opportunities with guaranteed returns.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Loan Calculator -->
-    <section class="section" id="calculator" style="background: var(--gray-light);">
-      <div class="container">
-        <div class="section-title">
-          <h2>Loan <span class="gold-text">Calculator</span></h2>
-          <p>Estimate your monthly payments instantly.</p>
-        </div>
-        <div class="calculator-container">
-          <form class="calculator-form" id="calcForm" onsubmit="return false;">
-            <div class="input-group">
-              <label for="loanAmount">Loan Amount ($)</label>
-              <input type="number" id="loanAmount" placeholder="e.g., 5000" min="100" step="100" required>
-            </div>
-            <div class="input-group">
-              <label for="interestRate">Annual Interest Rate (%)</label>
-              <input type="number" id="interestRate" placeholder="e.g., 5.5" min="0.1" step="0.1" required>
-            </div>
-            <div class="input-group">
-              <label for="loanTerm">Loan Term</label>
-              <select id="loanTerm" required>
-                <option value="">Select term</option>
-                <option value="12">1 year (12 months)</option>
-                <option value="24">2 years (24 months)</option>
-                <option value="36">3 years (36 months)</option>
-                <option value="48">4 years (48 months)</option>
-                <option value="60">5 years (60 months)</option>
-              </select>
-            </div>
-            <div class="calc-results" id="calcResults">
-              <div class="result-item"><div class="label">Monthly Payment</div><div class="value gold" id="monthlyPayment">$0</div></div>
-              <div class="result-item"><div class="label">Total Repayment</div><div class="value" id="totalRepayment">$0</div></div>
-              <div class="result-item"><div class="label">Total Interest</div><div class="value" id="totalInterest">$0</div></div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Loan Application -->
-    <section class="section" id="apply">
-      <div class="container">
-        <div class="section-title">
-          <h2>Apply for a <span class="gold-text">Loan</span></h2>
-          <p>Complete the form below. You can also upload supporting documents.</p>
-        </div>
-        <div class="application-container">
-          <form id="applicationForm" novalidate>
-            <div class="form-grid">
-              <div class="form-group">
-                <label for="firstName">First Name *</label>
-                <input type="text" id="firstName" required>
-                <span class="error-message">Please enter your first name.</span>
-              </div>
-              <div class="form-group">
-                <label for="lastName">Last Name *</label>
-                <input type="text" id="lastName" required>
-                <span class="error-message">Please enter your last name.</span>
-              </div>
-              <div class="form-group">
-                <label for="email">Email Address *</label>
-                <input type="email" id="email" required>
-                <span class="error-message">Valid email required (e.g., you@example.com).</span>
-              </div>
-              <div class="form-group">
-                <label for="phone">Phone Number *</label>
-                <input type="tel" id="phone" required>
-                <span class="error-message">Enter a valid phone number.</span>
-              </div>
-              <div class="form-group">
-                <label for="loanType">Loan Type *</label>
-                <select id="loanType" required>
-                  <option value="">Select loan type</option>
-                  <option value="personal">Personal Loan</option>
-                  <option value="business">Business Loan</option>
-                  <option value="mortgage">Mortgage</option>
-                </select>
-                <span class="error-message">Please select a loan type.</span>
-              </div>
-              <div class="form-group">
-                <label for="requestedAmount">Requested Amount ($) *</label>
-                <input type="number" id="requestedAmount" min="500" step="100" required>
-                <span class="error-message">Minimum $500.</span>
-              </div>
-              <div class="form-group full-width">
-                <label for="purpose">Loan Purpose</label>
-                <textarea id="purpose" placeholder="Briefly describe how you intend to use the funds..."></textarea>
-              </div>
-
-              <!-- File Upload -->
-              <div class="form-group full-width">
-                <label>Supporting Documents</label>
-                <div class="file-upload-area" id="fileDropZone">
-                  <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--gold);"></i>
-                  <p>Drag & drop files here or <span style="color: var(--gold); text-decoration: underline; cursor: pointer;">browse</span></p>
-                  <small style="color: var(--text-secondary);">Accepted: JPG, PNG, PDF (max 5MB each)</small>
-                  <input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,.pdf">
-                </div>
-                <div class="file-list" id="fileList"></div>
-              </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 2rem;">
-              <button type="submit" class="btn" style="padding: 1rem 3rem; font-size: 1.1rem;" id="submitBtn">
-                <i class="fas fa-paper-plane"></i> Submit Application
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Payment Section -->
-    <section class="section" id="payment" style="background: var(--gray-light);">
-      <div class="container">
-        <div class="section-title">
-          <h2>Make a <span class="gold-text">Payment</span></h2>
-          <p>Pay your loan application fee or installment securely with Paystack.</p>
-        </div>
-        <div class="payment-container">
-          <form id="paymentForm" onsubmit="return false;">
-            <div class="form-group">
-              <label for="payEmail">Email Address *</label>
-              <input type="email" id="payEmail" required>
-            </div>
-            <div class="form-group">
-              <label>Select Amount</label>
-              <div class="payment-amount-buttons">
-                <button type="button" class="btn btn-outline amount-btn" data-amount="50">$50</button>
-                <button type="button" class="btn btn-outline amount-btn" data-amount="100">$100</button>
-                <button type="button" class="btn btn-outline amount-btn" data-amount="200">$200</button>
-                <button type="button" class="btn btn-outline amount-btn" data-amount="500">$500</button>
-              </div>
-              <input type="number" id="payAmount" placeholder="Or enter custom amount" min="1" step="any">
-            </div>
-            <button type="submit" class="btn" style="width:100%; padding: 1rem;">
-              <i class="fas fa-lock"></i> Pay Now
-            </button>
-          </form>
-          <div id="paymentSuccess" style="text-align: center; margin-top: 2rem; display: none;">
-            <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--green);"></i>
-            <h3>Payment Successful!</h3>
-            <p>Your transaction reference is: <strong id="transactionRef"></strong></p>
+          <div class="service-card">
+            <i class="fas fa-hand-holding-usd"></i>
+            <h3>Term Loans</h3>
+            <p>Fixed‑rate loans from <strong>$5,000 – $500,000</strong> with predictable monthly payments.</p>
+          </div>
+          <div class="service-card">
+            <i class="fas fa-chart-line"></i>
+            <h3>Lines of Credit</h3>
+            <p>Revolving credit up to <strong>$250,000</strong> — draw as needed, pay interest only on what you use.</p>
+          </div>
+          <div class="service-card">
+            <i class="fas fa-tools"></i>
+            <h3>Equipment Financing</h3>
+            <p>Fund essential equipment up to <strong>$500,000</strong> with flexible terms.</p>
+          </div>
+          <div class="service-card">
+            <i class="fas fa-building"></i>
+            <h3>Commercial Real Estate</h3>
+            <p>Purchase or refinance commercial property with loans up to <strong>$2,000,000</strong>.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Client Portal -->
-    <section class="section" id="status" style="background: var(--white);">
+    <!-- About Excerpt -->
+    <section class="section" style="background: var(--gray-light);">
       <div class="container">
-        <div class="section-title">
-          <h2>Check Your <span class="gold-text">Application Status</span></h2>
-          <p>Enter your email and the reference number you received after applying.</p>
-        </div>
-        <div class="client-portal-container">
-          <form id="statusForm" onsubmit="return false;">
-            <div class="form-group">
-              <label for="statusEmail">Email Address *</label>
-              <input type="email" id="statusEmail" required>
-            </div>
-            <div class="form-group">
-              <label for="statusRef">Reference Number *</label>
-              <input type="text" id="statusRef" required placeholder="e.g., AML-ABC123">
-            </div>
-            <button type="submit" class="btn" style="width:100%;">Check Status</button>
-          </form>
-          <div class="client-result" id="clientResult">
-            <p><strong>Name:</strong> <span id="clientName"></span></p>
-            <p><strong>Loan Type:</strong> <span id="clientLoanType"></span></p>
-            <p><strong>Amount:</strong> <span id="clientAmount"></span></p>
-            <p><strong>Status:</strong> <span id="clientStatus"></span></p>
-            <p><strong>Date Submitted:</strong> <span id="clientDate"></span></p>
-          </div>
-          <div id="statusError" style="color: red; margin-top: 1rem; display: none;"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- About -->
-    <section class="section" id="about" style="background: var(--gray-light);">
-      <div class="container">
-        <div class="about-flex">
+        <div class="about-excerpt">
           <div class="about-text">
             <h2>About <span class="gold-text">AML Lending Group</span></h2>
-            <p>Based in Houston, Texas, we are a premier loan and investment firm committed to providing transparent, fair, and fast financial solutions. Our team brings decades of combined experience in banking and private lending.</p>
-            <p style="margin-top:1rem;">We believe everyone deserves access to capital – whether you're an individual with a dream or a business ready to scale.</p>
+            <p>Based in Houston, Texas, AML Lending Group is a premier business loan provider dedicated to helping companies of all sizes access the capital they need to grow. Led by <strong>Mrs Rolanda Medina</strong>, our team combines decades of financial experience with a client‑first approach.</p>
+            <a href="about.html" class="btn" style="margin-top:1.5rem;">Learn More</a>
           </div>
           <div class="about-image">
             <img src="about-company.jpg" alt="AML Lending Group office" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
@@ -581,810 +267,78 @@
         </div>
       </div>
     </section>
-
-    <!-- Testimonials -->
-    <section class="section" id="testimonials">
-      <div class="container">
-        <div class="section-title">
-          <h2>What Our <span class="gold-text">Clients Say</span></h2>
-          <p>Real feedback from people we've helped.</p>
-        </div>
-        <div class="testimonials-grid">
-          <div class="testimonial-card"><p class="quote">"AML made the loan process incredibly easy. Funds were in my account within 24 hours."</p><p class="author">- Jane D.</p></div>
-          <div class="testimonial-card"><p class="quote">"I've invested with AML for two years. Consistent returns and professional team."</p><p class="author">- Mark T.</p></div>
-          <div class="testimonial-card"><p class="quote">"Finally, a lending company that treats you like a partner, not just a number."</p><p class="author">- Sarah L.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="section" id="faq" style="background: var(--gray-light);">
-      <div class="container">
-        <div class="section-title">
-          <h2>Frequently Asked <span class="gold-text">Questions</span></h2>
-        </div>
-        <div class="faq-list">
-          <div class="faq-item"><h3>What are the requirements for a personal loan? <i class="fas fa-chevron-down"></i></h3><p>Valid ID, proof of income, and a completed application form. No collateral required for amounts under $10,000.</p></div>
-          <div class="faq-item"><h3>How long does approval take?</h3><p>Most applications are reviewed within 24 hours, and funds are disbursed immediately after approval.</p></div>
-          <div class="faq-item"><h3>Is my investment guaranteed?</h3><p>We offer capital protection on select plans. Please see our investment terms for full details.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section class="section" id="contact">
-      <div class="container">
-        <div class="section-title">
-          <h2>Get In <span class="gold-text">Touch</span></h2>
-          <p>We're here to help. Reach out via phone, email, or visit our Houston office.</p>
-        </div>
-        <div class="contact-grid">
-          <div class="contact-info">
-            <p><i class="fas fa-map-marker-alt"></i> 3050 Post Oak Blvd Unit 510, Houston, TX 77056</p>
-            <p><i class="fas fa-phone"></i> +1 713 587 6261</p>
-            <p><i class="fas fa-envelope"></i> support@amllending.com</p>
-          </div>
-          <form class="contact-form" id="contactForm" novalidate>
-  <input type="text" id="contactName" placeholder="Your Name" required>
-  <input type="email" id="contactEmail" placeholder="Email Address" required>
-  <textarea id="contactMessage" placeholder="Your Message" required></textarea>
-  <button type="submit" class="btn">Send Message</button>
-</form>
-        </div>
-      </div>
-    </section>
-
-    <!-- Terms of Service -->
-    <section class="section" id="terms" style="background: var(--white);">
-      <div class="container">
-        <div class="section-title">
-          <h2>Terms of <span class="gold-text">Service</span></h2>
-        </div>
-        <div class="legal-content">
-          <p><strong>Last updated: 1 January 2026</strong></p>
-          <p>Welcome to AML Lending Group. By accessing or using our website and services, you agree to be bound by these Terms of Service. If you do not agree, please do not use our services.</p>
-
-          <h3>1. Services</h3>
-          <p>AML Lending Group provides loan brokerage, investment placement, and related financial services. All services are subject to eligibility, approval, and applicable laws. We reserve the right to modify or discontinue any service at any time.</p>
-
-          <h3>2. User Obligations</h3>
-          <p>You agree to provide accurate, complete, and up‑to‑date information during any application or transaction. You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account.</p>
-
-          <h3>3. Intellectual Property</h3>
-          <p>All content, logos, and trademarks on this site are the property of AML Lending Group or its licensors. You may not reproduce, distribute, or create derivative works without our prior written consent.</p>
-
-          <h3>4. Limitation of Liability</h3>
-          <p>AML Lending Group shall not be liable for any indirect, incidental, or consequential damages arising from your use of our services. Our total liability is limited to the fees you have paid us, if any, in the 12 months preceding the claim.</p>
-
-          <h3>5. Governing Law</h3>
-          <p>These terms are governed by the laws of the State of Texas, USA. Any disputes shall be resolved in the courts of Houston, Texas.</p>
-
-          <h3>6. Changes to Terms</h3>
-          <p>We may update these Terms of Service from time to time. The revised version will be posted on this page with an updated date. Continued use of the services after changes constitutes acceptance.</p>
-
-          <h3>7. Contact</h3>
-          <p>If you have any questions, contact us at <a href="mailto:support@amllending.com" style="color:var(--gold);">support@amllending.com</a> or call +1 713 587 6261.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Privacy Policy -->
-    <section class="section" id="privacy" style="background: var(--gray-light);">
-      <div class="container">
-        <div class="section-title">
-          <h2>Privacy <span class="gold-text">Policy</span></h2>
-        </div>
-        <div class="legal-content">
-          <p><strong>Last updated: 1 January 2026</strong></p>
-          <p>AML Lending Group respects your privacy. This policy explains how we collect, use, and protect your personal data when you use our website and services.</p>
-
-          <h3>1. Information We Collect</h3>
-          <ul>
-            <li><strong>Personal identification data:</strong> Name, email address, phone number, and documents you upload.</li>
-            <li><strong>Financial data:</strong> Loan amount requested, loan type, and purpose.</li>
-            <li><strong>Technical data:</strong> IP address, browser type, and usage data via cookies.</li>
-          </ul>
-
-          <h3>2. How We Use Your Information</h3>
-          <ul>
-            <li>Process and evaluate loan applications</li>
-            <li>Communicate with you about your application status</li>
-            <li>Comply with legal obligations</li>
-            <li>Improve our services and user experience</li>
-          </ul>
-
-          <h3>3. Data Storage & Security</h3>
-          <p>Your data is stored securely on <strong>Supabase</strong> (PostgreSQL database) and its file storage system. We use Row Level Security (RLS) policies and encryption in transit (HTTPS). Only authorized personnel can access your full application data.</p>
-
-          <h3>4. Third‑Party Services</h3>
-          <p>We use the following services to operate our business:</p>
-          <ul>
-            <li><strong>EmailJS</strong> – to send you confirmation and notification emails. They process your email address and application details.</li>
-            <li><strong>Paystack</strong> – to handle payments. They receive your email and payment amount; they do not have access to your loan application documents.</li>
-          </ul>
-          <p>These providers have their own privacy policies.</p>
-
-          <h3>5. Cookies</h3>
-          <p>We do not use tracking cookies for advertising. Essential session cookies may be used for security and functionality.</p>
-
-          <h3>6. Your Rights</h3>
-          <p>You have the right to access, correct, or delete your personal data. To exercise these rights, please contact us. We will respond within 30 days.</p>
-
-          <h3>7. Changes to This Policy</h3>
-          <p>We may update this Privacy Policy. The latest version will always be on this page.</p>
-
-          <h3>8. Contact</h3>
-          <p>For privacy concerns, email us at <a href="mailto:support@amllending.com" style="color:var(--gold);">support@amllending.com</a> or write to: AML Lending Group, 3050 Post Oak Blvd Unit 510, Houston, TX 77056.</p>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <!-- Admin Dashboard -->
-  <div id="adminDashboard">
-    <div class="container">
-      <div class="admin-header">
-        <h2><span class="gold-text">Admin</span> Dashboard</h2>
-        <button class="btn btn-danger btn-sm" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
-      </div>
-      <div class="admin-controls">
-        <input type="text" id="searchInput" placeholder="Search by name or email...">
-        <select id="statusFilter">
-          <option value="">All Statuses</option>
-          <option value="pending">Pending</option>
-          <option value="approved">Approved</option>
-          <option value="rejected">Rejected</option>
-        </select>
-      </div>
-      <div style="overflow-x: auto;">
-        <table class="app-table" id="appTable">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Amount</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Documents</th>
-              <th>Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="appTableBody">
-            <tr><td colspan="8">Loading...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <footer class="site-footer" id="mainFooter">
+  <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
-        <div><h4>AML Lending Group</h4><p>Your trusted partner for loans and investments.</p></div>
-        <div><h4>Quick Links</h4><ul><li><a href="#home">Home</a></li><li><a href="#services">Services</a></li><li><a href="#calculator">Calculator</a></li><li><a href="#apply">Apply</a></li><li><a href="#status">Check Status</a></li><li><a href="#payment">Make a Payment</a></li><li><a href="#contact">Contact</a></li></ul></div>
-        <div><h4>Contact</h4><ul><li>+1 713 587 6261</li><li>support@amllending.com</li><li>Houston, TX</li></ul></div>
+        <div>
+          <h4>AML Lending Group</h4>
+          <p>Your trusted partner for business loans and investments.</p>
+          <p><strong>Director:</strong> Mrs Rolanda Medina</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="business-loans.html">Business Loans</a></li>
+            <li><a href="apply.html">Apply</a></li>
+            <li><a href="brokers.html">Brokers</a></li>
+            <li><a href="testimonials.html">Testimonials</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <ul>
+            <li><i class="fas fa-phone"></i> +1 713 587 6261</li>
+            <li><i class="fas fa-envelope"></i> info@amllending.com</li>
+            <li><i class="fas fa-map-marker-alt"></i> Houston, TX, USA</li>
+          </ul>
+        </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 AML Lending Group. All rights reserved. | <a href="#terms">Terms</a> | <a href="#privacy">Privacy</a> | <a href="#" id="adminLink" style="color: var(--gray);">Admin</a></p>
+        <p>&copy; 2026 AML Lending Group. All rights reserved. | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
       </div>
     </div>
   </footer>
 
-  <a href="https://wa.me/17135876261" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
-
-  <!-- Application Success Modal -->
-  <div class="modal-overlay" id="appModalOverlay"></div>
-  <div class="success-modal" id="successModal">
-    <i class="fas fa-check-circle"></i>
-    <h3>Application Submitted!</h3>
-    <p>Your reference number: <strong id="applicationRefDisplay"></strong></p>
-    <p style="font-size:0.9rem;">A confirmation email has been sent. Keep this number to check your status.</p>
-    <button class="btn" id="closeModalBtn">Close</button>
-  </div>
-
-  <!-- Admin Login Modal -->
-  <div class="modal-overlay" id="loginModalOverlay"></div>
-  <div class="login-modal" id="loginModal">
-    <h3>Admin Login</h3>
-    <form id="loginForm" onsubmit="return false;">
-      <input type="email" id="loginEmail" placeholder="Email" required>
-      <input type="password" id="loginPassword" placeholder="Password" required>
-      <button type="submit" class="btn" style="width:100%;">Log In</button>
-    </form>
-    <p id="loginError" style="color: red; text-align: center; margin-top: 1rem; display: none;"></p>
-  </div>
-
-  <!-- Supabase JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <a href="https://wa.me/17135876261" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
 
   <script>
-    // --- Supabase, EmailJS, Paystack Initialization ---
-    const SUPABASE_URL = 'SUPABASE_URL';
-    const SUPABASE_ANON_KEY = 'SUPABASE_ANON_KEY';
-    const EMAILJS_PUBLIC_KEY = 'EMAILJS_PUBLIC_KEY';
-    const PAYSTACK_PUBLIC_KEY = 'PAYSTACK_PUBLIC_KEY';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    (function() {
-      emailjs.init(EMAILJS_PUBLIC_KEY);
-    })();
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.getElementById('hamburger');
+      const navLinks = document.getElementById('navLinks');
+      const overlay = document.getElementById('menuOverlay');
+      const links = navLinks.querySelectorAll('a');
 
-    // --- Generate reference number ---
-    function generateRef() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let result = 'AML-';
-      for (let i = 0; i < 6; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      function closeMenu() {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
       }
-      return result;
-    }
-
-           // Close mobile menu when a link is clicked (checkbox hack)
-    document.addEventListener('DOMContentLoaded', function () {
-      const toggle = document.getElementById('menuToggle');
-      if (!toggle) return;
-      document.querySelectorAll('#navLinks a').forEach(function (link) {
-        link.addEventListener('click', function () {
-          toggle.checked = false;
-        });
+      function openMenu() {
+        hamburger.classList.add('active');
+        navLinks.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      hamburger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        navLinks.classList.contains('active') ? closeMenu() : openMenu();
+      });
+      overlay.addEventListener('click', closeMenu);
+      links.forEach(link => link.addEventListener('click', closeMenu));
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
       });
     });
-    // --- Loan Calculator ---
-    (function() {
-      const loanAmount = document.getElementById('loanAmount');
-      const interestRate = document.getElementById('interestRate');
-      const loanTerm = document.getElementById('loanTerm');
-      const monthlyPayment = document.getElementById('monthlyPayment');
-      const totalRepayment = document.getElementById('totalRepayment');
-      const totalInterest = document.getElementById('totalInterest');
-      function calculateLoan() {
-        const P = parseFloat(loanAmount.value);
-        const r = parseFloat(interestRate.value) / 100 / 12;
-        const n = parseInt(loanTerm.value);
-        if (!P || !r || !n || P <= 0 || r < 0 || n <= 0) {
-          monthlyPayment.textContent = '$0';
-          totalRepayment.textContent = '$0';
-          totalInterest.textContent = '$0';
-          return;
-        }
-        let monthly;
-        if (r === 0) {
-          monthly = P / n;
-        } else {
-          monthly = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
-        }
-        const totalPay = monthly * n;
-        const totalInt = totalPay - P;
-        monthlyPayment.textContent = '$' + monthly.toFixed(2);
-        totalRepayment.textContent = '$' + totalPay.toFixed(2);
-        totalInterest.textContent = '$' + totalInt.toFixed(2);
-      }
-      loanAmount.addEventListener('input', calculateLoan);
-      interestRate.addEventListener('input', calculateLoan);
-      loanTerm.addEventListener('change', calculateLoan);
-      calculateLoan();
-    })();
-
-    // --- Application Form with File Upload & Email ---
-    (function() {
-      const form = document.getElementById('applicationForm');
-      const modalOverlay = document.getElementById('appModalOverlay');
-      const successModal = document.getElementById('successModal');
-      const closeModalBtn = document.getElementById('closeModalBtn');
-      const submitBtn = document.getElementById('submitBtn');
-      const applicationRefDisplay = document.getElementById('applicationRefDisplay');
-
-      const fileInput = document.getElementById('fileInput');
-      const fileDropZone = document.getElementById('fileDropZone');
-      const fileList = document.getElementById('fileList');
-      let selectedFiles = [];
-
-      function showError(input, message) {
-        const formGroup = input.closest('.form-group');
-        const errorSpan = formGroup.querySelector('.error-message');
-        formGroup.classList.add('error');
-        if (errorSpan) errorSpan.textContent = message;
-      }
-      function clearError(input) {
-        const formGroup = input.closest('.form-group');
-        formGroup.classList.remove('error');
-      }
-      function validateField(input) {
-        let valid = true;
-        if (input.required && !input.value.trim()) {
-          showError(input, 'This field is required.');
-          valid = false;
-        } else if (input.type === 'email' && input.value.trim()) {
-          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!emailPattern.test(input.value.trim())) {
-            showError(input, 'Please enter a valid email address.');
-            valid = false;
-          } else { clearError(input); }
-        } else if (input.id === 'phone' && input.value.trim()) {
-          const phonePattern = /^[\d\s\-\(\)\+]+$/;
-          if (!phonePattern.test(input.value.trim()) || input.value.trim().length < 7) {
-            showError(input, 'Enter a valid phone number.');
-            valid = false;
-          } else { clearError(input); }
-        } else if (input.id === 'requestedAmount') {
-          const amount = parseFloat(input.value);
-          if (isNaN(amount) || amount < 500) {
-            showError(input, 'Minimum loan amount is $500.');
-            valid = false;
-          } else { clearError(input); }
-        } else { clearError(input); }
-        return valid;
-      }
-
-      form.querySelectorAll('input:not([type="file"]), select, textarea').forEach(input => {
-        input.addEventListener('blur', () => validateField(input));
-        input.addEventListener('input', () => {
-          if (input.closest('.form-group').classList.contains('error')) {
-            validateField(input);
-          }
-        });
-      });
-
-      function updateFileList() {
-        fileList.innerHTML = '';
-        selectedFiles.forEach((file, index) => {
-          const div = document.createElement('div');
-          div.className = 'file-item';
-          div.innerHTML = `<span>${file.name} (${(file.size / 1024).toFixed(1)} KB)</span> <span class="remove-file" data-index="${index}">&times;</span>`;
-          fileList.appendChild(div);
-        });
-        fileList.querySelectorAll('.remove-file').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            const idx = parseInt(e.target.dataset.index);
-            selectedFiles.splice(idx, 1);
-            updateFileList();
-          });
-        });
-      }
-
-      fileInput.addEventListener('change', (e) => {
-        const newFiles = Array.from(e.target.files);
-        const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-        let validFiles = newFiles.filter(file => {
-          if (!allowedTypes.includes(file.type)) {
-            alert(`File ${file.name} is not allowed. Only JPG, PNG, PDF accepted.`);
-            return false;
-          }
-          if (file.size > 5 * 1024 * 1024) {
-            alert(`File ${file.name} exceeds 5MB limit.`);
-            return false;
-          }
-          return true;
-        });
-        selectedFiles = [...selectedFiles, ...validFiles];
-        updateFileList();
-        fileInput.value = '';
-      });
-
-      fileDropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        fileDropZone.style.borderColor = 'var(--gold)';
-      });
-      fileDropZone.addEventListener('dragleave', () => {
-        fileDropZone.style.borderColor = '#cbd5e1';
-      });
-      fileDropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        fileDropZone.style.borderColor = '#cbd5e1';
-        const droppedFiles = Array.from(e.dataTransfer.files);
-        fileInput.files = droppedFiles;
-        const event = new Event('change', { bubbles: true });
-        Object.defineProperty(event, 'target', { value: { files: droppedFiles } });
-        fileInput.dispatchEvent(event);
-      });
-
-      fileDropZone.addEventListener('click', () => fileInput.click());
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        let isFormValid = true;
-        form.querySelectorAll('[required]:not([type="file"])').forEach(input => {
-          if (!validateField(input)) isFormValid = false;
-        });
-        if (!isFormValid) {
-          const firstError = form.querySelector('.form-group.error');
-          if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return;
-        }
-
-        const newRef = generateRef();
-        const applicationData = {
-          first_name: document.getElementById('firstName').value.trim(),
-          last_name: document.getElementById('lastName').value.trim(),
-          email: document.getElementById('email').value.trim(),
-          phone: document.getElementById('phone').value.trim(),
-          loan_type: document.getElementById('loanType').value,
-          requested_amount: parseFloat(document.getElementById('requestedAmount').value),
-          purpose: document.getElementById('purpose').value.trim() || null,
-          application_ref: newRef,
-          documents: []
-        };
-
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-
-        const uploadedPaths = [];
-        if (selectedFiles.length > 0) {
-          for (const file of selectedFiles) {
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${newRef}/${Date.now()}-${Math.random().toString(36).substring(2,8)}.${fileExt}`;
-            const { data, error } = await supabaseClient.storage
-              .from('application-documents')
-              .upload(fileName, file, { cacheControl: '3600', upsert: false });
-            if (error) {
-              console.error('File upload error:', error);
-              alert(`Failed to upload ${file.name}. Please try again.`);
-              submitBtn.disabled = false;
-              submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
-              return;
-            }
-            uploadedPaths.push(fileName);
-          }
-        }
-        applicationData.documents = uploadedPaths;
-
-        const { error } = await supabaseClient.from('applications').insert([applicationData]);
-        if (error) {
-          console.error('Insert error:', error);
-          alert('Something went wrong saving your application. Please try again.');
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
-          return;
-        }
-
-        // Send emails (fire-and-forget)
-        const emailParams = {
-          first_name: applicationData.first_name,
-          last_name: applicationData.last_name,
-          email: applicationData.email,
-          phone: applicationData.phone,
-          loan_type: applicationData.loan_type,
-          requested_amount: applicationData.requested_amount,
-          application_ref: newRef,
-          purpose: applicationData.purpose || 'N/A'
-        };
-        emailjs.send('service_ID', 'template_ID', {
-          to_email: applicationData.email,
-          ...emailParams
-        }).catch(err => console.warn('Client email failed:', err));
-        emailjs.send('service_ID', 'template_ID', {
-          to_email: 'support@amllending.com',
-          subject: `New Loan Application – ${applicationData.first_name} ${applicationData.last_name}`,
-          ...emailParams
-        }).catch(err => console.warn('Admin email failed:', err));
-
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
-        applicationRefDisplay.textContent = newRef;
-        modalOverlay.style.display = 'block';
-        successModal.style.display = 'block';
-        form.reset();
-        selectedFiles = [];
-        updateFileList();
-        form.querySelectorAll('.form-group').forEach(group => group.classList.remove('error'));
-      });
-
-      closeModalBtn.addEventListener('click', () => {
-        modalOverlay.style.display = 'none';
-        successModal.style.display = 'none';
-      });
-      modalOverlay.addEventListener('click', () => {
-        modalOverlay.style.display = 'none';
-        successModal.style.display = 'none';
-      });
-    })();
-
-       // --- Payment Form (fixed callback) ---
-    (function() {
-      const payAmount = document.getElementById('payAmount');
-      const payEmail = document.getElementById('payEmail');
-      const paymentForm = document.getElementById('paymentForm');
-      const paymentSuccess = document.getElementById('paymentSuccess');
-      const transactionRef = document.getElementById('transactionRef');
-
-      // Predefined amount buttons
-      document.querySelectorAll('.amount-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          payAmount.value = btn.dataset.amount;
-          document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-        });
-      });
-
-      // Submit handler
-      paymentForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const email = payEmail.value.trim();
-        const amountInNaira = parseFloat(payAmount.value);
-        if (!email || !amountInNaira || amountInNaira <= 0) {
-          alert('Please enter a valid email and amount.');
-          return;
-        }
-
-        const amountInKobo = Math.round(amountInNaira * 100);
-        const ref = 'AML-PAY-' + Date.now();
-
-        // Define the callback as a standalone function
-        function onPaymentSuccess(response) {
-          // Save payment record to Supabase
-          supabaseClient.from('payments').insert([{
-            reference: response.reference,
-            email: email,
-            amount: amountInNaira,
-            status: 'success'
-          }]).then(function() {
-            paymentForm.style.display = 'none';
-            paymentSuccess.style.display = 'block';
-            transactionRef.textContent = response.reference;
-          }).catch(function(err) {
-            console.error('Failed to save payment:', err);
-            // Still show success even if saving fails
-            paymentForm.style.display = 'none';
-            paymentSuccess.style.display = 'block';
-            transactionRef.textContent = response.reference;
-          });
-        }
-
-        function onPaymentClose() {
-          alert('Payment window closed. You can try again when ready.');
-        }
-
-        // Initialize Paystack
-        const handler = PaystackPop.setup({
-          key: PAYSTACK_PUBLIC_KEY,
-          email: email,
-          amount: amountInKobo,
-          currency: 'NGN',
-          ref: ref,
-          callback: onPaymentSuccess,
-          onClose: onPaymentClose
-        });
-
-        handler.openIframe();
-      });
-    })();
-
-    // --- Admin Authentication & Dashboard (with document viewer) ---
-    (function() {
-      const mainContent = document.getElementById('mainContent');
-      const adminDashboard = document.getElementById('adminDashboard');
-      const mainFooter = document.getElementById('mainFooter');
-      const adminLink = document.getElementById('adminLink');
-      const loginModal = document.getElementById('loginModal');
-      const loginModalOverlay = document.getElementById('loginModalOverlay');
-      const loginForm = document.getElementById('loginForm');
-      const loginError = document.getElementById('loginError');
-      const logoutBtn = document.getElementById('logoutBtn');
-      const searchInput = document.getElementById('searchInput');
-      const statusFilter = document.getElementById('statusFilter');
-      const appTableBody = document.getElementById('appTableBody');
-
-      let currentUser = null;
-
-      async function checkSession() {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (session) {
-          currentUser = session.user;
-          showDashboard();
-        }
-      }
-
-      function showDashboard() {
-        mainContent.style.display = 'none';
-        mainFooter.style.display = 'none';
-        adminDashboard.style.display = 'block';
-        loginModal.style.display = 'none';
-        loginModalOverlay.style.display = 'none';
-        loadApplications();
-      }
-
-      function hideDashboard() {
-        mainContent.style.display = '';
-        mainFooter.style.display = '';
-        adminDashboard.style.display = 'none';
-        currentUser = null;
-      }
-
-      adminLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (currentUser) {
-          showDashboard();
-        } else {
-          loginModal.style.display = 'block';
-          loginModalOverlay.style.display = 'block';
-        }
-      });
-
-      loginModalOverlay.addEventListener('click', () => {
-        loginModal.style.display = 'none';
-        loginModalOverlay.style.display = 'none';
-      });
-
-      loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        loginError.style.display = 'none';
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) {
-          loginError.textContent = error.message;
-          loginError.style.display = 'block';
-          return;
-        }
-        currentUser = data.user;
-        showDashboard();
-        loginForm.reset();
-      });
-
-      logoutBtn.addEventListener('click', async () => {
-        await supabaseClient.auth.signOut();
-        hideDashboard();
-      });
-
-      async function loadApplications(search = '', status = '') {
-        if (!currentUser) return;
-        let query = supabaseClient.from('applications').select('*').order('created_at', { ascending: false });
-        if (status) query = query.eq('status', status);
-        if (search) query = query.or(`first_name.ilike.%${search}%,last_name.ilike.%${search}%,email.ilike.%${search}%`);
-        const { data, error } = await query;
-        if (error) {
-          appTableBody.innerHTML = '<tr><td colspan="8">Error loading applications.</td></tr>';
-          return;
-        }
-        if (data.length === 0) {
-          appTableBody.innerHTML = '<tr><td colspan="8">No applications found.</td></tr>';
-          return;
-        }
-
-        const rows = await Promise.all(data.map(async app => {
-          let docsHtml = '—';
-          if (app.documents && app.documents.length > 0) {
-            const links = await Promise.all(app.documents.map(async (docPath) => {
-              const { data: signedData, error: signedError } = await supabaseClient.storage
-                .from('application-documents')
-                .createSignedUrl(docPath, 60);
-              if (signedError || !signedData) {
-                return `<span style="color: red;" title="${docPath}">Error</span>`;
-              }
-              return `<a href="${signedData.signedUrl}" target="_blank" rel="noopener">View</a>`;
-            }));
-            docsHtml = links.join('<br>');
-          }
-
-          return `
-            <tr>
-              <td>${app.first_name} ${app.last_name}</td>
-              <td>${app.email}</td>
-              <td>$${parseFloat(app.requested_amount).toLocaleString()}</td>
-              <td>${app.loan_type}</td>
-              <td><span class="badge badge-${app.status}">${app.status}</span></td>
-              <td>${docsHtml}</td>
-              <td>${new Date(app.created_at).toLocaleDateString()}</td>
-              <td>
-                ${app.status === 'pending' ? `
-                  <button class="btn btn-sm btn-success" onclick="updateStatus(${app.id}, 'approved')">Approve</button>
-                  <button class="btn btn-sm btn-danger" onclick="updateStatus(${app.id}, 'rejected')">Reject</button>
-                ` : ''}
-              </td>
-            </tr>
-          `;
-        }));
-        appTableBody.innerHTML = rows.join('');
-      }
-
-      window.updateStatus = async (id, status) => {
-        const { error } = await supabaseClient.from('applications').update({ status }).eq('id', id);
-        if (error) {
-          alert('Update failed.');
-          return;
-        }
-        loadApplications(searchInput.value, statusFilter.value);
-      };
-
-      searchInput.addEventListener('input', () => loadApplications(searchInput.value, statusFilter.value));
-      statusFilter.addEventListener('change', () => loadApplications(searchInput.value, statusFilter.value));
-
-      checkSession();
-    })();
-
-    // --- Client Portal (RPC) ---
-    (function() {
-      const statusForm = document.getElementById('statusForm');
-      const statusError = document.getElementById('statusError');
-      const clientResult = document.getElementById('clientResult');
-      const clientName = document.getElementById('clientName');
-      const clientLoanType = document.getElementById('clientLoanType');
-      const clientAmount = document.getElementById('clientAmount');
-      const clientStatus = document.getElementById('clientStatus');
-      const clientDate = document.getElementById('clientDate');
-
-      statusForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('statusEmail').value.trim();
-        const ref = document.getElementById('statusRef').value.trim();
-        clientResult.style.display = 'none';
-        statusError.style.display = 'none';
-
-        if (!email || !ref) {
-          statusError.textContent = 'Please fill in both fields.';
-          statusError.style.display = 'block';
-          return;
-        }
-
-        const { data, error } = await supabaseClient.rpc('check_application_status', {
-          p_email: email,
-          p_ref: ref
-        });
-
-        if (error || !data || data.length === 0) {
-          statusError.textContent = 'Application not found. Check your email and reference number.';
-          statusError.style.display = 'block';
-          return;
-        }
-
-        const app = data[0];
-        clientName.textContent = `${app.first_name} ${app.last_name}`;
-        clientLoanType.textContent = app.loan_type;
-        clientAmount.textContent = `$${parseFloat(app.requested_amount).toLocaleString()}`;
-        clientStatus.textContent = app.status;
-        clientDate.textContent = new Date(app.created_at).toLocaleDateString();
-        clientResult.style.display = 'block';
-      });
-    })();
-    // Auto-open admin login if URL has ?admin=true
-(function() {
-  if (window.location.search.includes('admin=true')) {
-    const loginModal = document.getElementById('loginModal');
-    const loginModalOverlay = document.getElementById('loginModalOverlay');
-    if (loginModal && loginModalOverlay) {
-      loginModal.style.display = 'block';
-      loginModalOverlay.style.display = 'block';
-    }
-  }
-})();
-        // --- Contact Form (reuses admin template) ---
-    (function() {
-      const contactForm = document.getElementById('contactForm');
-      if (!contactForm) return;
-
-      contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const name = document.getElementById('contactName').value.trim();
-        const email = document.getElementById('contactEmail').value.trim();
-        const message = document.getElementById('contactMessage').value.trim();
-
-        if (!name || !email || !message) {
-          alert('Please fill in all fields.');
-          return;
-        }
-
-        emailjs.send('service_ID', 'template_ID', {
-          to_email: 'support@amllending.com',
-          subject: 'New Contact Message from Website',
-          first_name: name,
-          last_name: '',
-          email: email,
-          phone: '',
-          loan_type: '',
-          requested_amount: '',
-          application_ref: '',
-          purpose: message
-        }).then(function() {
-          alert('Message sent successfully! We will respond shortly.');
-          contactForm.reset();
-        }).catch(function(err) {
-          console.error('Contact form error:', err);
-          alert('Failed to send message. Please try again later.');
-        });
-      });
-    })();
   </script>
 </body>
 </html>
