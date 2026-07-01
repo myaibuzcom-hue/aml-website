@@ -350,7 +350,7 @@
       return result;
     }
 
-    // Mobile menu toggle with guaranteed navigation
+    // Mobile menu toggle – immediate navigation
     document.addEventListener('DOMContentLoaded', function() {
       const hamburger = document.getElementById('hamburger');
       const navLinks = document.getElementById('navLinks');
@@ -378,20 +378,22 @@
 
       overlay.addEventListener('click', closeMenu);
 
-      // Handle link clicks – manual navigation to avoid overlay interception
+      // Handle link clicks – navigate immediately
       links.forEach(function(link) {
         link.addEventListener('click', function(e) {
-          e.preventDefault();               // stop browser default
+          e.preventDefault();
           const targetUrl = link.getAttribute('href');
-          closeMenu();                      // close the mobile menu
+          closeMenu();
           if (targetUrl && targetUrl !== '#') {
-            // Navigate after a tiny delay so the menu close animation starts
-            setTimeout(function() {
-              window.location.href = targetUrl;
-            }, 100);
+            window.location.href = targetUrl;   // immediate, no delay
           }
         });
       });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
+      });
+    });
 
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
