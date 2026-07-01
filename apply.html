@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Apply for a business loan with AML Lending Group. Fast approvals, competitive rates, secure document upload.">
+  <meta name="theme-color" content="#0a0e17">
+  <title>Apply for a Loan – AML Lending Group</title>
+  <link rel="icon" type="image/png" href="favicon-32x32.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <style>
+    :root {
+      --gold: #c9a44c;
+      --green: #1fae8e;
+      --dark: #0a0e17;
+      --white: #ffffff;
+      --gray-light: #f5f7fa;
+      --text-primary: #1e293b;
+      --text-secondary: #475569;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-heading: 'Poppins', sans-serif;
+      --transition: 0.25s ease-in-out;
+    }
+
+    *,
+    *::before,
+    *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body); font-weight: 400; line-height: 1.6;
+      color: var(--text-primary); background-color: var(--white);
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; transition: var(--transition); }
+    ul { list-style: none; }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading); font-weight: 600; line-height: 1.3; color: var(--text-primary);
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+    .section { padding: 5rem 0; }
+    .section-title { text-align: center; margin-bottom: 3rem; }
+    .section-title h2 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .section-title p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+    .gold-text { color: var(--gold); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.75rem 1.75rem; font-family: var(--font-heading); font-weight: 600;
+      font-size: 0.95rem; border-radius: 6px; cursor: pointer; transition: var(--transition);
+      border: none; background-color: var(--gold); color: var(--dark);
+    }
+    .btn:hover { background-color: #d4b05d; transform: translateY(-1px); }
+    .btn-outline { background-color: transparent; border: 2px solid var(--gold); color: var(--gold); }
+    .btn-outline:hover { background-color: var(--gold); color: var(--dark); }
+    .btn-sm { padding: 0.4rem 1rem; font-size: 0.85rem; }
+
+    /* Header */
+    .site-header {
+      background-color: var(--dark); border-bottom: 1px solid rgba(201, 164, 76, 0.2);
+      position: sticky; top: 0; z-index: 1000; padding: 0;
+    }
+    .navbar { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 0; }
+    .logo { display: flex; align-items: center; gap: 0.3rem; font-family: var(--font-heading); font-weight: 700; font-size: 1.5rem; color: var(--white); flex-shrink: 0; }
+    .logo span.gold { color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 2rem; }
+    .nav-links a { font-family: var(--font-heading); font-weight: 500; font-size: 0.95rem; color: var(--white); opacity: 0.85; position: relative; white-space: nowrap; }
+    .nav-links a:hover, .nav-links a.active { opacity: 1; color: var(--gold); }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background-color: var(--gold); transition: width var(--transition); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+    .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1100; padding: 5px; }
+    .hamburger span { display: block; width: 25px; height: 2px; background-color: var(--white); transition: var(--transition); transform-origin: center; }
+
+    @media (max-width: 992px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        position: fixed; top: 0; right: -100%; width: 70%; max-width: 320px;
+        height: 100vh; background-color: var(--dark); flex-direction: column;
+        align-items: flex-start; justify-content: center; padding: 4rem 2rem;
+        gap: 2rem; transition: right 0.15s ease;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.5); z-index: 1100;
+      }
+      .nav-links.active { right: 0; }
+      .nav-links a { font-size: 1.1rem; opacity: 1; }
+      .menu-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6); z-index: 1050; display: none;
+      }
+      .menu-overlay.active { display: block; }
+    }
+
+    /* Application Form */
+    .application-container { max-width: 800px; margin: 0 auto; background: var(--white); border-radius: 16px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .form-grid .full-width { grid-column: 1 / -1; }
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-group label { font-weight: 600; color: var(--text-primary); font-size: 0.95rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 6px;
+      font-family: var(--font-body); font-size: 1rem; transition: var(--transition);
+    }
+    .form-group textarea { resize: vertical; height: 100px; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201, 164, 76, 0.15); }
+    .error-message { color: #e74c3c; font-size: 0.85rem; margin-top: 0.25rem; display: none; }
+    .form-group.error input, .form-group.error select, .form-group.error textarea { border-color: #e74c3c; }
+    .form-group.error .error-message { display: block; }
+
+    /* File Upload */
+    .file-upload-area {
+      border: 2px dashed #cbd5e1; border-radius: 8px;
+      padding: 2rem; text-align: center; transition: var(--transition);
+      background: var(--gray-light);
+    }
+    .file-upload-area:hover { border-color: var(--gold); background: #f8fafc; }
+    .file-upload-area input[type="file"] { display: none; }
+    .file-list { margin-top: 1rem; text-align: left; }
+    .file-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.5rem 0.75rem; background: white; border-radius: 4px;
+      margin-bottom: 0.5rem; border: 1px solid #e2e8f0;
+    }
+    .file-item .remove-file { cursor: pointer; color: #e74c3c; font-size: 0.9rem; }
+
+    /* Success Modal */
+    .success-modal {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: var(--white); border-radius: 16px; padding: 3rem; text-align: center;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.2); z-index: 2000; display: none;
+    }
+    .success-modal h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .success-modal i { font-size: 3rem; color: var(--green); margin-bottom: 1rem; }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1999; display: none; }
+
+    /* Footer */
+    .site-footer { background-color: var(--dark); color: var(--gray-light); padding: 3rem 0; font-size: 0.9rem; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+    .footer-grid h4 { color: var(--white); margin-bottom: 1rem; }
+    .footer-grid ul li { margin-bottom: 0.5rem; }
+    .footer-grid a:hover { color: var(--gold); }
+    .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    .footer-bottom a { color: var(--gold); }
+
+    .whatsapp-float {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background-color: #25D366; color: white; width: 60px; height: 60px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      z-index: 999; transition: var(--transition);
+    }
+    .whatsapp-float:hover { transform: scale(1.1); }
+
+    @media (max-width: 768px) {
+      .section { padding: 3rem 0; }
+      .section-title h2 { font-size: 1.8rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .application-container { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="logo">
+          <img src="logo.png" alt="AML" style="height:40px; width:auto; vertical-align:middle;">
+          <span><span class="gold">AML</span> Lending Group</span>
+        </a>
+        <div class="hamburger" id="hamburger" aria-label="Menu" role="button" tabindex="0">
+          <span></span><span></span><span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="business-loans.html">Business Loans</a></li>
+          <li><a href="apply.html" class="active">Apply</a></li>
+          <li><a href="brokers.html">Brokers</a></li>
+          <li><a href="testimonials.html">Testimonials</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <main>
+    <!-- Page Header -->
+    <section class="section" style="background: var(--dark); color: var(--white); text-align: center; padding: 4rem 0 2rem;">
+      <div class="container">
+        <h1 style="color: var(--white); font-size: 2.8rem; margin-bottom: 0.5rem;">Apply for a <span class="gold-text">Business Loan</span></h1>
+        <p style="opacity:0.9;">Complete the form below and upload supporting documents. We'll respond within 24 hours.</p>
+      </div>
+    </section>
+
+    <!-- Application Form -->
+    <section class="section" style="background: var(--gray-light);">
+      <div class="container">
+        <div class="application-container">
+          <form id="applicationForm" novalidate>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="firstName">First Name *</label>
+                <input type="text" id="firstName" required>
+                <span class="error-message">Please enter your first name.</span>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input type="text" id="lastName" required>
+                <span class="error-message">Please enter your last name.</span>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" required>
+                <span class="error-message">Valid email required (e.g., you@example.com).</span>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" required>
+                <span class="error-message">Enter a valid phone number.</span>
+              </div>
+              <div class="form-group">
+                <label for="loanType">Loan Type *</label>
+                <select id="loanType" required>
+                  <option value="">Select loan type</option>
+                  <option value="term-loan">Term Loan</option>
+                  <option value="line-of-credit">Line of Credit</option>
+                  <option value="equipment">Equipment Financing</option>
+                  <option value="commercial-real-estate">Commercial Real Estate</option>
+                </select>
+                <span class="error-message">Please select a loan type.</span>
+              </div>
+              <div class="form-group">
+                <label for="requestedAmount">Requested Amount (USD) *</label>
+                <input type="number" id="requestedAmount" min="500" step="100" required>
+                <span class="error-message">Minimum $500.</span>
+              </div>
+              <div class="form-group full-width">
+                <label for="purpose">Loan Purpose</label>
+                <textarea id="purpose" placeholder="Briefly describe how you intend to use the funds..."></textarea>
+              </div>
+
+              <!-- File Upload -->
+              <div class="form-group full-width">
+                <label>Supporting Documents</label>
+                <div class="file-upload-area" id="fileDropZone">
+                  <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--gold);"></i>
+                  <p>Drag & drop files here or <span style="color: var(--gold); text-decoration: underline; cursor: pointer;">browse</span></p>
+                  <small style="color: var(--text-secondary);">Accepted: JPG, PNG, PDF (max 5MB each)</small>
+                  <input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,.pdf">
+                </div>
+                <div class="file-list" id="fileList"></div>
+              </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+              <button type="submit" class="btn" style="padding: 1rem 3rem; font-size: 1.1rem;" id="submitBtn">
+                <i class="fas fa-paper-plane"></i> Submit Application
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="appModalOverlay"></div>
+  <div class="success-modal" id="successModal">
+    <i class="fas fa-check-circle"></i>
+    <h3>Application Submitted!</h3>
+    <p>Your reference number: <strong id="applicationRefDisplay"></strong></p>
+    <p style="font-size:0.9rem;">A confirmation email has been sent. Keep this number to check your status.</p>
+    <button class="btn" id="closeModalBtn">Close</button>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>AML Lending Group</h4>
+          <p>Your trusted partner for business loans and investments.</p>
+          <p><strong>Director:</strong> Mrs Rolanda Medina</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="business-loans.html">Business Loans</a></li>
+            <li><a href="apply.html">Apply</a></li>
+            <li><a href="brokers.html">Brokers</a></li>
+            <li><a href="testimonials.html">Testimonials</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <ul>
+            <li><i class="fas fa-phone"></i> +1 713 587 6261</li>
+            <li><i class="fas fa-envelope"></i> info@amllending.com</li>
+            <li><i class="fas fa-map-marker-alt"></i> Houston, TX, USA</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 AML Lending Group. All rights reserved. | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/17135876261" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    // --- Supabase & EmailJS Initialization ---
+    const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
+    const EMAILJS_PUBLIC_KEY = '3ScenjU80QSOfq1_-';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    (function() {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    })();
+
+    // --- Generate reference number ---
+    function generateRef() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = 'AML-';
+      for (let i = 0; i < 6; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    // --- Mobile Menu ---
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.getElementById('hamburger');
+      const navLinks = document.getElementById('navLinks');
+      const overlay = document.getElementById('menuOverlay');
+      const links = navLinks.querySelectorAll('a');
+
+      function closeMenu() {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+      function openMenu() {
+        hamburger.classList.add('active');
+        navLinks.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      hamburger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        navLinks.classList.contains('active') ? closeMenu() : openMenu();
+      });
+      overlay.addEventListener('click', closeMenu);
+      links.forEach(link => link.addEventListener('click', closeMenu));
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
+      });
+    });
+
+    // --- Application Form with File Upload & Email ---
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('applicationForm');
+      const modalOverlay = document.getElementById('appModalOverlay');
+      const successModal = document.getElementById('successModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const submitBtn = document.getElementById('submitBtn');
+      const applicationRefDisplay = document.getElementById('applicationRefDisplay');
+
+      const fileInput = document.getElementById('fileInput');
+      const fileDropZone = document.getElementById('fileDropZone');
+      const fileList = document.getElementById('fileList');
+      let selectedFiles = [];
+
+      function showError(input, message) {
+        const formGroup = input.closest('.form-group');
+        const errorSpan = formGroup.querySelector('.error-message');
+        formGroup.classList.add('error');
+        if (errorSpan) errorSpan.textContent = message;
+      }
+      function clearError(input) {
+        const formGroup = input.closest('.form-group');
+        formGroup.classList.remove('error');
+      }
+      function validateField(input) {
+        let valid = true;
+        if (input.required && !input.value.trim()) {
+          showError(input, 'This field is required.');
+          valid = false;
+        } else if (input.type === 'email' && input.value.trim()) {
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailPattern.test(input.value.trim())) {
+            showError(input, 'Please enter a valid email address.');
+            valid = false;
+          } else { clearError(input); }
+        } else if (input.id === 'phone' && input.value.trim()) {
+          const phonePattern = /^[\d\s\-\(\)\+]+$/;
+          if (!phonePattern.test(input.value.trim()) || input.value.trim().length < 7) {
+            showError(input, 'Enter a valid phone number.');
+            valid = false;
+          } else { clearError(input); }
+        } else if (input.id === 'requestedAmount') {
+          const amount = parseFloat(input.value);
+          if (isNaN(amount) || amount < 500) {
+            showError(input, 'Minimum loan amount is $500.');
+            valid = false;
+          } else { clearError(input); }
+        } else { clearError(input); }
+        return valid;
+      }
+
+      form.querySelectorAll('input:not([type="file"]), select, textarea').forEach(input => {
+        input.addEventListener('blur', () => validateField(input));
+        input.addEventListener('input', () => {
+          if (input.closest('.form-group').classList.contains('error')) {
+            validateField(input);
+          }
+        });
+      });
+
+      function updateFileList() {
+        fileList.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+          const div = document.createElement('div');
+          div.className = 'file-item';
+          div.innerHTML = `<span>${file.name} (${(file.size / 1024).toFixed(1)} KB)</span> <span class="remove-file" data-index="${index}">&times;</span>`;
+          fileList.appendChild(div);
+        });
+        fileList.querySelectorAll('.remove-file').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            selectedFiles.splice(idx, 1);
+            updateFileList();
+          });
+        });
+      }
+
+      fileInput.addEventListener('change', (e) => {
+        const newFiles = Array.from(e.target.files);
+        const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+        let validFiles = newFiles.filter(file => {
+          if (!allowedTypes.includes(file.type)) {
+            alert(`File ${file.name} is not allowed. Only JPG, PNG, PDF accepted.`);
+            return false;
+          }
+          if (file.size > 5 * 1024 * 1024) {
+            alert(`File ${file.name} exceeds 5MB limit.`);
+            return false;
+          }
+          return true;
+        });
+        selectedFiles = [...selectedFiles, ...validFiles];
+        updateFileList();
+        fileInput.value = '';
+      });
+
+      fileDropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileDropZone.style.borderColor = 'var(--gold)';
+      });
+      fileDropZone.addEventListener('dragleave', () => {
+        fileDropZone.style.borderColor = '#cbd5e1';
+      });
+      fileDropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileDropZone.style.borderColor = '#cbd5e1';
+        const droppedFiles = Array.from(e.dataTransfer.files);
+        fileInput.files = droppedFiles;
+        const event = new Event('change', { bubbles: true });
+        Object.defineProperty(event, 'target', { value: { files: droppedFiles } });
+        fileInput.dispatchEvent(event);
+      });
+
+      fileDropZone.addEventListener('click', () => fileInput.click());
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        let isFormValid = true;
+        form.querySelectorAll('[required]:not([type="file"])').forEach(input => {
+          if (!validateField(input)) isFormValid = false;
+        });
+        if (!isFormValid) {
+          const firstError = form.querySelector('.form-group.error');
+          if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+
+        const newRef = generateRef();
+        const applicationData = {
+          first_name: document.getElementById('firstName').value.trim(),
+          last_name: document.getElementById('lastName').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          loan_type: document.getElementById('loanType').value,
+          requested_amount: parseFloat(document.getElementById('requestedAmount').value),
+          purpose: document.getElementById('purpose').value.trim() || null,
+          application_ref: newRef,
+          documents: []
+        };
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+        const uploadedPaths = [];
+        if (selectedFiles.length > 0) {
+          for (const file of selectedFiles) {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${newRef}/${Date.now()}-${Math.random().toString(36).substring(2,8)}.${fileExt}`;
+            const { error } = await supabaseClient.storage
+              .from('application-documents')
+              .upload(fileName, file, { cacheControl: '3600', upsert: false });
+            if (error) {
+              console.error('File upload error:', error);
+              alert(`Failed to upload ${file.name}. Please try again.`);
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+              return;
+            }
+            uploadedPaths.push(fileName);
+          }
+        }
+        applicationData.documents = uploadedPaths;
+
+        const { error } = await supabaseClient.from('applications').insert([applicationData]);
+        if (error) {
+          console.error('Insert error:', error);
+          alert('Something went wrong saving your application. Please try again.');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+          return;
+        }
+
+        // Send emails (fire-and-forget)
+        const emailParams = {
+          first_name: applicationData.first_name,
+          last_name: applicationData.last_name,
+          email: applicationData.email,
+          phone: applicationData.phone,
+          loan_type: applicationData.loan_type,
+          requested_amount: applicationData.requested_amount,
+          application_ref: newRef,
+          purpose: applicationData.purpose || 'N/A'
+        };
+        emailjs.send('service_l7ouze8', 'template_qnh9ouz', {
+          to_email: applicationData.email,
+          ...emailParams
+        }).catch(err => console.warn('Client email failed:', err));
+        emailjs.send('service_l7ouze8', 'template_muxh2qa', {
+          to_email: 'support@amllending.com',
+          subject: `New Loan Application – ${applicationData.first_name} ${applicationData.last_name}`,
+          ...emailParams
+        }).catch(err => console.warn('Admin email failed:', err));
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+        applicationRefDisplay.textContent = newRef;
+        modalOverlay.style.display = 'block';
+        successModal.style.display = 'block';
+        form.reset();
+        selectedFiles = [];
+        updateFileList();
+        form.querySelectorAll('.form-group').forEach(group => group.classList.remove('error'));
+      });
+
+      closeModalBtn.addEventListener('click', () => {
+        modalOverlay.style.display = 'none';
+        successModal.style.display = 'none';
+      });
+      modalOverlay.addEventListener('click', () => {
+        modalOverlay.style.display = 'none';
+        successModal.style.display = 'none';
+      });
+    });
+  </script>
+</body>
+</html>
