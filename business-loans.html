@@ -220,30 +220,39 @@
             }
         }
 
-        /* ===================== LOANS HERO SECTION ===================== */
+        /* ===================== UPDATED LOANS HERO SECTION (WITH IMAGE) ===================== */
         .loans-hero {
             background-color: var(--dark);
-            padding: 80px 0 60px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 60px 0 80px;
+            position: relative;
+            overflow: hidden;
         }
-        .loans-hero h1 {
+        .loans-hero-container {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .loans-content {
+            flex: 0 0 55%;
+        }
+        .loans-content h1 {
             font-family: var(--font-heading);
             font-weight: 700;
             font-size: 3.2rem;
+            line-height: 1.2;
             color: var(--white);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
-        .loans-hero h1 .highlight-gold {
+        .loans-content h1 .highlight-gold {
             color: var(--gold);
         }
-        .loans-hero p {
+        .loans-content p {
             font-size: 1.1rem;
             color: #b0b0b0;
-            max-width: 600px;
-            margin: 0 auto 1.5rem auto;
+            max-width: 450px;
+            margin-bottom: 2rem;
         }
-        .loans-hero .btn-hero-cta {
+        .loans-content .btn-hero-cta {
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -257,14 +266,60 @@
             border: 2px solid var(--gold);
             transition: all 0.3s;
         }
-        .loans-hero .btn-hero-cta:hover {
+        .loans-content .btn-hero-cta:hover {
             background: transparent;
             color: var(--gold);
         }
 
+        .loans-image-wrapper {
+            flex: 0 0 45%;
+            height: 450px;
+            position: relative;
+        }
+        .loans-image {
+            width: 100%;
+            height: 100%;
+            /* Matching business image with financial charts/laptop */
+            background-image: url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            border: 2px solid rgba(201,164,76,0.2);
+            box-shadow: -20px 20px 30px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 992px) {
+            .loans-hero-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .loans-content {
+                flex: 0 0 100%;
+                text-align: center;
+                padding-right: 0;
+            }
+            .loans-content h1 {
+                font-size: 2.8rem;
+            }
+            .loans-content p {
+                max-width: 100%;
+                margin: 0 auto 2rem;
+            }
+            .loans-image-wrapper {
+                flex: 0 0 100%;
+                height: 300px;
+                width: 100%;
+            }
+            .loans-image {
+                border-radius: 20px 20px 0 0;
+            }
+        }
         @media (max-width: 480px) {
-            .loans-hero h1 {
-                font-size: 2.5rem;
+            .loans-content h1 {
+                font-size: 2.2rem;
+            }
+            .loans-image-wrapper {
+                height: 250px;
             }
         }
 
@@ -585,12 +640,20 @@
         <label for="menuToggle" class="overlay"></label>
     </header>
 
-    <!-- ===================== LOANS HERO SECTION ===================== -->
+    <!-- ===================== UPDATED LOANS HERO SECTION ===================== -->
     <section class="loans-hero">
-        <div class="container">
-            <h1>Business Loans <span class="highlight-gold">Tailored for Your Growth</span></h1>
-            <p>Whether you need to expand your equipment, manage cash flow, or bridge an invoice gap, AML Lending Group has the right funding solution for your business.</p>
-            <a href="apply.html" class="btn-hero-cta">Check Your Eligibility &rarr;</a>
+        <div class="container loans-hero-container">
+            <!-- Left Content -->
+            <div class="loans-content">
+                <h1>Business Loans <span class="highlight-gold">Tailored for Your Growth</span></h1>
+                <p>Whether you need to expand your equipment, manage cash flow, or bridge an invoice gap, AML Lending Group has the right funding solution for your business.</p>
+                <a href="apply.html" class="btn-hero-cta">Check Your Eligibility &rarr;</a>
+            </div>
+
+            <!-- Right Image -->
+            <div class="loans-image-wrapper">
+                <div class="loans-image"></div>
+            </div>
         </div>
     </section>
 
