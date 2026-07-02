@@ -84,23 +84,51 @@
     .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1100; padding: 5px; }
     .hamburger span { display: block; width: 25px; height: 2px; background-color: var(--white); transition: var(--transition); transform-origin: center; }
 
-    @media (max-width: 992px) {
+        @media (max-width: 992px) {
       .hamburger { display: flex; }
       .site-header { z-index: auto !important; }
+
       .nav-links {
-        position: fixed; top: 0; right: -100%; width: 70%; max-width: 320px;
-        height: 100vh; background-color: var(--dark); flex-direction: column;
-        align-items: flex-start; justify-content: center; padding: 4rem 2rem;
-        gap: 2rem; transition: right 0.15s ease;
-        box-shadow: -10px 0 30px rgba(0,0,0,0.5); z-index: 1100;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        max-width: 320px;
+        height: 100vh;
+        background-color: var(--dark);
+        align-items: flex-start;
+        justify-content: center;
+        padding: 4rem 2rem;
+        gap: 2rem;
+        transition: right 0.15s ease;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        z-index: 1100;
       }
-      .nav-links.active { right: 0; }
-      .nav-links a { font-size: 1.1rem; opacity: 1; }
+
+      /* Show menu when checkbox is checked */
+      #menuToggle:checked ~ .container .navbar .nav-links,
+      #menuToggle:checked ~ .nav-links {
+        right: 0;
+      }
+
       .menu-overlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6); z-index: 1050; display: none;
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6);
+        z-index: 1050;
+        cursor: pointer;
       }
-      .menu-overlay.active { display: block; }
+
+      /* Show overlay when menu is open */
+      #menuToggle:checked ~ .menu-overlay {
+        display: block;
+      }
+
+      .nav-links a { font-size: 1.1rem; opacity: 1; }
     }
 
     /* Application Form */
@@ -173,29 +201,30 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="container">
-      <nav class="navbar">
-        <a href="index.html" class="logo">
-          <img src="logo.png" alt="AML" style="height:40px; width:auto; vertical-align:middle;">
-          <span><span class="gold">AML</span> Lending Group</span>
-        </a>
-        <div class="hamburger" id="hamburger" aria-label="Menu" role="button" tabindex="0">
-          <span></span><span></span><span></span>
-        </div>
-        <ul class="nav-links" id="navLinks">
-          <li><a href="index.html">Home</a></li>
+  <input type="checkbox" id="menuToggle" style="display:none;">
+  <div class="container">
+    <nav class="navbar">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="AML" style="height:40px; width:auto; vertical-align:middle;">
+        <span><span class="gold">AML</span> Lending Group</span>
+      </a>
+      <label for="menuToggle" class="hamburger" id="hamburger" aria-label="Menu" role="button" tabindex="0">
+        <span></span><span></span><span></span>
+      </label>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
           <li><a href="business-loans.html">Business Loans</a></li>
-          <li><a href="apply.html" class="active">Apply</a></li>
+          <li><a href="apply.html">Apply</a></li>
           <li><a href="brokers.html">Brokers</a></li>
           <li><a href="testimonials.html">Testimonials</a></li>
           <li><a href="faq.html">FAQ</a></li>
-          <li><a href="about.html">About</a></li>
+          <li><a href="about.html" class="active">About</a></li>
           <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-  <div class="menu-overlay" id="menuOverlay"></div>
+      </ul>
+    </nav>
+  </div>
+  <label for="menuToggle" class="menu-overlay" id="menuOverlay"></label>
+</header>
 
   <main>
     <!-- Page Header -->
@@ -350,45 +379,18 @@
       return result;
     }
 
-    // Mobile menu toggle – immediate navigation
+    // Close mobile menu (uncheck checkbox) when any link is clicked
     document.addEventListener('DOMContentLoaded', function() {
-      const hamburger = document.getElementById('hamburger');
-      const navLinks = document.getElementById('navLinks');
-      const overlay = document.getElementById('menuOverlay');
-      const links = navLinks.querySelectorAll('a');
-
-      function closeMenu() {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-
-      function openMenu() {
-        hamburger.classList.add('active');
-        navLinks.classList.add('active');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-
-      hamburger.addEventListener('click', function(e) {
-        e.stopPropagation();
-        navLinks.classList.contains('active') ? closeMenu() : openMenu();
-      });
-
-      overlay.addEventListener('click', closeMenu);
-
-      // Handle link clicks – navigate immediately
-      links.forEach(function(link) {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetUrl = link.getAttribute('href');
-          closeMenu();
-          if (targetUrl && targetUrl !== '#') {
-            window.location.href = targetUrl;   // immediate, no delay
-          }
+      const toggle = document.getElementById('menuToggle');
+      if (!toggle) return;
+      document.querySelectorAll('#navLinks a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          toggle.checked = false;
+          // The browser will then follow the link naturally
         });
       });
+      // Also close menu when the overlay label is clicked (it's a label, so it toggles)
+    });
 
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && navLinks.classList.contains('active')) closeMenu();
