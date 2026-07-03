@@ -42,7 +42,7 @@
             padding: 0 20px;
         }
 
-        /* ===================== HEADER & NAVIGATION ===================== */
+        /* ===================== HEADER & NAVIGATION (IDENTICAL TO WORKING INDEX.HTML) ===================== */
         .header-container {
             display: flex;
             justify-content: space-between;
@@ -61,10 +61,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-        }
-        .logo .logo-icon {
-            color: var(--gold);
-            font-size: 1.5rem;
         }
         .logo .logo-gold {
             color: var(--gold);
@@ -93,7 +89,7 @@
             gap: 1.5rem;
         }
         .nav-menu label {
-            display: contents;
+            display: contents; /* Ensures links are inline on desktop */
         }
         .nav-menu a {
             font-size: 0.9rem;
@@ -115,22 +111,23 @@
             height: 2px;
             background-color: var(--gold);
         }
-        .nav-menu .cta-btn {
-            background: var(--gold);
-            color: var(--dark);
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-weight: 600;
-        }
-        .nav-menu .cta-btn:hover {
-            background: #b08a3b;
-            color: var(--dark);
-        }
-        .nav-menu .cta-btn::after {
-            display: none;
-        }
         .close-x {
             display: none;
+        }
+
+        /* Apply Button (Desktop) */
+        .desktop-cta {
+            background: var(--gold);
+            color: var(--dark);
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .desktop-cta:hover {
+            background: #b08a3b;
+            color: var(--dark);
         }
 
         /* Checkbox Menu Toggle (Hidden) */
@@ -170,7 +167,7 @@
                 display: block;
                 width: 100%;
                 padding: 12px 0;
-                cursor: pointer;
+                cursor: pointer; /* Clicking the label toggles checkbox */
             }
             .nav-menu a {
                 display: block;
@@ -185,15 +182,6 @@
             .nav-menu a:hover {
                 color: var(--gold);
             }
-            .nav-menu .cta-btn {
-                display: inline-block;
-                width: auto;
-                padding: 10px 20px;
-                margin-top: 10px;
-                border-radius: 6px;
-                background: var(--gold);
-                color: var(--dark);
-            }
             .close-x {
                 display: block;
                 text-align: right;
@@ -202,6 +190,9 @@
                 cursor: pointer;
                 padding: 0 0 20px 0;
                 width: 100%;
+            }
+            .desktop-cta {
+                display: none; /* Hide desktop button on mobile */
             }
             /* Toggle Logic */
             #menuToggle:checked ~ .header-container .nav-menu {
@@ -739,11 +730,8 @@
     <header class="header-container">
         <!-- Logo -->
         <div class="logo">
-            <span class="logo-icon">&#128200;</span>
-            <div>
-                <span class="logo-gold">AML</span> LENDING GROUP
-                <span class="tagline">EMPOWERING BUSINESSES SINCE 2015</span>
-            </div>
+            <span class="logo-gold">AML</span> LENDING GROUP
+            <span class="tagline">EMPOWERING BUSINESSES SINCE 2015</span>
         </div>
 
         <!-- Hamburger Icon -->
@@ -762,13 +750,10 @@
             <label for="menuToggle"><a href="about.html">About Us</a></label>
             <label for="menuToggle"><a href="faq.html">FAQ</a></label>
             <label for="menuToggle"><a href="contact.html">Contact Us</a></label>
-            
-            <!-- Mobile only CTA -->
-            <label for="menuToggle"><a href="apply.html" class="cta-btn">Apply Now</a></label>
         </nav>
 
-        <!-- Desktop CTA Button (ONLY ONE - REMOVED PHONE CTA) -->
-        <a href="apply.html" class="cta-btn" style="background:var(--gold);color:var(--dark);padding:10px 20px;border-radius:6px;font-weight:600;font-size:0.9rem;transition:background 0.3s;">Apply Now</a>
+        <!-- Desktop CTA Button (ONLY ONE) -->
+        <a href="apply.html" class="desktop-cta">Apply Now</a>
 
         <!-- Dark Overlay to close menu by clicking outside -->
         <label for="menuToggle" class="overlay"></label>
