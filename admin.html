@@ -43,7 +43,6 @@
         }
 
         /* ===================== 404 SECURITY OVERRIDE ===================== */
-        /* By default, we hide the dashboard behind a 404 if ?admin=true is missing */
         #dashboard-content {
             display: none;
         }
@@ -65,11 +64,6 @@
             font-size: 1.2rem;
             margin-top: 10px;
         }
-
-        /* SHOW DASHBOARD ONLY IF URL HAS ?admin=true */
-        /* Using CSS :has selector to detect URL parameter presence */
-        /* Since CSS can't read URL params natively, we use JavaScript for the check below. */
-        /* BUT we still hide it from search engines by default. */
 
         /* ===================== ADMIN HEADER ===================== */
         .admin-header {
@@ -543,20 +537,20 @@
 
     <script>
         // ===================== SECURITY CHECK =====================
-        // 1. Check if ?admin=true is in the URL
+        // 1. Change param to 'secure' to avoid browser conflicts
         const urlParams = new URLSearchParams(window.location.search);
-        const isAdmin = urlParams.get('admin') === 'true';
+        const isAdmin = urlParams.get('secure') === 'true';
 
-        // 2. Master Password (Change this to whatever you want!)
+        // 2. Master Password
         const MASTER_PASSWORD = "AML2026"; 
 
         if (!isAdmin) {
-            // If URL parameter is missing, show 404 (page not found)
+            // If URL parameter is missing, show 404
             document.getElementById('access-denied').style.display = 'flex';
             document.getElementById('dashboard-content').style.display = 'none';
             document.getElementById('password-overlay').style.display = 'none';
         } else {
-            // If parameter is present, show password overlay but hide dashboard
+            // If parameter is present, show password overlay
             document.getElementById('access-denied').style.display = 'none';
             document.getElementById('dashboard-content').style.display = 'none';
             document.getElementById('password-overlay').style.display = 'flex';
@@ -565,12 +559,10 @@
         function checkPassword() {
             const input = document.getElementById('adminPass').value;
             if (input === MASTER_PASSWORD) {
-                // Correct Password
                 document.getElementById('password-overlay').style.display = 'none';
                 document.getElementById('dashboard-content').style.display = 'block';
                 document.getElementById('pError').style.display = 'none';
             } else {
-                // Wrong Password
                 document.getElementById('pError').style.display = 'block';
                 document.getElementById('adminPass').value = '';
                 document.getElementById('adminPass').focus();
@@ -578,7 +570,6 @@
         }
 
         function logoutAdmin() {
-            // Lock the dashboard again
             document.getElementById('dashboard-content').style.display = 'none';
             document.getElementById('password-overlay').style.display = 'flex';
             document.getElementById('adminPass').value = '';
