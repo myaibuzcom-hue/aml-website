@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a Broker - AML Lending Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===================== RESET & VARIABLES ===================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --gold: #c9a44c;
+            --dark: #0a0e17;
+            --white: #ffffff;
+            --light-gray: #f5f7fa;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-body);
+            color: #e0e0e0;
+            background-color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===================== HEADER & NAVIGATION ===================== */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--dark);
+            position: relative;
+            z-index: 1000;
+        }
+        .logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo .logo-gold {
+            color: var(--gold);
+        }
+        .logo .tagline {
+            font-size: 0.6rem;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            color: var(--gold);
+            font-size: 32px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Desktop Nav */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .nav-menu label {
+            display: contents;
+        }
+        .nav-menu a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #b0b0b0;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--white);
+        }
+        .nav-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--gold);
+        }
+        .close-x {
+            display: none;
+        }
+
+        /* Desktop CTA Button */
+        .desktop-cta {
+            border: 1px solid var(--gold);
+            padding: 8px 18px;
+            border-radius: 6px;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .desktop-cta:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+
+        /* Checkbox Menu Toggle (Hidden) */
+        #menuToggle {
+            display: none;
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+        }
+
+        /* Mobile Menu Styles */
+        @media (max-width: 992px) {
+            .hamburger {
+                display: block;
+            }
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 280px;
+                height: 100vh;
+                background: var(--dark);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2rem 2rem 2rem 3rem;
+                transform: translateX(100%);
+                visibility: hidden;
+                transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.7);
+                z-index: 1000;
+                border-left: 1px solid rgba(201, 164, 76, 0.2);
+                gap: 0;
+                overflow-y: auto;
+            }
+            .nav-menu label {
+                display: block;
+                width: 100%;
+                padding: 12px 0;
+                cursor: pointer;
+                color: #ffffff;
+            }
+            .nav-menu a {
+                display: block;
+                width: 100%;
+                font-size: 1.1rem;
+                padding: 5px 0;
+                color: #ffffff;
+                text-decoration: none;
+            }
+            .nav-menu a.active::after {
+                display: none;
+            }
+            .nav-menu a:hover {
+                color: var(--gold);
+            }
+            .close-x {
+                display: block;
+                text-align: right;
+                color: var(--gold);
+                font-size: 32px;
+                cursor: pointer;
+                padding: 0 0 20px 0;
+                width: 100%;
+            }
+            .desktop-cta {
+                display: none;
+            }
+            /* Toggle Logic */
+            #menuToggle:checked ~ .header-container .nav-menu {
+                transform: translateX(0);
+                visibility: visible;
+            }
+            #menuToggle:checked ~ .header-container .overlay {
+                display: block;
+            }
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 999;
+            }
+        }
+
+        /* ===================== BROKER HERO SECTION ===================== */
+        .broker-hero {
+            padding: 40px 0 60px;
+            background-color: var(--dark);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        .breadcrumb {
+            font-size: 0.85rem;
+            color: #b0b0b0;
+            margin-bottom: 30px;
+        }
+        .breadcrumb span {
+            color: var(--gold);
+        }
+        .broker-hero-container {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .broker-hero-text {
+            flex: 0 0 55%;
+        }
+        .broker-hero-text h1 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 3.2rem;
+            line-height: 1.2;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+        .broker-hero-text h1 .highlight-gold {
+            color: var(--gold);
+        }
+        .broker-hero-text p {
+            color: #b0b0b0;
+            font-size: 1rem;
+            margin-bottom: 25px;
+            max-width: 500px;
+        }
+        .hero-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .hero-features .h-feat {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #b0b0b0;
+        }
+        .hero-features .h-feat .f-icon {
+            color: var(--gold);
+            font-size: 1.2rem;
+            border: 1px solid rgba(201, 164, 76, 0.3);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .broker-hero-image {
+            flex: 0 0 45%;
+            height: 350px;
+        }
+        .broker-hero-image .hero-img {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            border: 2px solid rgba(201,164,76,0.2);
+            box-shadow: -20px 20px 30px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 992px) {
+            .broker-hero-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .broker-hero-text {
+                flex: 0 0 100%;
+                text-align: center;
+            }
+            .broker-hero-text p {
+                max-width: 100%;
+                margin: 0 auto 25px;
+            }
+            .hero-features {
+                justify-content: center;
+            }
+            .broker-hero-image {
+                flex: 0 0 100%;
+                height: 250px;
+                width: 100%;
+            }
+        }
+        @media (max-width: 480px) {
+            .broker-hero-text h1 {
+                font-size: 2.2rem;
+            }
+            .broker-hero-image {
+                height: 200px;
+            }
+        }
+
+        /* ===================== APPLICATION SECTION ===================== */
+        .broker-apply-layout {
+            padding: 60px 0 80px;
+        }
+        .broker-apply-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: flex-start;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .section-header h2 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 2.2rem;
+            color: var(--white);
+        }
+        .section-header p {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+            margin-top: 10px;
+        }
+
+        /* ===================== APPLICATION FORM ===================== */
+        .app-form-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 40px;
+        }
+        .form-step-title {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-step-title .step-icon {
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+        .form-divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin: 30px 0;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-size: 0.85rem;
+            color: #b0b0b0;
+            margin-bottom: 8px;
+        }
+        .form-group label .required {
+            color: #ff4d4d;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 15px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+            width: 100%;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #666;
+        }
+        .form-group select {
+            color: #b0b0b0;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23c9a44c'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+        .form-group select option {
+            background: var(--dark);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .terms-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #b0b0b0;
+        }
+        .terms-check input[type="checkbox"] {
+            accent-color: var(--gold);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .terms-check a {
+            color: var(--gold);
+            text-decoration: underline;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--gold);
+            color: var(--dark);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .submit-btn:hover {
+            background: #b08a3b;
+        }
+
+        /* ===================== SIDEBAR ===================== */
+        .sidebar-widget {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .sidebar-widget:last-child {
+            margin-bottom: 0;
+        }
+        .sidebar-widget h3 {
+            font-family: var(--font-heading);
+            color: var(--gold);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        /* Timeline Widget */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 5px;
+            bottom: 5px;
+            width: 2px;
+            background: rgba(255,255,255,0.1);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--dark);
+            border: 2px solid var(--gold);
+            z-index: 1;
+        }
+        .timeline-item h4 {
+            color: var(--white);
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .timeline-item p {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        /* Help Widget */
+        .help-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+        .help-item .h-icon {
+            color: var(--gold);
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+        .help-item strong {
+            color: var(--white);
+        }
+
+        /* ===================== MOBILE RESPONSIVENESS ===================== */
+        @media (max-width: 768px) {
+            .broker-apply-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .app-form-container {
+                padding: 20px;
+            }
+        }
+
+        /* ===================== BOTTOM CTA ===================== */
+        .broker-bottom-cta {
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .broker-bottom-cta .cta-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .broker-bottom-cta .cta-icon {
+            font-size: 3rem;
+            color: var(--gold);
+        }
+        .broker-bottom-cta .cta-text h3 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+        }
+        .broker-bottom-cta .cta-text p {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+        .broker-bottom-cta .btn-cta-right {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            color: var(--gold);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .broker-bottom-cta .btn-cta-right:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+
+        @media (max-width: 768px) {
+            .broker-bottom-cta {
+                flex-direction: column;
+                text-align: center;
+            }
+            .broker-bottom-cta .cta-left {
+                flex-direction: column;
+            }
+        }
+
+        /* ===================== FOOTER ===================== */
+        footer {
+            background-color: #070a11;
+            padding: 50px 0 20px;
+            color: #b0b0b0;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            color: var(--white);
+            font-family: var(--font-heading);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+        .footer-col ul li a {
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .footer-col ul li a:hover {
+            color: var(--gold);
+        }
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--white);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer-logo .gold {
+            color: var(--gold);
+        }
+        .footer-col p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        .footer-director {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+        }
+        .footer-bottom-links a {
+            transition: color 0.3s;
+        }
+        .footer-bottom-links a:hover {
+            color: var(--gold);
+        }
+
+        @media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===================== HEADER & MENU ===================== -->
+    <input type="checkbox" id="menuToggle" hidden>
+    <header class="header-container">
+        <!-- Logo -->
+        <div class="logo">
+            <span class="logo-gold">AML</span> LENDING GROUP
+            <span class="tagline">EMPOWERING BUSINESSES SINCE 2015</span>
+        </div>
+
+        <!-- Hamburger Icon -->
+        <label for="menuToggle" class="hamburger">&#9776;</label>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-menu">
+            <!-- Close Button inside Menu -->
+            <label for="menuToggle" class="close-x">&times;</label>
+
+            <label for="menuToggle"><a href="index.html">Home</a></label>
+            <label for="menuToggle"><a href="business-loans.html">Business Loans</a></label>
+            <label for="menuToggle"><a href="apply.html">Apply</a></label>
+            <label for="menuToggle"><a href="broker-application.html" class="active">Brokers</a></label>
+            <label for="menuToggle"><a href="testimonials.html">Testimonials</a></label>
+            <label for="menuToggle"><a href="about.html">About Us</a></label>
+            <label for="menuToggle"><a href="faq.html">FAQ</a></label>
+            <label for="menuToggle"><a href="contact.html">Contact Us</a></label>
+        </nav>
+
+        <!-- Desktop CTA Button -->
+        <a href="broker-application.html" class="desktop-cta">Become a Broker</a>
+
+        <!-- Dark Overlay to close menu by clicking outside -->
+        <label for="menuToggle" class="overlay"></label>
+    </header>
+
+    <!-- ===================== HERO SECTION ===================== -->
+    <section class="broker-hero">
+        <div class="container">
+            <div class="breadcrumb">
+                Home <span>&#8250;</span> Brokers <span>&#8250;</span> Become a Broker
+            </div>
+            <div class="broker-hero-container">
+                <div class="broker-hero-text">
+                    <h1>Become a <span class="highlight-gold">Broker</span></h1>
+                    <p>Join our trusted network of brokers and start earning competitive commissions while helping businesses access the capital they need to grow.</p>
+                    <div class="hero-features">
+                        <div class="h-feat"><span class="f-icon">&#37;</span> High Commissions</div>
+                        <div class="h-feat"><span class="f-icon">&#128339;</span> Fast Approvals</div>
+                        <div class="h-feat"><span class="f-icon">&#127911;</span> Dedicated Support</div>
+                        <div class="h-feat"><span class="f-icon">&#128197;</span> Weekly Payouts</div>
+                    </div>
+                </div>
+                <div class="broker-hero-image">
+                    <div class="hero-img"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== APPLICATION LAYOUT (FORM + SIDEBAR) ===================== -->
+    <section class="broker-apply-layout">
+        <div class="container">
+            <div class="section-header">
+                <h2>Broker Application</h2>
+                <p>Fill out the form below and our team will review your application.</p>
+            </div>
+            <div class="broker-apply-grid">
+                
+                <!-- LEFT COLUMN: Application Form -->
+                <div class="app-form-container">
+                    <form>
+                        <!-- Step 1 -->
+                        <div class="form-step-title"><span class="step-icon">&#128100;</span> Personal Information</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name <span class="required">*</span></label>
+                                <input type="text" placeholder="First Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name <span class="required">*</span></label>
+                                <input type="text" placeholder="Last Name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email Address <span class="required">*</span></label>
+                                <input type="email" placeholder="Email Address" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number <span class="required">*</span></label>
+                                <input type="tel" placeholder="Phone Number" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Company Name (if applicable)</label>
+                                <input type="text" placeholder="Company Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Website (if applicable)</label>
+                                <input type="text" placeholder="Website">
+                            </div>
+                        </div>
+
+                        <hr class="form-divider">
+
+                        <!-- Step 2 -->
+                        <div class="form-step-title"><span class="step-icon">&#128193;</span> Business Information</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Business Type <span class="required">*</span></label>
+                                <select required>
+                                    <option value="" disabled selected>Select Business Type</option>
+                                    <option value="Sole Prop">Sole Proprietorship</option>
+                                    <option value="LLC">LLC</option>
+                                    <option value="Corp">Corporation</option>
+                                    <option value="Partnership">Partnership</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Years in Business <span class="required">*</span></label>
+                                <select required>
+                                    <option value="" disabled selected>Select Years</option>
+                                    <option value="1">Less than 1 year</option>
+                                    <option value="2">1 - 2 years</option>
+                                    <option value="5">3 - 5 years</option>
+                                    <option value="10">5+ years</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Estimated Monthly Deals <span class="required">*</span></label>
+                                <select required>
+                                    <option value="" disabled selected>Select Range</option>
+                                    <option value="1-5">1 - 5</option>
+                                    <option value="6-10">6 - 10</option>
+                                    <option value="11-20">11 - 20</option>
+                                    <option value="20+">20+</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>States You Operate In <span class="required">*</span></label>
+                                <input type="text" placeholder="e.g. CA, TX, FL or Worldwide" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>How did you hear about us?</label>
+                                <select>
+                                    <option value="" disabled selected>Select an Option</option>
+                                    <option value="Search">Search Engine</option>
+                                    <option value="Social">Social Media</option>
+                                    <option value="Referral">Referral</option>
+                                    <option value="Email">Email</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label> </label>
+                                <div style="height: 1px;"></div>
+                            </div>
+                        </div>
+
+                        <hr class="form-divider">
+
+                        <!-- Step 3 -->
+                        <div class="form-step-title"><span class="step-icon">&#128172;</span> Additional Information</div>
+                        <div class="form-row" style="grid-template-columns: 1fr;">
+                            <div class="form-group">
+                                <label>Tell us about your experience in lending or finance (optional)</label>
+                                <textarea placeholder="Write your message here..."></textarea>
+                            </div>
+                        </div>
+
+                        <hr class="form-divider">
+
+                        <!-- Actions -->
+                        <div class="form-actions">
+                            <div class="terms-check">
+                                <input type="checkbox" id="terms" required>
+                                <label for="terms">I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a>.</label>
+                            </div>
+                            <button type="submit" class="submit-btn">
+                                &#128640; Submit Application
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- RIGHT COLUMN: Sidebar -->
+                <div class="sidebar-wrapper">
+                    <!-- Widget 1: Timeline -->
+                    <div class="sidebar-widget">
+                        <h3>What Happens Next?</h3>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <h4>Application Review</h4>
+                                <p>We'll review your application within 1-2 business days.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h4>Welcome Call</h4>
+                                <p>Our broker team will schedule a quick call to learn more about you.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h4>Approval &amp; Onboarding</h4>
+                                <p>Once approved, we'll get you set up and give you access to our broker portal.</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h4>Start Earning</h4>
+                                <p>Submit deals and start earning competitive commissions.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Widget 2: Questions -->
+                    <div class="sidebar-widget">
+                        <h3>Questions?</h3>
+                        <p style="color:#888; font-size:0.9rem; margin-bottom:15px;">Our broker support team is here to help:</p>
+                        <div class="help-item">
+                            <span class="h-icon">&#9742;</span> 
+                            <div><strong>+1 713 587 6261</strong></div>
+                        </div>
+                        <div class="help-item">
+                            <span class="h-icon">&#9993;</span> 
+                            <div><a href="mailto:info@amllending.com" style="color:var(--gold);">info@amllending.com</a></div>
+                        </div>
+                        <div class="help-item">
+                            <span class="h-icon">&#128339;</span> 
+                            <div>Mon - Fri: 8AM - 8PM EST</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== BOTTOM CTA ===================== -->
+    <div class="container">
+        <div class="broker-bottom-cta">
+            <div class="cta-left">
+                <div class="cta-icon">&#128101;</div>
+                <div class="cta-text">
+                    <h3>Ready to grow with us?</h3>
+                    <p>Partner with AML Lending Group and help businesses achieve their goals.</p>
+                </div>
+            </div>
+            <a href="about.html" class="btn-cta-right">Learn More About Our Program &rarr;</a>
+        </div>
+    </div>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo"><span class="gold">AML</span> LENDING GROUP</div>
+                    <p>Empowering businesses with fast, reliable funding solutions since 2015.</p>
+                    <p class="footer-director">Director: Mrs. Rolanda Medina</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="business-loans.html">Business Loans</a></li>
+                        <li><a href="apply.html">Apply Now</a></li>
+                        <li><a href="broker-application.html">Brokers</a></li>
+                        <li><a href="testimonials.html">Testimonials</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <p><strong>Address:</strong> Houston, TX, USA</p>
+                    <p><strong>Phone:</strong> +1 713 587 6261</p>
+                    <p><strong>Email:</strong> info@amllending.com</p>
+                    <p><strong>Support:</strong> support@amllending.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 AML Lending Group. All rights reserved.</span>
+                <div class="footer-bottom-links">
+                    <a href="terms.html">Terms &amp; Conditions</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
