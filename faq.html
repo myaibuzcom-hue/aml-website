@@ -1,338 +1,911 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Frequently asked questions about business loans, applications, and broker partnerships with AML Lending Group.">
-  <meta name="theme-color" content="#0a0e17">
-  <title>FAQ – AML Lending Group</title>
-  <link rel="icon" type="image/png" href="favicon-32x32.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - AML Lending Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===================== RESET & VARIABLES ===================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --gold: #c9a44c;
+            --dark: #0a0e17;
+            --white: #ffffff;
+            --light-gray: #f5f7fa;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-body);
+            color: #e0e0e0;
+            background-color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        /* ===================== HEADER & NAVIGATION ===================== */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--dark);
+            position: relative;
+            z-index: 1000;
+        }
+        .logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo .logo-icon {
+            color: var(--gold);
+            font-size: 1.5rem;
+        }
+        .logo .logo-gold {
+            color: var(--gold);
+        }
+        .logo .tagline {
+            font-size: 0.6rem;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 1px;
+            display: block;
+        }
 
-  <style>
-    :root {
-      --gold: #c9a44c;
-      --green: #1fae8e;
-      --dark: #0a0e17;
-      --white: #ffffff;
-      --gray-light: #f5f7fa;
-      --text-primary: #1e293b;
-      --text-secondary: #475569;
-      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --font-heading: 'Poppins', sans-serif;
-      --transition: 0.25s ease-in-out;
-    }
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            color: var(--gold);
+            font-size: 32px;
+            cursor: pointer;
+            z-index: 1001;
+        }
 
-    *,
-    *::before,
-    *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Desktop Nav */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .nav-menu label {
+            display: contents;
+        }
+        .nav-menu a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #b0b0b0;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--white);
+        }
+        .nav-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--gold);
+        }
+        .close-x {
+            display: none;
+        }
 
-    html { scroll-behavior: smooth; }
+        /* Phone CTA */
+        .cta-phone {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1px solid var(--gold);
+            border-radius: 6px;
+            color: var(--white);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            background: rgba(201, 164, 76, 0.05);
+        }
+        .cta-phone .phone-icon {
+            color: var(--gold);
+        }
+        .cta-phone:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+        .cta-phone:hover .phone-icon {
+            color: var(--dark);
+        }
 
-    body {
-      font-family: var(--font-body); font-weight: 400; line-height: 1.6;
-      color: var(--text-primary); background-color: var(--white);
-      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
-    }
+        /* Checkbox Menu Toggle (Hidden) */
+        #menuToggle {
+            display: none;
+        }
 
-    a { text-decoration: none; color: inherit; transition: var(--transition); }
-    ul { list-style: none; }
-    h1, h2, h3, h4, h5, h6 {
-      font-family: var(--font-heading); font-weight: 600; line-height: 1.3; color: var(--text-primary);
-    }
+        /* Overlay */
+        .overlay {
+            display: none;
+        }
 
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
-    .section { padding: 5rem 0; }
-    .section-title { text-align: center; margin-bottom: 3rem; }
-    .section-title h2 { font-size: 2.2rem; margin-bottom: 0.5rem; }
-    .section-title p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
-    .gold-text { color: var(--gold); }
+        /* Mobile Menu Styles */
+        @media (max-width: 992px) {
+            .hamburger {
+                display: block;
+            }
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 280px;
+                height: 100vh;
+                background: var(--dark);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2rem 2rem 2rem 3rem;
+                transform: translateX(100%);
+                visibility: hidden;
+                transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.7);
+                z-index: 1000;
+                border-left: 1px solid rgba(201, 164, 76, 0.2);
+                gap: 0;
+                overflow-y: auto;
+            }
+            .nav-menu label {
+                display: block;
+                width: 100%;
+                padding: 12px 0;
+                cursor: pointer;
+                color: #ffffff;
+            }
+            .nav-menu a {
+                display: block;
+                width: 100%;
+                font-size: 1.1rem;
+                padding: 5px 0;
+                color: #ffffff;
+                text-decoration: none;
+            }
+            .nav-menu a.active::after {
+                display: none;
+            }
+            .nav-menu a:hover {
+                color: var(--gold);
+            }
+            .close-x {
+                display: block;
+                text-align: right;
+                color: var(--gold);
+                font-size: 32px;
+                cursor: pointer;
+                padding: 0 0 20px 0;
+                width: 100%;
+            }
+            .cta-phone {
+                display: none;
+            }
+            /* Toggle Logic */
+            #menuToggle:checked ~ .header-container .nav-menu {
+                transform: translateX(0);
+                visibility: visible;
+            }
+            #menuToggle:checked ~ .header-container .overlay {
+                display: block;
+            }
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 999;
+            }
+        }
 
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-      padding: 0.75rem 1.75rem; font-family: var(--font-heading); font-weight: 600;
-      font-size: 0.95rem; border-radius: 6px; cursor: pointer; transition: var(--transition);
-      border: none; background-color: var(--gold); color: var(--dark);
-    }
-    .btn:hover { background-color: #d4b05d; transform: translateY(-1px); }
-
-    /* Header */
-    .site-header {
-      background-color: var(--dark); border-bottom: 1px solid rgba(201, 164, 76, 0.2);
-      position: sticky; top: 0; z-index: 1000; padding: 0;
-    }
-    .navbar { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 0; }
-    .logo { display: flex; align-items: center; gap: 0.3rem; font-family: var(--font-heading); font-weight: 700; font-size: 1.5rem; color: var(--white); flex-shrink: 0; }
-    .logo span.gold { color: var(--gold); }
-    .nav-links { display: flex; align-items: center; gap: 2rem; }
-    .nav-links a { font-family: var(--font-heading); font-weight: 500; font-size: 0.95rem; color: var(--white); opacity: 0.85; position: relative; white-space: nowrap; }
-    .nav-links a:hover, .nav-links a.active { opacity: 1; color: var(--gold); }
-    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background-color: var(--gold); transition: width var(--transition); }
-    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-
-    .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; z-index: 1100; padding: 5px; }
-    .hamburger span { display: block; width: 25px; height: 2px; background-color: var(--white); transition: var(--transition); transform-origin: center; }
+        /* ===================== HERO SECTION (WITH IMAGE) ===================== */
+        .faq-hero {
+            position: relative;
+            padding: 80px 0 100px;
+            background-color: var(--dark);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            overflow: hidden;
+        }
+        /* Background Image for Hero */
+        .faq-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.25;
+            z-index: 1;
+        }
+        .faq-hero-container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .faq-hero-text {
+            flex: 0 0 55%;
+        }
+        .faq-hero-text .subtitle {
+            color: var(--gold);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .faq-hero-text .subtitle-line {
+            display: inline-block;
+            width: 20px;
+            height: 2px;
+            background: var(--gold);
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+        .faq-hero-text h1 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 3.5rem;
+            line-height: 1.2;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+        .faq-hero-text h1 .highlight-gold {
+            color: var(--gold);
+        }
+        .faq-hero-text p {
+            color: #b0b0b0;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            max-width: 450px;
+        }
+        .faq-hero-image {
+            flex: 0 0 45%;
+            height: 350px;
+        }
+        .faq-hero-image .hero-img {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            border: 2px solid rgba(201,164,76,0.2);
+            box-shadow: -20px 20px 30px rgba(0,0,0,0.5);
+        }
 
         @media (max-width: 992px) {
-      .hamburger { display: flex; }
-      .site-header { z-index: auto !important; }
+            .faq-hero-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .faq-hero-text {
+                flex: 0 0 100%;
+                text-align: center;
+                padding-right: 0;
+            }
+            .faq-hero-text p {
+                max-width: 100%;
+                margin: 0 auto 1.5rem;
+            }
+            .faq-hero-image {
+                flex: 0 0 100%;
+                height: 250px;
+                width: 100%;
+            }
+        }
+        @media (max-width: 480px) {
+            .faq-hero-text h1 {
+                font-size: 2.2rem;
+            }
+            .faq-hero-image {
+                height: 200px;
+            }
+        }
 
-      .nav-links {
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 70%;
-        max-width: 320px;
-        height: 100vh;
-        background-color: var(--dark);
-        align-items: flex-start;
-        justify-content: center;
-        padding: 4rem 2rem;
-        gap: 2rem;
-        transition: right 0.15s ease;
-        box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-        z-index: 1100;
-      }
+        /* ===================== SEARCH & FILTER BOX ===================== */
+        .faq-tools {
+            margin-bottom: 40px;
+        }
+        .faq-search-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .faq-search-box .find-icon {
+            color: var(--gold);
+            font-size: 3rem;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .faq-search-box .find-text h4 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.1rem;
+        }
+        .faq-search-box .find-text p {
+            color: #b0b0b0;
+            font-size: 0.85rem;
+        }
+        .faq-search-box .search-input-wrap {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+        .faq-search-box .search-input-wrap input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+        }
+        .faq-search-box .search-input-wrap input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        .faq-search-box .search-input-wrap input::placeholder {
+            color: #666;
+        }
+        .faq-search-box .search-input-wrap::before {
+            content: '&#128269;';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 1.2rem;
+        }
 
-      /* Show menu when checkbox is checked */
-      #menuToggle:checked ~ .container .navbar .nav-links,
-      #menuToggle:checked ~ .nav-links {
-        right: 0;
-      }
+        .faq-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .faq-tags .tag {
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #b0b0b0;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .faq-tags .tag:hover {
+            border-color: rgba(201,164,76,0.3);
+            color: var(--white);
+        }
+        .faq-tags .tag.active {
+            background: var(--gold);
+            color: var(--dark);
+            font-weight: 500;
+            border-color: var(--gold);
+        }
 
-      .menu-overlay {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6);
-        z-index: 1050;
-        cursor: pointer;
-      }
+        @media (max-width: 768px) {
+            .faq-search-box {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            .faq-search-box .search-input-wrap {
+                width: 100%;
+            }
+            .faq-tags {
+                justify-content: center;
+            }
+        }
 
-      /* Show overlay when menu is open */
-      #menuToggle:checked ~ .menu-overlay {
-        display: block;
-      }
+        /* ===================== FAQ ACCORDION (CSS RADIO) ===================== */
+        .faq-accordion-section {
+            padding-bottom: 60px;
+        }
+        .faq-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        /* Hide Radio Buttons */
+        .faq-wrapper input[type="radio"] {
+            display: none;
+        }
+        .faq-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .faq-item label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            color: var(--white);
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            position: relative;
+        }
+        .faq-item label:hover {
+            background: rgba(255,255,255,0.02);
+        }
+        .faq-item label::after {
+            content: '\2304'; /* Down arrow */
+            font-size: 1.2rem;
+            color: var(--gold);
+            transition: transform 0.3s;
+        }
+        .faq-item .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding: 0 25px;
+            color: #b0b0b0;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+        /* Toggle Logic */
+        .faq-wrapper:has(#q1:checked) #a1 { max-height: 300px; padding: 0 25px 25px 25px; }
+        .faq-wrapper:has(#q2:checked) #a2 { max-height: 300px; padding: 0 25px 25px 25px; }
+        .faq-wrapper:has(#q3:checked) #a3 { max-height: 300px; padding: 0 25px 25px 25px; }
+        .faq-wrapper:has(#q4:checked) #a4 { max-height: 300px; padding: 0 25px 25px 25px; }
+        .faq-wrapper:has(#q5:checked) #a5 { max-height: 300px; padding: 0 25px 25px 25px; }
+        .faq-wrapper:has(#q6:checked) #a6 { max-height: 300px; padding: 0 25px 25px 25px; }
+        .faq-wrapper:has(#q7:checked) #a7 { max-height: 300px; padding: 0 25px 25px 25px; }
 
-      .nav-links a { font-size: 1.1rem; opacity: 1; }
-    }
+        /* Rotate arrow when open */
+        .faq-wrapper:has(#q1:checked) .faq-item label[for="q1"]::after,
+        .faq-wrapper:has(#q2:checked) .faq-item label[for="q2"]::after,
+        .faq-wrapper:has(#q3:checked) .faq-item label[for="q3"]::after,
+        .faq-wrapper:has(#q4:checked) .faq-item label[for="q4"]::after,
+        .faq-wrapper:has(#q5:checked) .faq-item label[for="q5"]::after,
+        .faq-wrapper:has(#q6:checked) .faq-item label[for="q6"]::after,
+        .faq-wrapper:has(#q7:checked) .faq-item label[for="q7"]::after {
+            transform: rotate(180deg);
+        }
+        
+        /* Highlight open item */
+        .faq-wrapper:has(#q1:checked) .faq-item label[for="q1"] { background: rgba(201,164,76,0.05); }
+        .faq-wrapper:has(#q2:checked) .faq-item label[for="q2"] { background: rgba(201,164,76,0.05); }
+        .faq-wrapper:has(#q3:checked) .faq-item label[for="q3"] { background: rgba(201,164,76,0.05); }
+        .faq-wrapper:has(#q4:checked) .faq-item label[for="q4"] { background: rgba(201,164,76,0.05); }
+        .faq-wrapper:has(#q5:checked) .faq-item label[for="q5"] { background: rgba(201,164,76,0.05); }
+        .faq-wrapper:has(#q6:checked) .faq-item label[for="q6"] { background: rgba(201,164,76,0.05); }
+        .faq-wrapper:has(#q7:checked) .faq-item label[for="q7"] { background: rgba(201,164,76,0.05); }
 
-    /* FAQ Accordion */
-    .faq-list { max-width: 800px; margin: 0 auto; }
-    .faq-item {
-      border-bottom: 1px solid #e2e8f0;
-      padding: 1.5rem 0;
-      cursor: pointer;
-    }
-    .faq-item h3 {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 1.1rem;
-      transition: var(--transition);
-    }
-    .faq-item h3:hover { color: var(--gold); }
-    .faq-item h3 i {
-      transition: transform 0.3s ease;
-      font-size: 0.9rem;
-    }
-    .faq-item.open h3 i {
-      transform: rotate(180deg);
-    }
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-      color: var(--text-secondary);
-    }
-    .faq-item.open .faq-answer {
-      max-height: 300px;
-      margin-top: 0.75rem;
-    }
+        @media (max-width: 480px) {
+            .faq-item label {
+                font-size: 0.9rem;
+                padding: 15px 15px;
+            }
+            .faq-item .faq-answer {
+                font-size: 0.85rem;
+            }
+        }
 
-    /* Footer */
-    .site-footer { background-color: var(--dark); color: var(--gray-light); padding: 3rem 0; font-size: 0.9rem; }
-    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
-    .footer-grid h4 { color: var(--white); margin-bottom: 1rem; }
-    .footer-grid ul li { margin-bottom: 0.5rem; }
-    .footer-grid a:hover { color: var(--gold); }
-    .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
-    .footer-bottom a { color: var(--gold); }
+        /* ===================== BOTTOM SUPPORT BOX ===================== */
+        .faq-support {
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .faq-support .support-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .faq-support .support-item .s-icon {
+            color: var(--gold);
+            font-size: 2.5rem;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .faq-support .support-item h4 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.1rem;
+        }
+        .faq-support .support-item p {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+        .support-chat-btn {
+            background: var(--gold);
+            color: var(--dark);
+            padding: 14px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .support-chat-btn:hover {
+            background: #b08a3b;
+        }
 
-    .whatsapp-float {
-      position: fixed; bottom: 2rem; right: 2rem;
-      background-color: #25D366; color: white; width: 60px; height: 60px;
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 1.8rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      z-index: 999; transition: var(--transition);
-    }
-    .whatsapp-float:hover { transform: scale(1.1); }
+        @media (max-width: 992px) {
+            .faq-support {
+                flex-direction: column;
+                text-align: center;
+            }
+            .faq-support .support-item {
+                flex-direction: column;
+            }
+        }
 
-    @media (max-width: 768px) {
-      .section { padding: 3rem 0; }
-      .section-title h2 { font-size: 1.8rem; }
-    }
-  </style>
+        /* ===================== FOOTER ===================== */
+        footer {
+            background-color: #070a11;
+            padding: 50px 0 20px;
+            color: #b0b0b0;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            color: var(--white);
+            font-family: var(--font-heading);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+        .footer-col ul li a {
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .footer-col ul li a:hover {
+            color: var(--gold);
+        }
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--white);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer-logo .gold {
+            color: var(--gold);
+        }
+        .footer-col p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        .footer-director {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+        }
+        .footer-bottom-links a {
+            transition: color 0.3s;
+        }
+        .footer-bottom-links a:hover {
+            color: var(--gold);
+        }
+
+        @media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
-<header class="site-header">
-  <input type="checkbox" id="menuToggle" style="display:none;">
-  <div class="container">
-    <nav class="navbar">
-      <a href="index.html" class="logo">
-        <img src="logo.png" alt="AML" style="height:40px; width:auto; vertical-align:middle;">
-        <span><span class="gold">AML</span> Lending Group</span>
-      </a>
-      <label for="menuToggle" class="hamburger" id="hamburger" aria-label="Menu" role="button" tabindex="0">
-        <span></span><span></span><span></span>
-      </label>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Home</a></li>
-          <li><a href="business-loans.html">Business Loans</a></li>
-          <li><a href="apply.html">Apply</a></li>
-          <li><a href="brokers.html">Brokers</a></li>
-          <li><a href="testimonials.html">Testimonials</a></li>
-          <li><a href="faq.html">FAQ</a></li>
-          <li><a href="about.html" class="active">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </div>
-  <label for="menuToggle" class="menu-overlay" id="menuOverlay"></label>
-</header>
 
-  <main>
-    <!-- Page Header -->
-    <section class="section" style="background: var(--dark); color: var(--white); text-align: center; padding: 4rem 0 2rem;">
-      <div class="container">
-        <h1 style="color: var(--white); font-size: 2.8rem; margin-bottom: 0.5rem;">Frequently <span class="gold-text">Asked Questions</span></h1>
-        <p style="opacity:0.9;">Get answers to common questions about our business loans.</p>
-      </div>
-    </section>
-
-    <!-- FAQ Accordion -->
-    <section class="section">
-      <div class="container">
-        <div class="faq-list">
-          <div class="faq-item">
-            <h3>What are the requirements for a business loan? <i class="fas fa-chevron-down"></i></h3>
-            <div class="faq-answer">
-              <p>We require a completed application form, proof of business ownership, bank statements for the last 3 months, and a valid government‑issued ID. Specific requirements vary by loan type — our team will guide you.</p>
+    <!-- ===================== HEADER & MENU ===================== -->
+    <input type="checkbox" id="menuToggle" hidden>
+    <header class="header-container">
+        <!-- Logo -->
+        <div class="logo">
+            <span class="logo-icon">&#127970;</span>
+            <div>
+                <span class="logo-gold">AML</span> LENDING GROUP
+                <span class="tagline">EMPOWERING BUSINESSES SINCE 2015</span>
             </div>
-          </div>
-          <div class="faq-item">
-            <h3>How long does approval take? <i class="fas fa-chevron-down"></i></h3>
-            <div class="faq-answer">
-              <p>Most applications are reviewed within 24–48 hours. Once approved, funds are disbursed within 1–3 business days, depending on the loan type.</p>
-            </div>
-          </div>
-          <div class="faq-item">
-            <h3>What interest rates do you offer? <i class="fas fa-chevron-down"></i></h3>
-            <div class="faq-answer">
-              <p>Our rates are competitive and based on the loan type, amount, and term. Contact us for a personalised quote — we pride ourselves on transparency with no hidden fees.</p>
-            </div>
-          </div>
-          <div class="faq-item">
-            <h3>Can I apply if my business is less than a year old? <i class="fas fa-chevron-down"></i></h3>
-            <div class="faq-answer">
-              <p>Yes! We work with startups and established businesses alike. For newer businesses, we may ask for a business plan or additional documentation.</p>
-            </div>
-          </div>
-          <div class="faq-item">
-            <h3>How do I become a broker partner? <i class="fas fa-chevron-down"></i></h3>
-            <div class="faq-answer">
-              <p>Visit our <a href="brokers.html" style="color:var(--gold);">Brokers page</a> and click "Get Started." Fill out the short form and our partnership team will contact you within 24 hours.</p>
-            </div>
-          </div>
-          <div class="faq-item">
-            <h3>Is there a prepayment penalty? <i class="fas fa-chevron-down"></i></h3>
-            <div class="faq-answer">
-              <p>No — we never charge prepayment penalties. You can pay off your loan early at any time with no extra cost.</p>
-            </div>
-          </div>
-          <div class="faq-item">
-            <h3>How is my personal information protected? <i class="fas fa-chevron-down"></i></h3>
-            <div class="faq-answer">
-              <p>We use industry‑standard encryption and secure database storage. Your documents are stored privately and only accessible to authorised personnel. See our <a href="privacy.html" style="color:var(--gold);">Privacy Policy</a> for details.</p>
-            </div>
-          </div>
         </div>
-      </div>
-    </section>
 
-    <!-- CTA -->
-    <section class="section" style="background: var(--dark); text-align: center; padding: 4rem 0;">
-      <div class="container">
-        <h2 style="color: var(--white); font-size: 2rem; margin-bottom: 1rem;">Still Have Questions?</h2>
-        <p style="color: #cbd5e1; margin-bottom: 2rem;">Contact us directly — we're happy to help.</p>
-        <a href="contact.html" class="btn" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
-          <i class="fas fa-envelope"></i> Contact Us
+        <!-- Hamburger Icon -->
+        <label for="menuToggle" class="hamburger">&#9776;</label>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-menu">
+            <!-- Close Button inside Menu -->
+            <label for="menuToggle" class="close-x">&times;</label>
+
+            <label for="menuToggle"><a href="index.html">Home</a></label>
+            <label for="menuToggle"><a href="business-loans.html">Business Loans</a></label>
+            <label for="menuToggle"><a href="apply.html">Apply</a></label>
+            <label for="menuToggle"><a href="broker-application.html">Brokers</a></label>
+            <label for="menuToggle"><a href="testimonials.html">Testimonials</a></label>
+            <label for="menuToggle"><a href="about.html">About Us</a></label>
+            <label for="menuToggle"><a href="faq.html" class="active">FAQ</a></label>
+            <label for="menuToggle"><a href="contact.html">Contact Us</a></label>
+        </nav>
+
+        <!-- Desktop Phone CTA -->
+        <a href="tel:+17135876261" class="cta-phone">
+            <span class="phone-icon">&#9742;</span> +1 713 587 6261
         </a>
-      </div>
+
+        <!-- Dark Overlay to close menu by clicking outside -->
+        <label for="menuToggle" class="overlay"></label>
+    </header>
+
+    <!-- ===================== HERO SECTION ===================== -->
+    <section class="faq-hero">
+        <div class="container">
+            <div class="faq-hero-container">
+                <div class="faq-hero-text">
+                    <div class="subtitle">FAQ <span class="subtitle-line"></span></div>
+                    <h1>Frequently<br><span class="highlight-gold">Asked Questions</span></h1>
+                    <p>Get answers to common questions about our business loans.</p>
+                </div>
+                <div class="faq-hero-image">
+                    <div class="hero-img"></div>
+                </div>
+            </div>
+        </div>
     </section>
-  </main>
 
-  <footer class="site-footer">
+    <!-- ===================== SEARCH & FILTER ===================== -->
+    <section class="faq-tools">
+        <div class="container">
+            <div class="faq-search-box">
+                <div class="find-icon">&#129302;</div>
+                <div class="find-text">
+                    <h4>Find your answer</h4>
+                    <p>Search our FAQ or browse by topic.</p>
+                </div>
+                <div class="search-input-wrap">
+                    <input type="text" placeholder="Search questions...">
+                </div>
+            </div>
+            
+            <div class="faq-tags">
+                <div class="tag active">All Questions</div>
+                <div class="tag">&#128100; Eligibility</div>
+                <div class="tag">&#128196; Application</div>
+                <div class="tag">&#128176; Funding</div>
+                <div class="tag">&#128197; Repayment</div>
+                <div class="tag">&#128065; Other</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== ACCORDION SECTION ===================== -->
+    <section class="faq-accordion-section">
+        <div class="container">
+            <div class="faq-wrapper">
+                
+                <!-- Q1 (Checked by default to match image) -->
+                <input type="radio" name="faq" id="q1" checked>
+                <div class="faq-item">
+                    <label for="q1">What are the requirements for a business loan?</label>
+                    <div class="faq-answer" id="a1">
+                        To qualify, your business typically needs to be operating for at least 6 months with a minimum monthly revenue of $10,000. We also review your credit profile and other factors to determine the best loan options for your business.
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <input type="radio" name="faq" id="q2">
+                <div class="faq-item">
+                    <label for="q2">How long does approval take?</label>
+                    <div class="faq-answer" id="a2">
+                        Our streamlined process allows for fast approvals. In most cases, you can receive a decision within 24 to 48 hours of submitting your complete application.
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <input type="radio" name="faq" id="q3">
+                <div class="faq-item">
+                    <label for="q3">What documents are required to apply?</label>
+                    <div class="faq-answer" id="a3">
+                        We typically require business bank statements for the last 6 months, business tax returns, a valid business license, and a government-issued ID for the business owner.
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <input type="radio" name="faq" id="q4">
+                <div class="faq-item">
+                    <label for="q4">How much funding can I get?</label>
+                    <div class="faq-answer" id="a4">
+                        Funding amounts range from $5,000 up to $500,000 depending on your business's revenue, creditworthiness, and specific funding needs.
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <input type="radio" name="faq" id="q5">
+                <div class="faq-item">
+                    <label for="q5">What are the interest rates and fees?</label>
+                    <div class="faq-answer" id="a5">
+                        Our rates are competitive and tailored to your business profile. We offer transparent pricing with no hidden fees. Contact us for a personalized quote.
+                    </div>
+                </div>
+
+                <!-- Q6 -->
+                <input type="radio" name="faq" id="q6">
+                <div class="faq-item">
+                    <label for="q6">How and when do I repay the loan?</label>
+                    <div class="faq-answer" id="a6">
+                        Repayment schedules are flexible. We offer daily, weekly, or monthly payment options to match your business cash flow cycle.
+                    </div>
+                </div>
+
+                <!-- Q7 -->
+                <input type="radio" name="faq" id="q7">
+                <div class="faq-item">
+                    <label for="q7">Can I pay off the loan early?</label>
+                    <div class="faq-answer" id="a7">
+                        Yes, we encourage early repayment! We do not charge any prepayment penalties, so you can save on interest by paying off your loan ahead of schedule.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== BOTTOM SUPPORT BOX ===================== -->
     <div class="container">
-      <div class="footer-grid">
-        <div>
-          <h4>AML Lending Group</h4>
-          <p>Your trusted partner for business loans and investments.</p>
-          <p><strong>Director:</strong> Mrs Rolanda Medina</p>
+        <div class="faq-support">
+            <div class="support-item">
+                <div class="s-icon">&#127911;</div>
+                <div>
+                    <h4>Still have questions?</h4>
+                    <p>Our team is here to help you 7 days a week.</p>
+                </div>
+            </div>
+            <div class="support-item">
+                <div class="s-icon">&#9742;</div>
+                <div>
+                    <h4>Call Us</h4>
+                    <p><strong>+1 713 587 6261</strong></p>
+                </div>
+            </div>
+            <div>
+                <a href="contact.html" class="support-chat-btn">&#128172; Live Chat <br><span style="font-weight:400; font-size:0.8rem;">Chat with us now</span></a>
+            </div>
         </div>
-        <div>
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="business-loans.html">Business Loans</a></li>
-            <li><a href="apply.html">Apply</a></li>
-            <li><a href="brokers.html">Brokers</a></li>
-            <li><a href="testimonials.html">Testimonials</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Contact</h4>
-          <ul>
-            <li><i class="fas fa-phone"></i> +1 713 587 6261</li>
-            <li><i class="fas fa-envelope"></i> info@amllending.com</li>
-            <li><i class="fas fa-map-marker-alt"></i> Houston, TX, USA</li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 AML Lending Group. All rights reserved. | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
-      </div>
     </div>
-  </footer>
 
-  <a href="https://wa.me/17135876261" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-  </a>
+    <!-- ===================== FOOTER ===================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo"><span class="gold">AML</span> LENDING GROUP</div>
+                    <p>Empowering businesses with fast, reliable funding solutions since 2015.</p>
+                    <p class="footer-director">Director: Mrs. Rolanda Medina</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="business-loans.html">Business Loans</a></li>
+                        <li><a href="apply.html">Apply Now</a></li>
+                        <li><a href="broker-application.html">Brokers</a></li>
+                        <li><a href="testimonials.html">Testimonials</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <p><strong>Address:</strong> Houston, TX, USA</p>
+                    <p><strong>Phone:</strong> +1 713 587 6261</p>
+                    <p><strong>Email:</strong> info@amllending.com</p>
+                    <p><strong>Support:</strong> support@amllending.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 AML Lending Group. All rights reserved.</span>
+                <div class="footer-bottom-links">
+                    <a href="terms.html">Terms &amp; Conditions</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-  <script>
-    // Close mobile menu (uncheck checkbox) when any link is clicked
-    document.addEventListener('DOMContentLoaded', function() {
-      const toggle = document.getElementById('menuToggle');
-      if (!toggle) return;
-      document.querySelectorAll('#navLinks a').forEach(function(link) {
-        link.addEventListener('click', function() {
-          toggle.checked = false;
-          // The browser will then follow the link naturally
-        });
-      });
-      // Also close menu when the overlay label is clicked (it's a label, so it toggles)
-    });
-  </script>
 </body>
 </html>
