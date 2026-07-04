@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - AML Lending Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===================== RESET & VARIABLES ===================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --gold: #c9a44c;
+            --dark: #0a0e17;
+            --white: #ffffff;
+            --light-gray: #f5f7fa;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-body);
+            color: #e0e0e0;
+            background-color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===================== HEADER & NAVIGATION ===================== */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--dark);
+            position: relative;
+            z-index: 1000;
+        }
+        .logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo .logo-gold {
+            color: var(--gold);
+        }
+        .logo .tagline {
+            font-size: 0.6rem;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            color: var(--gold);
+            font-size: 32px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Desktop Nav */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .nav-menu label {
+            display: contents;
+        }
+        .nav-menu a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #b0b0b0;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--white);
+        }
+        .nav-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--gold);
+        }
+        .close-x {
+            display: none;
+        }
+
+        /* Phone CTA */
+        .cta-phone {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1px solid var(--gold);
+            border-radius: 6px;
+            color: var(--white);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            background: rgba(201, 164, 76, 0.05);
+        }
+        .cta-phone .phone-icon {
+            color: var(--gold);
+        }
+        .cta-phone:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+        .cta-phone:hover .phone-icon {
+            color: var(--dark);
+        }
+
+        /* Checkbox Menu Toggle (Hidden) */
+        #menuToggle {
+            display: none;
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+        }
+
+        /* Mobile Menu Styles */
+        @media (max-width: 992px) {
+            .hamburger {
+                display: block;
+            }
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 280px;
+                height: 100vh;
+                background: var(--dark);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2rem 2rem 2rem 3rem;
+                transform: translateX(100%);
+                visibility: hidden;
+                transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.7);
+                z-index: 1000;
+                border-left: 1px solid rgba(201, 164, 76, 0.2);
+                gap: 0;
+                overflow-y: auto;
+            }
+            .nav-menu label {
+                display: block;
+                width: 100%;
+                padding: 12px 0;
+                cursor: pointer;
+                color: #ffffff;
+            }
+            .nav-menu a {
+                display: block;
+                width: 100%;
+                font-size: 1.1rem;
+                padding: 5px 0;
+                color: #ffffff;
+                text-decoration: none;
+            }
+            .nav-menu a.active::after {
+                display: none;
+            }
+            .nav-menu a:hover {
+                color: var(--gold);
+            }
+            .close-x {
+                display: block;
+                text-align: right;
+                color: var(--gold);
+                font-size: 32px;
+                cursor: pointer;
+                padding: 0 0 20px 0;
+                width: 100%;
+            }
+            .cta-phone {
+                display: none;
+            }
+            /* Toggle Logic */
+            #menuToggle:checked ~ .header-container .nav-menu {
+                transform: translateX(0);
+                visibility: visible;
+            }
+            #menuToggle:checked ~ .header-container .overlay {
+                display: block;
+            }
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 999;
+            }
+        }
+
+        /* ===================== PRIVACY HERO SECTION ===================== */
+        .privacy-hero {
+            position: relative;
+            padding: 80px 0 60px;
+            background-color: var(--dark);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            overflow: hidden;
+        }
+        .privacy-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 1;
+        }
+        .privacy-hero-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        .privacy-hero-container h1 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 3.2rem;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+        .privacy-hero-container h1 .highlight-gold {
+            color: var(--gold);
+        }
+        .privacy-hero-container p {
+            color: #b0b0b0;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .last-updated {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #888;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
+            display: inline-block;
+        }
+
+        @media (max-width: 480px) {
+            .privacy-hero-container h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* ===================== PRIVACY CONTENT LAYOUT ===================== */
+        .privacy-content-layout {
+            padding: 60px 0 80px;
+        }
+        .privacy-flex {
+            display: flex;
+            gap: 50px;
+            align-items: flex-start;
+        }
+
+        /* SIDEBAR: Table of Contents */
+        .privacy-toc {
+            flex: 0 0 280px;
+            position: sticky;
+            top: 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+        }
+        .privacy-toc h4 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 10px;
+        }
+        .privacy-toc ul li {
+            margin-bottom: 10px;
+        }
+        .privacy-toc ul li a {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            transition: color 0.3s;
+            display: block;
+        }
+        .privacy-toc ul li a:hover {
+            color: var(--gold);
+            padding-left: 5px;
+        }
+
+        /* MAIN CONTENT */
+        .privacy-main {
+            flex: 1;
+        }
+        .privacy-section {
+            margin-bottom: 40px;
+        }
+        .privacy-section:last-child {
+            margin-bottom: 0;
+        }
+        .privacy-section h2 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .privacy-section h2 .highlight-gold {
+            color: var(--gold);
+        }
+        .privacy-section h3 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.2rem;
+            margin: 15px 0 10px;
+        }
+        .privacy-section p {
+            color: #b0b0b0;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        .privacy-section ul {
+            list-style: disc;
+            padding-left: 25px;
+            margin-bottom: 15px;
+        }
+        .privacy-section ul li {
+            color: #b0b0b0;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        .privacy-section ul li strong {
+            color: var(--white);
+        }
+
+        @media (max-width: 992px) {
+            .privacy-flex {
+                flex-direction: column;
+            }
+            .privacy-toc {
+                flex: 0 0 100%;
+                position: relative;
+                top: 0;
+                width: 100%;
+            }
+            .privacy-toc ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .privacy-toc ul li {
+                margin-bottom: 0;
+            }
+        }
+
+        /* ===================== FOOTER ===================== */
+        footer {
+            background-color: #070a11;
+            padding: 50px 0 20px;
+            color: #b0b0b0;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            color: var(--white);
+            font-family: var(--font-heading);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+        .footer-col ul li a {
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .footer-col ul li a:hover {
+            color: var(--gold);
+        }
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--white);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer-logo .gold {
+            color: var(--gold);
+        }
+        .footer-col p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        .footer-director {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+        }
+        .footer-bottom-links a {
+            transition: color 0.3s;
+        }
+        .footer-bottom-links a:hover {
+            color: var(--gold);
+        }
+
+        @media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===================== HEADER & MENU ===================== -->
+    <input type="checkbox" id="menuToggle" hidden>
+    <header class="header-container">
+        <!-- Logo -->
+        <div class="logo">
+            <span class="logo-gold">AML</span> LENDING GROUP
+            <span class="tagline">EMPOWERING BUSINESSES SINCE 2015</span>
+        </div>
+
+        <!-- Hamburger Icon -->
+        <label for="menuToggle" class="hamburger">&#9776;</label>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-menu">
+            <!-- Close Button inside Menu -->
+            <label for="menuToggle" class="close-x">&times;</label>
+
+            <label for="menuToggle"><a href="index.html">Home</a></label>
+            <label for="menuToggle"><a href="business-loans.html">Business Loans</a></label>
+            <label for="menuToggle"><a href="apply.html">Apply</a></label>
+            <label for="menuToggle"><a href="broker-application.html">Brokers</a></label>
+            <label for="menuToggle"><a href="testimonials.html">Testimonials</a></label>
+            <label for="menuToggle"><a href="about.html">About Us</a></label>
+            <label for="menuToggle"><a href="faq.html">FAQ</a></label>
+            <label for="menuToggle"><a href="contact.html">Contact Us</a></label>
+        </nav>
+
+        <!-- Desktop Phone CTA -->
+        <a href="tel:+17135876261" class="cta-phone">
+            <span class="phone-icon">&#9742;</span> +1 713 587 6261
+        </a>
+
+        <!-- Dark Overlay to close menu by clicking outside -->
+        <label for="menuToggle" class="overlay"></label>
+    </header>
+
+    <!-- ===================== PRIVACY HERO ===================== -->
+    <section class="privacy-hero">
+        <div class="container privacy-hero-container">
+            <h1>Privacy <span class="highlight-gold">Policy</span></h1>
+            <p>Your privacy is important to us. This policy outlines how we collect, use, and protect your personal information.</p>
+            <div class="last-updated">Last Updated: July 2026</div>
+        </div>
+    </section>
+
+    <!-- ===================== PRIVACY CONTENT ===================== -->
+    <section class="privacy-content-layout">
+        <div class="container">
+            <div class="privacy-flex">
+                
+                <!-- Table of Contents Sidebar -->
+                <aside class="privacy-toc">
+                    <h4>Quick Navigation</h4>
+                    <ul>
+                        <li><a href="#intro">1. Introduction</a></li>
+                        <li><a href="#info-collect">2. Information We Collect</a></li>
+                        <li><a href="#use-info">3. How We Use Your Information</a></li>
+                        <li><a href="#share">4. Sharing Your Information</a></li>
+                        <li><a href="#cookies">5. Cookies &amp; Tracking</a></li>
+                        <li><a href="#rights">6. Your Rights</a></li>
+                        <li><a href="#security">7. Data Security</a></li>
+                        <li><a href="#contact-us">8. Contact Us</a></li>
+                    </ul>
+                </aside>
+
+                <!-- Main Content -->
+                <div class="privacy-main">
+                    
+                    <div id="intro" class="privacy-section">
+                        <h2>1. <span class="highlight-gold">Introduction</span></h2>
+                        <p>AML Lending Group ("Company", "we", "our", "us") respects the privacy of every individual who visits our website or uses our services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or apply for a business loan.</p>
+                        <p>By using our Services, you consent to the data practices described in this policy.</p>
+                    </div>
+
+                    <div id="info-collect" class="privacy-section">
+                        <h2>2. <span class="highlight-gold">Information We Collect</span></h2>
+                        <p>We collect information that you provide directly to us, such as when you fill out a loan application, contact our support team, or interact with our website. This may include:</p>
+                        <ul>
+                            <li><strong>Personal Identification:</strong> Name, email address, phone number, and date of birth.</li>
+                            <li><strong>Business Details:</strong> Business name, address, tax ID, and financial records.</li>
+                            <li><strong>Technical Data:</strong> IP address, browser type, operating system, and pages visited on our site.</li>
+                        </ul>
+                        <p>We may also collect information from third-party sources to verify your identity and creditworthiness as part of our underwriting process.</p>
+                    </div>
+
+                    <div id="use-info" class="privacy-section">
+                        <h2>3. <span class="highlight-gold">How We Use Your Information</span></h2>
+                        <p>We use the information we collect for various purposes, including:</p>
+                        <ul>
+                            <li>Processing and evaluating your loan application.</li>
+                            <li>Communicating with you regarding your application and loan status.</li>
+                            <li>Improving our website, services, and customer experience.</li>
+                            <li>Complying with legal and regulatory requirements.</li>
+                            <li>Detecting and preventing fraudulent activities.</li>
+                        </ul>
+                    </div>
+
+                    <div id="share" class="privacy-section">
+                        <h2>4. <span class="highlight-gold">Sharing Your Information</span></h2>
+                        <p>We do not sell, trade, or rent your personal information to third parties. However, we may share your information with trusted partners and service providers to facilitate our services, including:</p>
+                        <ul>
+                            <li><strong>Lending Partners:</strong> To fund your loan and manage your account.</li>
+                            <li><strong>Credit Bureaus:</strong> To verify your credit history and underwrite your loan.</li>
+                            <li><strong>Legal Authorities:</strong> If required by law or to protect our legal rights.</li>
+                        </ul>
+                        <p>We ensure that all third parties with whom we share data are bound by confidentiality agreements and data protection standards.</p>
+                    </div>
+
+                    <div id="cookies" class="privacy-section">
+                        <h2>5. <span class="highlight-gold">Cookies &amp; Tracking</span></h2>
+                        <p>Our website uses cookies and similar tracking technologies to enhance your browsing experience, analyze traffic, and personalize content. You can control cookies through your browser settings. However, disabling cookies may limit your ability to use certain features of our website.</p>
+                        <p>We also use third-party analytics services (e.g., Google Analytics) to understand how visitors interact with our site. These services may collect information such as your IP address and browsing behavior.</p>
+                    </div>
+
+                    <div id="rights" class="privacy-section">
+                        <h2>6. <span class="highlight-gold">Your Rights</span></h2>
+                        <p>Depending on your jurisdiction, you may have certain rights regarding your personal data, including:</p>
+                        <ul>
+                            <li><strong>Access:</strong> Request a copy of the data we hold about you.</li>
+                            <li><strong>Correction:</strong> Request that we correct any inaccurate data.</li>
+                            <li><strong>Deletion:</strong> Request that we delete your data, subject to legal obligations.</li>
+                            <li><strong>Opt-Out:</strong> Unsubscribe from marketing communications at any time.</li>
+                        </ul>
+                        <p>To exercise any of these rights, please contact us using the details provided below.</p>
+                    </div>
+
+                    <div id="security" class="privacy-section">
+                        <h2>7. <span class="highlight-gold">Data Security</span></h2>
+                        <p>We implement industry-standard security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. These include:</p>
+                        <ul>
+                            <li>Encryption of sensitive data during transmission.</li>
+                            <li>Secure servers and firewalls.</li>
+                            <li>Regular security audits and vulnerability assessments.</li>
+                        </ul>
+                        <p>While we strive to protect your data, no method of transmission over the internet is 100% secure. We encourage you to take precautions when sharing personal information online.</p>
+                    </div>
+
+                    <div id="contact-us" class="privacy-section">
+                        <h2>8. <span class="highlight-gold">Contact Us</span></h2>
+                        <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please reach out to us:</p>
+                        <ul>
+                            <li><strong>Email:</strong> <a href="mailto:info@amllending.com" style="color:var(--gold);">info@amllending.com</a></li>
+                            <li><strong>Phone:</strong> +1 713 587 6261</li>
+                            <li><strong>Address:</strong> Houston, TX, USA</li>
+                        </ul>
+                        <p>We are committed to protecting your privacy and providing a secure experience.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo"><span class="gold">AML</span> LENDING GROUP</div>
+                    <p>Empowering businesses with fast, reliable funding solutions since 2015.</p>
+                    <p class="footer-director">Director: Mrs. Rolanda Medina</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="business-loans.html">Business Loans</a></li>
+                        <li><a href="apply.html">Apply Now</a></li>
+                        <li><a href="broker-application.html">Brokers</a></li>
+                        <li><a href="testimonials.html">Testimonials</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <p><strong>Address:</strong> Houston, TX, USA</p>
+                    <p><strong>Phone:</strong> +1 713 587 6261</p>
+                    <p><strong>Email:</strong> info@amllending.com</p>
+                    <p><strong>Support:</strong> support@amllending.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 AML Lending Group. All rights reserved.</span>
+                <div class="footer-bottom-links">
+                    <a href="terms.html">Terms &amp; Conditions</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
