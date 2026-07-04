@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - AML Lending Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===================== RESET & VARIABLES ===================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --gold: #c9a44c;
+            --dark: #0a0e17;
+            --white: #ffffff;
+            --light-gray: #f5f7fa;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-body);
+            color: #e0e0e0;
+            background-color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===================== HEADER & NAVIGATION ===================== */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--dark);
+            position: relative;
+            z-index: 1000;
+        }
+        .logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo .logo-gold {
+            color: var(--gold);
+        }
+        .logo .tagline {
+            font-size: 0.6rem;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            color: var(--gold);
+            font-size: 32px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Desktop Nav */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .nav-menu label {
+            display: contents;
+        }
+        .nav-menu a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #b0b0b0;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--white);
+        }
+        .nav-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--gold);
+        }
+        .close-x {
+            display: none;
+        }
+
+        /* Phone CTA */
+        .cta-phone {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1px solid var(--gold);
+            border-radius: 6px;
+            color: var(--white);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            background: rgba(201, 164, 76, 0.05);
+        }
+        .cta-phone .phone-icon {
+            color: var(--gold);
+        }
+        .cta-phone:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+        .cta-phone:hover .phone-icon {
+            color: var(--dark);
+        }
+
+        /* Checkbox Menu Toggle (Hidden) */
+        #menuToggle {
+            display: none;
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+        }
+
+        /* Mobile Menu Styles */
+        @media (max-width: 992px) {
+            .hamburger {
+                display: block;
+            }
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 280px;
+                height: 100vh;
+                background: var(--dark);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2rem 2rem 2rem 3rem;
+                transform: translateX(100%);
+                visibility: hidden;
+                transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.7);
+                z-index: 1000;
+                border-left: 1px solid rgba(201, 164, 76, 0.2);
+                gap: 0;
+                overflow-y: auto;
+            }
+            .nav-menu label {
+                display: block;
+                width: 100%;
+                padding: 12px 0;
+                cursor: pointer;
+                color: #ffffff;
+            }
+            .nav-menu a {
+                display: block;
+                width: 100%;
+                font-size: 1.1rem;
+                padding: 5px 0;
+                color: #ffffff;
+                text-decoration: none;
+            }
+            .nav-menu a.active::after {
+                display: none;
+            }
+            .nav-menu a:hover {
+                color: var(--gold);
+            }
+            .close-x {
+                display: block;
+                text-align: right;
+                color: var(--gold);
+                font-size: 32px;
+                cursor: pointer;
+                padding: 0 0 20px 0;
+                width: 100%;
+            }
+            .cta-phone {
+                display: none;
+            }
+            /* Toggle Logic */
+            #menuToggle:checked ~ .header-container .nav-menu {
+                transform: translateX(0);
+                visibility: visible;
+            }
+            #menuToggle:checked ~ .header-container .overlay {
+                display: block;
+            }
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 999;
+            }
+        }
+
+        /* ===================== TERMS HERO SECTION ===================== */
+        .terms-hero {
+            position: relative;
+            padding: 80px 0 60px;
+            background-color: var(--dark);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            overflow: hidden;
+        }
+        .terms-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 1;
+        }
+        .terms-hero-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        .terms-hero-container h1 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 3.2rem;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+        .terms-hero-container h1 .highlight-gold {
+            color: var(--gold);
+        }
+        .terms-hero-container p {
+            color: #b0b0b0;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .last-updated {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #888;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
+            display: inline-block;
+        }
+
+        @media (max-width: 480px) {
+            .terms-hero-container h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* ===================== TERMS CONTENT LAYOUT ===================== */
+        .terms-content-layout {
+            padding: 60px 0 80px;
+        }
+        .terms-flex {
+            display: flex;
+            gap: 50px;
+            align-items: flex-start;
+        }
+
+        /* SIDEBAR: Table of Contents */
+        .terms-toc {
+            flex: 0 0 280px;
+            position: sticky;
+            top: 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+        }
+        .terms-toc h4 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 10px;
+        }
+        .terms-toc ul li {
+            margin-bottom: 10px;
+        }
+        .terms-toc ul li a {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            transition: color 0.3s;
+            display: block;
+        }
+        .terms-toc ul li a:hover {
+            color: var(--gold);
+            padding-left: 5px;
+        }
+
+        /* MAIN CONTENT */
+        .terms-main {
+            flex: 1;
+        }
+        .terms-section {
+            margin-bottom: 40px;
+        }
+        .terms-section:last-child {
+            margin-bottom: 0;
+        }
+        .terms-section h2 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .terms-section h2 .highlight-gold {
+            color: var(--gold);
+        }
+        .terms-section h3 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.2rem;
+            margin: 15px 0 10px;
+        }
+        .terms-section p {
+            color: #b0b0b0;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        .terms-section ul {
+            list-style: disc;
+            padding-left: 25px;
+            margin-bottom: 15px;
+        }
+        .terms-section ul li {
+            color: #b0b0b0;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        .terms-section ul li strong {
+            color: var(--white);
+        }
+
+        @media (max-width: 992px) {
+            .terms-flex {
+                flex-direction: column;
+            }
+            .terms-toc {
+                flex: 0 0 100%;
+                position: relative;
+                top: 0;
+                width: 100%;
+            }
+            .terms-toc ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .terms-toc ul li {
+                margin-bottom: 0;
+            }
+        }
+
+        /* ===================== FOOTER ===================== */
+        footer {
+            background-color: #070a11;
+            padding: 50px 0 20px;
+            color: #b0b0b0;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            color: var(--white);
+            font-family: var(--font-heading);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+        .footer-col ul li a {
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .footer-col ul li a:hover {
+            color: var(--gold);
+        }
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--white);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer-logo .gold {
+            color: var(--gold);
+        }
+        .footer-col p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        .footer-director {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+        }
+        .footer-bottom-links a {
+            transition: color 0.3s;
+        }
+        .footer-bottom-links a:hover {
+            color: var(--gold);
+        }
+
+        @media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===================== HEADER & MENU ===================== -->
+    <input type="checkbox" id="menuToggle" hidden>
+    <header class="header-container">
+        <!-- Logo -->
+        <div class="logo">
+            <span class="logo-gold">AML</span> LENDING GROUP
+            <span class="tagline">EMPOWERING BUSINESSES SINCE 2015</span>
+        </div>
+
+        <!-- Hamburger Icon -->
+        <label for="menuToggle" class="hamburger">&#9776;</label>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-menu">
+            <!-- Close Button inside Menu -->
+            <label for="menuToggle" class="close-x">&times;</label>
+
+            <label for="menuToggle"><a href="index.html">Home</a></label>
+            <label for="menuToggle"><a href="business-loans.html">Business Loans</a></label>
+            <label for="menuToggle"><a href="apply.html">Apply</a></label>
+            <label for="menuToggle"><a href="broker-application.html">Brokers</a></label>
+            <label for="menuToggle"><a href="testimonials.html">Testimonials</a></label>
+            <label for="menuToggle"><a href="about.html">About Us</a></label>
+            <label for="menuToggle"><a href="faq.html">FAQ</a></label>
+            <label for="menuToggle"><a href="contact.html">Contact Us</a></label>
+        </nav>
+
+        <!-- Desktop Phone CTA -->
+        <a href="tel:+17135876261" class="cta-phone">
+            <span class="phone-icon">&#9742;</span> +1 713 587 6261
+        </a>
+
+        <!-- Dark Overlay to close menu by clicking outside -->
+        <label for="menuToggle" class="overlay"></label>
+    </header>
+
+    <!-- ===================== TERMS HERO ===================== -->
+    <section class="terms-hero">
+        <div class="container terms-hero-container">
+            <h1>Terms of <span class="highlight-gold">Service</span></h1>
+            <p>Please read these terms carefully before using our services and applying for a business loan.</p>
+            <div class="last-updated">Last Updated: July 2026</div>
+        </div>
+    </section>
+
+    <!-- ===================== TERMS CONTENT ===================== -->
+    <section class="terms-content-layout">
+        <div class="container">
+            <div class="terms-flex">
+                
+                <!-- Table of Contents Sidebar -->
+                <aside class="terms-toc">
+                    <h4>Quick Navigation</h4>
+                    <ul>
+                        <li><a href="#intro">1. Introduction</a></li>
+                        <li><a href="#eligibility">2. Eligibility</a></li>
+                        <li><a href="#use">3. Use of Services</a></li>
+                        <li><a href="#loan-terms">4. Loan Terms &amp; Conditions</a></li>
+                        <li><a href="#repayment">5. Repayment &amp; Default</a></li>
+                        <li><a href="#privacy">6. Privacy &amp; Data</a></li>
+                        <li><a href="#liability">7. Limitation of Liability</a></li>
+                        <li><a href="#contact-us">8. Contact Us</a></li>
+                    </ul>
+                </aside>
+
+                <!-- Main Content -->
+                <div class="terms-main">
+                    
+                    <div id="intro" class="terms-section">
+                        <h2>1. <span class="highlight-gold">Introduction</span></h2>
+                        <p>Welcome to AML Lending Group ("Company", "we", "our", "us"). These Terms of Service ("Terms") govern your use of our website, applications, and lending services (collectively, the "Services").</p>
+                        <p>By accessing or using our Services, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use our Services.</p>
+                    </div>
+
+                    <div id="eligibility" class="terms-section">
+                        <h2>2. <span class="highlight-gold">Eligibility</span></h2>
+                        <p>By applying for a loan through our platform, you represent and warrant that:</p>
+                        <ul>
+                            <li>You are at least <strong>18 years of age</strong>.</li>
+                            <li>You have the legal authority to enter into a binding contract on behalf of yourself or your business.</li>
+                            <li>All information provided in your application is <strong>accurate, complete, and truthful</strong>.</li>
+                            <li>You are not located in a country or region that is subject to U.S. or international trade sanctions.</li>
+                        </ul>
+                    </div>
+
+                    <div id="use" class="terms-section">
+                        <h2>3. <span class="highlight-gold">Use of Services</span></h2>
+                        <p>Our Services are provided for lawful purposes only. You agree to use our platform solely for:</p>
+                        <ul>
+                            <li>Applying for and managing business loans.</li>
+                            <li>Communicating with our support team regarding loan applications.</li>
+                            <li>Reviewing loan offers and associated documentation.</li>
+                        </ul>
+                        <p>Any misuse of our platform, including but not limited to fraudulent activity, spamming, or attempting to bypass our security measures, will result in immediate termination of your access and potential legal action.</p>
+                    </div>
+
+                    <div id="loan-terms" class="terms-section">
+                        <h2>4. <span class="highlight-gold">Loan Terms &amp; Conditions</span></h2>
+                        <p>All loan products provided by AML Lending Group are subject to specific agreements that will be provided to you upon approval. Key points include:</p>
+                        <ul>
+                            <li><strong>Interest Rates:</strong> Rates are competitive and vary based on your credit profile, loan amount, and term length.</li>
+                            <li><strong>Fees:</strong> We are transparent about all fees. No hidden charges will be applied without your prior knowledge.</li>
+                            <li><strong>Approval:</strong> Loan approval is subject to our underwriting process and is not guaranteed. We reserve the right to decline any application.</li>
+                            <li><strong>Right to Modify:</strong> We reserve the right to change our loan products, rates, and terms at any time with reasonable notice.</li>
+                        </ul>
+                    </div>
+
+                    <div id="repayment" class="terms-section">
+                        <h2>5. <span class="highlight-gold">Repayment &amp; Default</span></h2>
+                        <p>You are responsible for repaying your loan according to the agreed schedule. Failure to do so may result in:</p>
+                        <ul>
+                            <li>Late payment fees.</li>
+                            <li>Reporting to credit bureaus.</li>
+                            <li>Collection actions to recover the outstanding amount.</li>
+                        </ul>
+                        <p>If you anticipate difficulty making a payment, please contact our support team immediately to discuss potential arrangements.</p>
+                    </div>
+
+                    <div id="privacy" class="terms-section">
+                        <h2>6. <span class="highlight-gold">Privacy &amp; Data</span></h2>
+                        <p>We take your privacy seriously. Our collection and use of your personal information are governed by our <a href="privacy.html" style="color:var(--gold);">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
+                        <p>By using our Services, you consent to the collection and processing of your data as outlined in our Privacy Policy.</p>
+                    </div>
+
+                    <div id="liability" class="terms-section">
+                        <h2>7. <span class="highlight-gold">Limitation of Liability</span></h2>
+                        <p>To the fullest extent permitted by law, AML Lending Group shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:</p>
+                        <ul>
+                            <li>Your use or inability to use our Services.</li>
+                            <li>Any conduct or content of any third party on our platform.</li>
+                            <li>Unauthorized access, use, or alteration of your transmissions or content.</li>
+                        </ul>
+                    </div>
+
+                    <div id="contact-us" class="terms-section">
+                        <h2>8. <span class="highlight-gold">Contact Us</span></h2>
+                        <p>If you have any questions regarding these Terms of Service, please contact us using the details below:</p>
+                        <ul>
+                            <li><strong>Email:</strong> <a href="mailto:info@amllending.com" style="color:var(--gold);">info@amllending.com</a></li>
+                            <li><strong>Phone:</strong> +1 713 587 6261</li>
+                            <li><strong>Address:</strong> Houston, TX, USA</li>
+                        </ul>
+                        <p>We are here to help you understand our policies and provide the best service possible.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo"><span class="gold">AML</span> LENDING GROUP</div>
+                    <p>Empowering businesses with fast, reliable funding solutions since 2015.</p>
+                    <p class="footer-director">Director: Mrs. Rolanda Medina</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="business-loans.html">Business Loans</a></li>
+                        <li><a href="apply.html">Apply Now</a></li>
+                        <li><a href="broker-application.html">Brokers</a></li>
+                        <li><a href="testimonials.html">Testimonials</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <p><strong>Address:</strong> Houston, TX, USA</p>
+                    <p><strong>Phone:</strong> +1 713 587 6261</p>
+                    <p><strong>Email:</strong> info@amllending.com</p>
+                    <p><strong>Support:</strong> support@amllending.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 AML Lending Group. All rights reserved.</span>
+                <div class="footer-bottom-links">
+                    <a href="terms.html">Terms &amp; Conditions</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
