@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a Broker - AML Lending Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===================== RESET & VARIABLES ===================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --gold: #c9a44c;
+            --dark: #0a0e17;
+            --white: #ffffff;
+            --light-gray: #f5f7fa;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-body);
+            color: #e0e0e0;
+            background-color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===================== HEADER & NAVIGATION ===================== */
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--dark);
+            position: relative;
+            z-index: 1000;
+        }
+        .logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo .logo-gold {
+            color: var(--gold);
+        }
+        .logo .tagline {
+            font-size: 0.6rem;
+            font-weight: 400;
+            color: #888;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            color: var(--gold);
+            font-size: 32px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Desktop Nav */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .nav-menu label {
+            display: contents;
+        }
+        .nav-menu a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #b0b0b0;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--white);
+        }
+        .nav-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--gold);
+        }
+        .close-x {
+            display: none;
+        }
+
+        /* Desktop CTA Button */
+        .desktop-cta {
+            border: 1px solid var(--gold);
+            padding: 8px 18px;
+            border-radius: 6px;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .desktop-cta:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
+
+        /* Checkbox Menu Toggle (Hidden) */
+        #menuToggle {
+            display: none;
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+        }
+
+        /* Mobile Menu Styles */
+        @media (max-width: 992px) {
+            .hamburger {
+                display: block;
+            }
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 280px;
+                height: 100vh;
+                background: var(--dark);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2rem 2rem 2rem 3rem;
+                transform: translateX(100%);
+                visibility: hidden;
+                transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.7);
+                z-index: 1000;
+                border-left: 1px solid rgba(201, 164, 76, 0.2);
+                gap: 0;
+                overflow-y: auto;
+            }
+            .nav-menu label {
+                display: block;
+                width: 100%;
+                padding: 12px 0;
+                cursor: pointer;
+                color: #ffffff;
+            }
+            .nav-menu a {
+                display: block;
+                width: 100%;
+                font-size: 1.1rem;
+                padding: 5px 0;
+                color: #ffffff;
+                text-decoration: none;
+            }
+            .nav-menu a.active::after {
+                display: none;
+            }
+            .nav-menu a:hover {
+                color: var(--gold);
+            }
+            .close-x {
+                display: block;
+                text-align: right;
+                color: var(--gold);
+                font-size: 32px;
+                cursor: pointer;
+                padding: 0 0 20px 0;
+                width: 100%;
+            }
+            .desktop-cta {
+                display: none;
+            }
+            /* Toggle Logic */
+            #menuToggle:checked ~ .header-container .nav-menu {
+                transform: translateX(0);
+                visibility: visible;
+            }
+            #menuToggle:checked ~ .header-container .overlay {
+                display: block;
+            }
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 999;
+            }
+        }
+
+        /* ===================== BROKER HERO SECTION ===================== */
+        .broker-hero {
+            padding: 60px 0 80px;
+            background-color: var(--dark);
+        }
+        .broker-hero-container {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .broker-hero-text {
+            flex: 0 0 50%;
+        }
+        .broker-hero-text h1 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 3.5rem;
+            line-height: 1.2;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+        .broker-hero-text h1 .highlight-gold {
+            color: var(--gold);
+        }
+        .broker-hero-text .sub-desc {
+            font-size: 1rem;
+            color: #b0b0b0;
+            margin-bottom: 25px;
+            max-width: 450px;
+        }
+        .broker-list {
+            margin-bottom: 30px;
+        }
+        .broker-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+        .broker-list li .check-icon {
+            color: var(--gold);
+            font-weight: bold;
+        }
+        .btn-broker-gold {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: var(--gold);
+            color: var(--dark);
+            border-radius: 8px;
+            font-weight: 600;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        .btn-broker-gold:hover {
+            background: #b08a3b;
+        }
+
+        .broker-hero-image {
+            flex: 0 0 50%;
+            height: 400px;
+        }
+        .broker-hero-image .hero-img {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            border: 2px solid rgba(201,164,76,0.2);
+            box-shadow: -20px 20px 30px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 992px) {
+            .broker-hero-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .broker-hero-text {
+                flex: 0 0 100%;
+                text-align: center;
+            }
+            .broker-hero-text .sub-desc {
+                max-width: 100%;
+                margin: 0 auto 25px;
+            }
+            .broker-list {
+                display: inline-block;
+                text-align: left;
+                margin: 0 auto 30px;
+            }
+            .broker-hero-image {
+                flex: 0 0 100%;
+                height: 250px;
+                width: 100%;
+            }
+        }
+        @media (max-width: 480px) {
+            .broker-hero-text h1 {
+                font-size: 2.2rem;
+            }
+            .broker-hero-image {
+                height: 200px;
+            }
+        }
+
+        /* ===================== BROKER FEATURES ===================== */
+        .broker-features {
+            padding: 0 0 60px;
+        }
+        .broker-features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .broker-feature-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .broker-feature-box:hover {
+            transform: translateY(-5px);
+            border-color: rgba(201,164,76,0.3);
+        }
+        .broker-feature-box .f-icon {
+            color: var(--gold);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .broker-feature-box h4 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        .broker-feature-box p {
+            color: #b0b0b0;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 992px) {
+            .broker-features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .broker-features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===================== WHY PARTNER SECTION ===================== */
+        .broker-middle {
+            padding: 60px 0 80px;
+            border-top: 1px solid rgba(255,255,255,0.03);
+        }
+        .broker-middle-container {
+            display: flex;
+            align-items: stretch;
+            gap: 40px;
+        }
+        .trust-box {
+            flex: 0 0 40%;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            min-height: 350px;
+            background-image: url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+        }
+        .trust-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 14, 23, 0.75);
+            z-index: 1;
+        }
+        .trust-box-content {
+            position: relative;
+            z-index: 2;
+            color: var(--white);
+        }
+        .trust-box-content .shield-icon {
+            font-size: 4rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+        .trust-box-content h3 {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
+        .trust-box-content p {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+
+        .partner-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .partner-content .sub-label {
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .partner-content h2 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 2.2rem;
+            color: var(--white);
+            margin-bottom: 15px;
+        }
+        .partner-content h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background: var(--gold);
+            margin-top: 10px;
+        }
+        .partner-content p {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+        .partner-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+        .partner-list li .check-icon {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        @media (max-width: 992px) {
+            .broker-middle-container {
+                flex-direction: column;
+            }
+            .trust-box {
+                flex: 0 0 100%;
+                min-height: 250px;
+            }
+            .partner-content h2::after {
+                margin: 10px auto 0;
+            }
+            .partner-content {
+                text-align: center;
+            }
+            .partner-list {
+                display: inline-block;
+                text-align: left;
+                margin: 0 auto;
+            }
+        }
+
+        /* ===================== HOW IT WORKS STEPS ===================== */
+        .broker-steps {
+            padding: 60px 0 80px;
+            border-top: 1px solid rgba(255,255,255,0.03);
+            text-align: center;
+        }
+        .broker-steps .sub-head {
+            color: var(--gold);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .broker-steps h2 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 50px;
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .step-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .step-number {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+        .step-item .s-icon {
+            color: var(--white);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .step-item h4 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        .step-item p {
+            color: #b0b0b0;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 992px) {
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===================== BOTTOM CTA BANNER ===================== */
+        .broker-bottom-cta {
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .broker-bottom-cta .cta-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .broker-bottom-cta .cta-icon {
+            font-size: 3rem;
+            color: var(--gold);
+        }
+        .broker-bottom-cta .cta-text h3 {
+            font-family: var(--font-heading);
+            color: var(--white);
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+        }
+        .broker-bottom-cta .cta-text p {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+        .broker-bottom-cta .btn-cta-right {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: var(--gold);
+            color: var(--dark);
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .broker-bottom-cta .btn-cta-right:hover {
+            background: #b08a3b;
+        }
+
+        @media (max-width: 768px) {
+            .broker-bottom-cta {
+                flex-direction: column;
+                text-align: center;
+            }
+            .broker-bottom-cta .cta-left {
+                flex-direction: column;
+            }
+        }
+
+        /* ===================== FOOTER ===================== */
+        footer {
+            background-color: #070a11;
+            padding: 50px 0 20px;
+            color: #b0b0b0;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            color: var(--white);
+            font-family: var(--font-heading);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+        .footer-col ul li a {
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .footer-col ul li a:hover {
+            color: var(--gold);
+        }
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--white);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer-logo .gold {
+            color: var(--gold);
+        }
+        .footer-col p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        .footer-director {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+        }
+        .footer-bottom-links a {
+            transition: color 0.3s;
+        }
+        .footer-bottom-links a:hover {
+            color: var(--gold);
+        }
+
+        @media (max-width: 992px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===================== HEADER & MENU ===================== -->
+    <input type="checkbox" id="menuToggle" hidden>
+    <header class="header-container">
+        <!-- Logo -->
+        <div class="logo">
+            <span class="logo-gold">AML</span> LENDING GROUP
+            <span class="tagline">EMPOWERING BUSINESSES SINCE 2015</span>
+        </div>
+
+        <!-- Hamburger Icon -->
+        <label for="menuToggle" class="hamburger">&#9776;</label>
+
+        <!-- Navigation Menu -->
+        <nav class="nav-menu">
+            <!-- Close Button inside Menu -->
+            <label for="menuToggle" class="close-x">&times;</label>
+
+            <label for="menuToggle"><a href="index.html">Home</a></label>
+            <label for="menuToggle"><a href="business-loans.html">Business Loans</a></label>
+            <label for="menuToggle"><a href="apply.html">Apply</a></label>
+            <label for="menuToggle"><a href="brokers.html" class="active">Brokers</a></label>
+            <label for="menuToggle"><a href="testimonials.html">Testimonials</a></label>
+            <label for="menuToggle"><a href="about.html">About Us</a></label>
+            <label for="menuToggle"><a href="faq.html">FAQ</a></label>
+            <label for="menuToggle"><a href="contact.html">Contact Us</a></label>
+        </nav>
+
+        <!-- Desktop CTA Button -->
+        <a href="brokers.html" class="desktop-cta">Become a Broker</a>
+
+        <!-- Dark Overlay to close menu by clicking outside -->
+        <label for="menuToggle" class="overlay"></label>
+    </header>
+
+    <!-- ===================== HERO SECTION ===================== -->
+    <section class="broker-hero">
+        <div class="container broker-hero-container">
+            <!-- Left Content -->
+            <div class="broker-hero-text">
+                <h1>Broker<br><span class="highlight-gold">Partnership</span></h1>
+                <p class="sub-desc">Earn competitive commissions and grow your business with our trusted lending network.</p>
+                <ul class="broker-list">
+                    <li><span class="check-icon">&#10003;</span> Competitive Commissions</li>
+                    <li><span class="check-icon">&#10003;</span> Fast Approvals</li>
+                    <li><span class="check-icon">&#10003;</span> Dedicated Broker Support</li>
+                </ul>
+                <a href="apply.html" class="btn-broker-gold">&#128100; Become a Broker</a>
+            </div>
+
+            <!-- Right Image -->
+            <div class="broker-hero-image">
+                <div class="hero-img"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== FEATURES SECTION ===================== -->
+    <section class="broker-features">
+        <div class="container">
+            <div class="broker-features-grid">
+                <div class="broker-feature-box">
+                    <div class="f-icon">&#36;</div>
+                    <h4>High Commissions</h4>
+                    <p>Industry-leading payouts on every funded deal.</p>
+                </div>
+                <div class="broker-feature-box">
+                    <div class="f-icon">&#128339;</div>
+                    <h4>Fast Approvals</h4>
+                    <p>Quick underwriting and funding for your clients.</p>
+                </div>
+                <div class="broker-feature-box">
+                    <div class="f-icon">&#127911;</div>
+                    <h4>Dedicated Support</h4>
+                    <p>Personalized support from our broker specialists.</p>
+                </div>
+                <div class="broker-feature-box">
+                    <div class="f-icon">&#128197;</div>
+                    <h4>Weekly Payouts</h4>
+                    <p>Get paid weekly with transparent reporting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== WHY PARTNER SECTION ===================== -->
+    <section class="broker-middle">
+        <div class="container broker-middle-container">
+            <!-- Left Box -->
+            <div class="trust-box">
+                <div class="trust-box-content">
+                    <div class="shield-icon">&#128737;</div>
+                    <h3>A Trusted Lending Partner</h3>
+                    <p>We make it easy for brokers to succeed with competitive programs, rapid decisions, and outstanding service.</p>
+                </div>
+            </div>
+            <!-- Right Content -->
+            <div class="partner-content">
+                <div class="sub-label">WHY PARTNER WITH US</div>
+                <h2>Solutions that help you and your clients grow.</h2>
+                <p>Our broker program is built for success. We provide the tools, resources, and support you need to grow your book of business and maximize your earnings.</p>
+                <ul class="partner-list">
+                    <li><span class="check-icon">&#10003;</span> Access to multiple loan products and flexible solutions</li>
+                    <li><span class="check-icon">&#10003;</span> Easy online submissions and fast responses</li>
+                    <li><span class="check-icon">&#10003;</span> Marketing materials and co-branded resources</li>
+                    <li><span class="check-icon">&#10003;</span> Long-term partnership focused on your growth</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== HOW IT WORKS SECTION ===================== -->
+    <section class="broker-steps">
+        <div class="container">
+            <div class="sub-head">HOW IT WORKS</div>
+            <h2>Simple steps. Powerful results.</h2>
+            <div class="steps-grid">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="s-icon">&#128100;</div>
+                    <h4>Join Our Program</h4>
+                    <p>Complete a quick application and get approved to become a broker.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="s-icon">&#128196;</div>
+                    <h4>Submit a Deal</h4>
+                    <p>Send us your client's information and we'll take it from there.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="s-icon">&#128077;</div>
+                    <h4>Get It Approved</h4>
+                    <p>We work quickly to get your client the best possible solution.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="s-icon">&#36;</div>
+                    <h4>Earn Commissions</h4>
+                    <p>Get paid weekly and grow your business with every funded deal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== BOTTOM CTA ===================== -->
+    <div class="container">
+        <div class="broker-bottom-cta">
+            <div class="cta-left">
+                <div class="cta-icon">&#128588;</div>
+                <div class="cta-text">
+                    <h3>Let's grow together.</h3>
+                    <p>Partner with AML Lending Group and maximize your success.</p>
+                </div>
+            </div>
+            <a href="apply.html" class="btn-cta-right">Become a Broker &rarr;</a>
+        </div>
+    </div>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo"><span class="gold">AML</span> LENDING GROUP</div>
+                    <p>Empowering businesses with fast, reliable funding solutions since 2015.</p>
+                    <p class="footer-director">Director: Mrs. Rolanda Medina</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="business-loans.html">Business Loans</a></li>
+                        <li><a href="apply.html">Apply Now</a></li>
+                        <li><a href="brokers.html">Brokers</a></li>
+                        <li><a href="testimonials.html">Testimonials</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <p><strong>Address:</strong> Houston, TX, USA</p>
+                    <p><strong>Phone:</strong> +1 713 587 6261</p>
+                    <p><strong>Email:</strong> info@amllending.com</p>
+                    <p><strong>Support:</strong> support@amllending.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 AML Lending Group. All rights reserved.</span>
+                <div class="footer-bottom-links">
+                    <a href="terms.html">Terms &amp; Conditions</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
