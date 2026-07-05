@@ -815,37 +815,38 @@
                 
                 <!-- LEFT COLUMN: Application Form -->
                 <div class="app-form-container">
-                    <form>
+                    <!-- ADDED ID="loanApplicationForm" TO THE FORM -->
+                    <form id="loanApplicationForm">
                         <!-- Step 1 -->
                         <div class="form-step-title"><span class="step-icon">&#128100;</span> 1. Personal Information</div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>First Name <span class="required">*</span></label>
-                                <input type="text" placeholder="Enter first name" required>
+                                <input type="text" id="firstName" placeholder="Enter first name" required>
                             </div>
                             <div class="form-group">
                                 <label>Last Name <span class="required">*</span></label>
-                                <input type="text" placeholder="Enter last name" required>
+                                <input type="text" id="lastName" placeholder="Enter last name" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Email Address <span class="required">*</span></label>
-                                <input type="email" placeholder="Enter email address" required>
+                                <input type="email" id="email" placeholder="Enter email address" required>
                             </div>
                             <div class="form-group">
                                 <label>Phone Number <span class="required">*</span></label>
-                                <input type="tel" placeholder="Enter phone number" required>
+                                <input type="tel" id="phone" placeholder="Enter phone number" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Title / Position <span class="required">*</span></label>
-                                <input type="text" placeholder="Enter your title or position" required>
+                                <input type="text" id="titlePosition" placeholder="Enter your title or position" required>
                             </div>
                             <div class="form-group">
                                 <label>Date of Birth</label>
-                                <input type="text" placeholder="MM / DD / YYYY">
+                                <input type="text" id="dob" placeholder="MM / DD / YYYY">
                             </div>
                         </div>
 
@@ -856,11 +857,11 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Business Name <span class="required">*</span></label>
-                                <input type="text" placeholder="Enter business name" required>
+                                <input type="text" id="businessName" placeholder="Enter business name" required>
                             </div>
                             <div class="form-group">
                                 <label>Business Type <span class="required">*</span></label>
-                                <select required>
+                                <select id="businessType" required>
                                     <option value="" disabled selected>Select business type</option>
                                     <option value="LLC">LLC</option>
                                     <option value="Sole Prop">Sole Proprietorship</option>
@@ -872,23 +873,23 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Years in Business <span class="required">*</span></label>
-                                <select required>
+                                <select id="yearsInBusiness" required>
                                     <option value="" disabled selected>Select years</option>
-                                    <option value="1">Less than 1 year</option>
-                                    <option value="2">1 - 2 years</option>
-                                    <option value="5">3 - 5 years</option>
-                                    <option value="10">5+ years</option>
+                                    <option value="Less than 1 year">Less than 1 year</option>
+                                    <option value="1 - 2 years">1 - 2 years</option>
+                                    <option value="3 - 5 years">3 - 5 years</option>
+                                    <option value="5+ years">5+ years</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>State / Province / Region You Operate In <span class="required">*</span></label>
-                                <input type="text" placeholder="Enter your state or region" required>
+                                <input type="text" id="stateRegion" placeholder="Enter your state or region" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Country <span class="required">*</span></label>
-                                <select required>
+                                <select id="country" required>
                                     <option value="" disabled selected>Select your country</option>
                                     <option value="United States" selected>United States</option>
                                     <option value="Canada">Canada</option>
@@ -901,23 +902,23 @@
                             </div>
                             <div class="form-group">
                                 <label>Estimated Monthly Revenue <span class="required">*</span></label>
-                                <select required>
+                                <select id="monthlyRevenue" required>
                                     <option value="" disabled selected>Select range</option>
-                                    <option value="10k">$10,000 - $25,000</option>
-                                    <option value="50k">$25,001 - $50,000</option>
-                                    <option value="100k">$50,001 - $100,000</option>
-                                    <option value="100k+">$100,000+</option>
+                                    <option value="$10,000 - $25,000">$10,000 - $25,000</option>
+                                    <option value="$25,001 - $50,000">$25,001 - $50,000</option>
+                                    <option value="$50,001 - $100,000">$50,001 - $100,000</option>
+                                    <option value="$100,000+">$100,000+</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Estimated Monthly Deals / Revenue Needed <span class="required">*</span></label>
-                                <input type="text" placeholder="Enter amount" required>
+                                <input type="text" id="monthlyDealsNeeded" placeholder="Enter amount" required>
                             </div>
                             <div class="form-group">
                                 <label>Business Address</label>
-                                <input type="text" placeholder="Enter business address">
+                                <input type="text" id="businessAddress" placeholder="Enter business address">
                             </div>
                         </div>
                         
@@ -925,15 +926,15 @@
                         <div class="form-row-3col">
                             <div class="form-group">
                                 <label>City</label>
-                                <input type="text" placeholder="Enter city">
+                                <input type="text" id="city" placeholder="Enter city">
                             </div>
                             <div class="form-group">
                                 <label>State / Province</label>
-                                <input type="text" placeholder="Enter state/province">
+                                <input type="text" id="stateProvince" placeholder="Enter state/province">
                             </div>
                             <div class="form-group">
                                 <label>ZIP / Postal Code</label>
-                                <input type="text" placeholder="Enter ZIP code">
+                                <input type="text" id="zip" placeholder="Enter ZIP code">
                             </div>
                         </div>
 
@@ -944,11 +945,11 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Loan Amount Requested <span class="required">*</span></label>
-                                <input type="number" min="1000" placeholder="Enter desired amount (e.g., 25000)" required>
+                                <input type="number" id="loanAmount" min="1000" placeholder="Enter desired amount (e.g., 25000)" required>
                             </div>
                             <div class="form-group">
                                 <label>How will the funds be used? <span class="required">*</span></label>
-                                <select required>
+                                <select id="fundingUse" required>
                                     <option value="" disabled selected>Select an option</option>
                                     <option value="Working Capital">Working Capital</option>
                                     <option value="Equipment">Equipment Financing</option>
@@ -960,7 +961,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>How did you hear about us?</label>
-                                <select>
+                                <select id="hearAboutUs">
                                     <option value="" disabled selected>Select an option</option>
                                     <option value="Search">Search Engine</option>
                                     <option value="Social">Social Media</option>
@@ -970,12 +971,12 @@
                             </div>
                             <div class="form-group">
                                 <label>Credit Score Range (Optional)</label>
-                                <select>
+                                <select id="creditScoreRange">
                                     <option value="" disabled selected>Select range</option>
-                                    <option value="600">600 - 650</option>
-                                    <option value="700">651 - 700</option>
-                                    <option value="750">701 - 750</option>
-                                    <option value="800">750+</option>
+                                    <option value="600 - 650">600 - 650</option>
+                                    <option value="651 - 700">651 - 700</option>
+                                    <option value="701 - 750">701 - 750</option>
+                                    <option value="750+">750+</option>
                                 </select>
                             </div>
                         </div>
@@ -990,25 +991,25 @@
                                 <h4>Business Bank Statements<br><span style="font-weight:400; font-size:0.7rem; color:#888;">(Last 3 Months)</span></h4>
                                 <p>PDF, JPG, PNG (Max: 10MB)</p>
                                 <span class="upload-btn">Upload File</span>
-                                <input type="file">
+                                <input type="file" id="fileBankStatements" accept=".pdf,.jpg,.jpeg,.png">
                             </div>
                             <div class="upload-box">
                                 <h4>Tax Returns<br><span style="font-weight:400; font-size:0.7rem; color:#888;">(Last 2 Years)</span></h4>
                                 <p>PDF, JPG, PNG (Max: 10MB)</p>
                                 <span class="upload-btn">Upload File</span>
-                                <input type="file">
+                                <input type="file" id="fileTaxReturns" accept=".pdf,.jpg,.jpeg,.png">
                             </div>
                             <div class="upload-box">
                                 <h4>Business License<br><span style="font-weight:400; font-size:0.7rem; color:#888;">(If Applicable)</span></h4>
                                 <p>PDF, JPG, PNG (Max: 10MB)</p>
                                 <span class="upload-btn">Upload File</span>
-                                <input type="file">
+                                <input type="file" id="fileBusinessLicense" accept=".pdf,.jpg,.jpeg,.png">
                             </div>
                             <div class="upload-box">
                                 <h4>Other Documents<br><span style="font-weight:400; font-size:0.7rem; color:#888;">(Optional)</span></h4>
                                 <p>PDF, JPG, PNG (Max: 10MB)</p>
                                 <span class="upload-btn">Upload File</span>
-                                <input type="file">
+                                <input type="file" id="fileOther" accept=".pdf,.jpg,.jpeg,.png">
                             </div>
                         </div>
 
@@ -1018,7 +1019,7 @@
                                 <input type="checkbox" id="terms" required>
                                 <label for="terms">I agree to the <a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a>.</label>
                             </div>
-                            <button type="submit" class="submit-btn">
+                            <button type="submit" class="submit-btn" id="submitBtn">
                                 &#128274; Submit Application
                             </button>
                             <div class="secure-note">
@@ -1130,6 +1131,136 @@
             </div>
         </div>
     </footer>
+
+    <!-- ===================== JAVASCRIPT INTEGRATION (INJECTED WITHOUT CHANGING DESIGN) ===================== -->
+    
+    <!-- 1. Load Supabase and EmailJS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <script>
+        // ===================== CONFIGURATION =====================
+        // REPLACE THESE WITH YOUR ACTUAL KEYS
+        const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
+        
+        // EmailJS Config - You need to sign up at emailjs.com and get these
+        const EMAILJS_PUBLIC_KEY = '3ScenjU80QSOfq1_-';
+        const EMAILJS_SERVICE_ID = 'service_l7ouze8';
+        const EMAILJS_TEMPLATE_CLIENT = 'template_qnh9ouz'; // Template 1
+        const EMAILJS_TEMPLATE_ADMIN = 'template_muxh2qa';   // Template 2
+
+        // Initialize Supabase
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // ===================== FORM SUBMISSION LOGIC =====================
+        document.getElementById('loanApplicationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalBtnText = submitBtn.innerHTML;
+            
+            // 1. Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '&#128339; Submitting...';
+
+            try {
+                // 2. Collect form data
+                const formData = {
+                    first_name: document.getElementById('firstName').value,
+                    last_name: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    title_position: document.getElementById('titlePosition').value,
+                    date_of_birth: document.getElementById('dob').value,
+                    business_name: document.getElementById('businessName').value,
+                    business_type: document.getElementById('businessType').value,
+                    years_in_business: document.getElementById('yearsInBusiness').value,
+                    state_region: document.getElementById('stateRegion').value,
+                    country: document.getElementById('country').value,
+                    monthly_revenue: document.getElementById('monthlyRevenue').value,
+                    monthly_deals_needed: document.getElementById('monthlyDealsNeeded').value,
+                    business_address: document.getElementById('businessAddress').value,
+                    city: document.getElementById('city').value,
+                    state_province: document.getElementById('stateProvince').value,
+                    zip_postal: document.getElementById('zip').value,
+                    loan_amount: parseFloat(document.getElementById('loanAmount').value),
+                    funding_use: document.getElementById('fundingUse').value,
+                    hear_about_us: document.getElementById('hearAboutUs').value,
+                    credit_score_range: document.getElementById('creditScoreRange').value
+                };
+
+                // 3. Insert data into Supabase
+                const { data, error } = await supabase
+                    .from('applications')
+                    .insert([formData])
+                    .select();
+
+                if (error) throw error;
+
+                const applicationId = data[0].id;
+
+                // 4. Handle File Uploads
+                const fileInputs = [
+                    document.getElementById('fileBankStatements'),
+                    document.getElementById('fileTaxReturns'),
+                    document.getElementById('fileBusinessLicense'),
+                    document.getElementById('fileOther')
+                ];
+
+                for (let i = 0; i < fileInputs.length; i++) {
+                    const input = fileInputs[i];
+                    if (input.files && input.files.length > 0) {
+                        const file = input.files[0];
+                        const filePath = `applications/${applicationId}/${Date.now()}_${file.name}`;
+                        
+                        const { error: uploadError } = await supabase.storage
+                            .from('loan_documents')
+                            .upload(filePath, file);
+
+                        if (uploadError) {
+                            console.warn('Upload warning for file:', file.name, uploadError);
+                            // We don't throw here; we let the application proceed even if a file fails
+                        }
+                    }
+                }
+
+                // 5. Send Emails via EmailJS (using the 2 allowed templates)
+                // Note: We pass 'form_type' to differentiate which form sent the data
+                const emailData = {
+                    form_type: 'loan_application', // <--- CRITICAL FOR EMAILJS
+                    application_id: applicationId,
+                    client_name: `${formData.first_name} ${formData.last_name}`,
+                    client_email: formData.email,
+                    client_phone: formData.phone,
+                    business_name: formData.business_name,
+                    loan_amount: formData.loan_amount,
+                    admin_email: 'info@amllending.com',
+                    // ... any other fields you want to pass to your email templates
+                };
+
+                // Send Client Confirmation Email (Template 1)
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, emailData);
+
+                // Send Admin Notification Email (Template 2)
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, emailData);
+
+                // 6. Success Message
+                alert('✅ Application submitted successfully! We will review your application and get back to you within 24 hours. Please check your email for confirmation.');
+                document.getElementById('loanApplicationForm').reset();
+
+            } catch (error) {
+                console.error('Submission Error:', error);
+                alert('❌ There was an error submitting your application: ' + error.message);
+            } finally {
+                // 7. Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        });
+    </script>
 
 </body>
 </html>
