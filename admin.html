@@ -386,34 +386,34 @@
                 <div class="stat-card">
                     <div class="stat-header">
                         <span class="stat-icon">&#128176;</span>
-                        <span class="stat-change">&#9650; 12%</span>
+                        <span class="stat-change" id="appGrowth">&#9650; 0%</span>
                     </div>
-                    <h3>$4.2M</h3>
-                    <p>Active Loans Outstanding</p>
+                    <h3 id="totalApps">0</h3>
+                    <p>Total Applications</p>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
                         <span class="stat-icon">&#128196;</span>
-                        <span class="stat-change" style="color:#ffc107; background:rgba(255,193,7,0.1);">&#9650; 8</span>
+                        <span class="stat-change" id="brokerGrowth" style="color:#ffc107; background:rgba(255,193,7,0.1);">&#9650; 0</span>
                     </div>
-                    <h3>24</h3>
-                    <p>Pending Applications</p>
+                    <h3 id="totalBrokers">0</h3>
+                    <p>Total Brokers</p>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
-                        <span class="stat-icon">&#128101;</span>
-                        <span class="stat-change">&#9650; 5%</span>
+                        <span class="stat-icon">&#128172;</span>
+                        <span class="stat-change" id="msgGrowth">&#9650; 0%</span>
                     </div>
-                    <h3>142</h3>
-                    <p>Active Brokers</p>
+                    <h3 id="totalMsgs">0</h3>
+                    <p>Contact Messages</p>
                 </div>
                 <div class="stat-card">
                     <div class="stat-header">
-                        <span class="stat-icon">&#128200;</span>
-                        <span class="stat-change" style="color:#2196F3; background:rgba(33,150,243,0.1);">&#9650; 3</span>
+                        <span class="stat-icon">&#128222;</span>
+                        <span class="stat-change" id="cbGrowth" style="color:#2196F3; background:rgba(33,150,243,0.1);">&#9650; 0</span>
                     </div>
-                    <h3>$1.8M</h3>
-                    <p>This Month's Revenue</p>
+                    <h3 id="totalCB">0</h3>
+                    <p>Callback Requests</p>
                 </div>
             </div>
 
@@ -433,26 +433,9 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="appTableBody">
                             <tr>
-                                <td>Michael R.</td>
-                                <td>$45,000</td>
-                                <td><span class="status-badge pending">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td>Sarah T.</td>
-                                <td>$120,000</td>
-                                <td><span class="status-badge review">Review</span></td>
-                            </tr>
-                            <tr>
-                                <td>James L.</td>
-                                <td>$25,000</td>
-                                <td><span class="status-badge approved">Approved</span></td>
-                            </tr>
-                            <tr>
-                                <td>Elite Logistics</td>
-                                <td>$250,000</td>
-                                <td><span class="status-badge pending">Pending</span></td>
+                                <td colspan="3" style="text-align:center; color:#888;">Loading data...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -472,21 +455,9 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="brokerTableBody">
                             <tr>
-                                <td>David K.</td>
-                                <td>Prime Capital</td>
-                                <td><span class="status-badge approved">Active</span></td>
-                            </tr>
-                            <tr>
-                                <td>Linda M.</td>
-                                <td>Growth Partners</td>
-                                <td><span class="status-badge pending">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td>Robert C.</td>
-                                <td>Summit Finance</td>
-                                <td><span class="status-badge review">Review</span></td>
+                                <td colspan="3" style="text-align:center; color:#888;">Loading data...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -537,20 +508,16 @@
 
     <script>
         // ===================== SECURITY CHECK =====================
-        // 1. Change param to 'secure' to avoid browser conflicts
         const urlParams = new URLSearchParams(window.location.search);
         const isAdmin = urlParams.get('secure') === 'true';
 
-        // 2. Master Password
         const MASTER_PASSWORD = "AML2026"; 
 
         if (!isAdmin) {
-            // If URL parameter is missing, show 404
             document.getElementById('access-denied').style.display = 'flex';
             document.getElementById('dashboard-content').style.display = 'none';
             document.getElementById('password-overlay').style.display = 'none';
         } else {
-            // If parameter is present, show password overlay
             document.getElementById('access-denied').style.display = 'none';
             document.getElementById('dashboard-content').style.display = 'none';
             document.getElementById('password-overlay').style.display = 'flex';
@@ -562,6 +529,7 @@
                 document.getElementById('password-overlay').style.display = 'none';
                 document.getElementById('dashboard-content').style.display = 'block';
                 document.getElementById('pError').style.display = 'none';
+                loadDashboardData(); // Load data after successful login
             } else {
                 document.getElementById('pError').style.display = 'block';
                 document.getElementById('adminPass').value = '';
@@ -575,7 +543,100 @@
             document.getElementById('adminPass').value = '';
             document.getElementById('pError').style.display = 'none';
         }
+
+        // ===================== SUPABASE CONFIG (REPLACE WITH YOUR KEYS) =====================
+        const CONFIG = {
+            supabaseUrl: 'https://ejuykwilrdzyavbpuwty.supabase.co',
+            supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM'
+        };
+        const supabaseClient = supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+
+        // ===================== LOAD DASHBOARD DATA =====================
+        async function loadDashboardData() {
+            try {
+                // 1. Fetch Applications
+                const { data: apps, error: appErr } = await supabaseClient
+                    .from('applications')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (appErr) throw appErr;
+                
+                document.getElementById('totalApps').textContent = apps ? apps.length : 0;
+                renderAppTable(apps);
+
+                // 2. Fetch Brokers
+                const { data: brokers, error: brokerErr } = await supabaseClient
+                    .from('brokers')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (brokerErr) throw brokerErr;
+
+                document.getElementById('totalBrokers').textContent = brokers ? brokers.length : 0;
+                renderBrokerTable(brokers);
+
+                // 3. Fetch Contact Messages
+                const { count: msgCount, error: msgErr } = await supabaseClient
+                    .from('contact_messages')
+                    .select('*', { count: 'exact', head: true });
+
+                if (msgErr) throw msgErr;
+                document.getElementById('totalMsgs').textContent = msgCount || 0;
+
+                // 4. Fetch Callback Requests
+                const { count: cbCount, error: cbErr } = await supabaseClient
+                    .from('callback_requests')
+                    .select('*', { count: 'exact', head: true });
+
+                if (cbErr) throw cbErr;
+                document.getElementById('totalCB').textContent = cbCount || 0;
+
+            } catch (error) {
+                console.error('Dashboard Load Error:', error);
+                document.getElementById('appTableBody').innerHTML = `<tr><td colspan="3" style="text-align:center; color:#ff4d4d;">Error loading data: ${error.message}</td></tr>`;
+                document.getElementById('brokerTableBody').innerHTML = `<tr><td colspan="3" style="text-align:center; color:#ff4d4d;">Error loading data: ${error.message}</td></tr>`;
+            }
+        }
+
+        // ===================== RENDER TABLES =====================
+        function renderAppTable(apps) {
+            const tbody = document.getElementById('appTableBody');
+            if (!apps || apps.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#888;">No applications yet.</td></tr>`;
+                return;
+            }
+            // Show only the latest 3
+            const recent = apps.slice(0, 3);
+            tbody.innerHTML = recent.map(app => `
+                <tr>
+                    <td>${app.first_name} ${app.last_name}</td>
+                    <td>$${parseInt(app.loan_amount).toLocaleString()}</td>
+                    <td><span class="status-badge ${app.status}">${app.status.charAt(0).toUpperCase() + app.status.slice(1)}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function renderBrokerTable(brokers) {
+            const tbody = document.getElementById('brokerTableBody');
+            if (!brokers || brokers.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#888;">No brokers yet.</td></tr>`;
+                return;
+            }
+            // Show only the latest 3
+            const recent = brokers.slice(0, 3);
+            tbody.innerHTML = recent.map(broker => `
+                <tr>
+                    <td>${broker.first_name} ${broker.last_name}</td>
+                    <td>${broker.company_name || 'N/A'}</td>
+                    <td><span class="status-badge ${broker.status}">${broker.status.charAt(0).toUpperCase() + broker.status.slice(1)}</span></td>
+                </tr>
+            `).join('');
+        }
     </script>
+
+    <!-- Load Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </body>
 </html>
