@@ -1193,12 +1193,17 @@
                 };
 
                 // 3. Insert data into Supabase
-                const { data, error } = await supabaseClient
-                    .from('applications')
-                    .insert([formData])
-                    .select();
+                //const { data, error } = await supabaseClient
+                //    .from('applications')
+                //    .insert([formData])
+                //   .select();
 
-                if (error) throw error;
+                //if (error) throw error;
+                // --- TEMPORARY FALLBACK (Skipping Supabase) ---
+                console.log('✅ Supabase is offline. Sending email-only fallback.');
+                // Create a dummy ID for the email reference
+                const applicationId = Date.now().toString().slice(-6);
+                // --- END FALLBACK ---
 
                 const applicationId = data[0].id;
 
