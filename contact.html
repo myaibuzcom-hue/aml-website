@@ -872,8 +872,24 @@
                     client_phone: formData.phone,
                     admin_email: 'info@amllending.com'
                 };
+                // --- SEND CLIENT CONFIRMATION ---
+                const clientParams = {
+                    ...emailData,
+                    from_email: 'help@amllending.com',
+                    reply_to: 'support@amllending.com',
+                    to_email: emailData.client_email
+                };
+                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateClient, clientParams);
 
-                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
+                // --- SEND ADMIN NOTIFICATION ---
+                const adminParams = {
+                    ...emailData,
+                    from_email: 'help@amllending.com',
+                    reply_to: 'support@amllending.com',
+                    to_email: 'support@amllending.com'
+                };
+                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, adminParams);
+              
 
                 alert('✅ Callback request sent! We will call you within 1 hour.');
                 document.getElementById('callbackForm').reset();
