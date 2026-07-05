@@ -656,12 +656,13 @@
                     <div class="callback-box">
                         <h4>&#128222; Request a Callback</h4>
                         <p style="color:#888; font-size:0.85rem; margin-bottom:15px;">Leave your number and we will call you back within 1 hour.</p>
-                        <form class="callback-box">
+                        <!-- ADDED ID="callbackForm" -->
+                        <form id="callbackForm">
                             <div class="cb-row">
-                                <input type="text" placeholder="Your Name" required>
-                                <input type="tel" placeholder="Your Phone Number" required>
+                                <input type="text" id="cbName" placeholder="Your Name" required>
+                                <input type="tel" id="cbPhone" placeholder="Your Phone Number" required>
                             </div>
-                            <button type="submit" class="cb-btn" style="margin-top:15px; width:100%;">Call Me Back</button>
+                            <button type="submit" class="cb-btn" id="cbSubmitBtn" style="margin-top:15px; width:100%;">Call Me Back</button>
                         </form>
                     </div>
                 </div>
@@ -670,36 +671,37 @@
                 <div class="contact-form-wrap">
                     <h2>Send Us a Message</h2>
                     <p>Fill out the form below and our team will respond promptly.</p>
-                    <form>
+                    <!-- ADDED ID="contactForm" -->
+                    <form id="contactForm">
                         <div class="cf-row">
                             <div class="cf-group">
                                 <label>First Name <span style="color:#ff4d4d;">*</span></label>
-                                <input type="text" placeholder="Enter first name" required>
+                                <input type="text" id="cfFirstName" placeholder="Enter first name" required>
                             </div>
                             <div class="cf-group">
                                 <label>Last Name <span style="color:#ff4d4d;">*</span></label>
-                                <input type="text" placeholder="Enter last name" required>
+                                <input type="text" id="cfLastName" placeholder="Enter last name" required>
                             </div>
                         </div>
                         <div class="cf-row">
                             <div class="cf-group">
                                 <label>Email Address <span style="color:#ff4d4d;">*</span></label>
-                                <input type="email" placeholder="Enter email address" required>
+                                <input type="email" id="cfEmail" placeholder="Enter email address" required>
                             </div>
                             <div class="cf-group">
                                 <label>Phone Number</label>
-                                <input type="tel" placeholder="Enter phone number">
+                                <input type="tel" id="cfPhone" placeholder="Enter phone number">
                             </div>
                         </div>
                         <div class="cf-group" style="margin-bottom: 20px;">
                             <label>Subject <span style="color:#ff4d4d;">*</span></label>
-                            <input type="text" placeholder="How can we help you?" required>
+                            <input type="text" id="cfSubject" placeholder="How can we help you?" required>
                         </div>
                         <div class="cf-group" style="margin-bottom: 20px;">
                             <label>Your Message <span style="color:#ff4d4d;">*</span></label>
-                            <textarea placeholder="Write your message here..." required></textarea>
+                            <textarea id="cfMessage" placeholder="Write your message here..." required></textarea>
                         </div>
-                        <button type="submit" class="cf-submit-btn">&#128640; Send Message</button>
+                        <button type="submit" class="cf-submit-btn" id="cfSubmitBtn">&#128640; Send Message</button>
                     </form>
                 </div>
 
@@ -749,6 +751,129 @@
             </div>
         </div>
     </footer>
+
+    <!-- ===================== JAVASCRIPT INTEGRATION (INJECTED WITHOUT CHANGING DESIGN) ===================== -->
+    
+    <!-- 1. Load Supabase and EmailJS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <script>
+        // ===================== CONFIGURATION =====================
+        // REPLACE THESE WITH YOUR ACTUAL KEYS
+        const CONFIG = {
+            supabaseUrl: 'YOUR_SUPABASE_URL',
+            supabaseKey: 'YOUR_SUPABASE_ANON_KEY',
+            emailjsPublicKey: 'YOUR_EMAILJS_PUBLIC_KEY',
+            emailjsServiceId: 'YOUR_EMAILJS_SERVICE_ID',
+            emailjsTemplateClient: 'YOUR_TEMPLATE_ID_CLIENT',
+            emailjsTemplateAdmin: 'YOUR_TEMPLATE_ID_ADMIN'
+        };
+
+        // Initialize Supabase
+        const supabaseClient = supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+        // Initialize EmailJS
+        emailjs.init(CONFIG.emailjsPublicKey);
+
+        // ===================== CONTACT FORM SUBMISSION =====================
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('cfSubmitBtn');
+            const originalBtnText = submitBtn.innerHTML;
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '&#128339; Sending...';
+
+            try {
+                const formData = {
+                    first_name: document.getElementById('cfFirstName').value,
+                    last_name: document.getElementById('cfLastName').value,
+                    email: document.getElementById('cfEmail').value,
+                    phone: document.getElementById('cfPhone').value,
+                    subject: document.getElementById('cfSubject').value,
+                    message: document.getElementById('cfMessage').value
+                };
+
+                // Insert into contact_messages table
+                const { data, error } = await supabaseClient
+                    .from('contact_messages')
+                    .insert([formData])
+                    .select();
+
+                if (error) throw error;
+
+                // Send Email via EmailJS
+                const emailData = {
+                    form_type: 'contact_message',
+                    client_name: `${formData.first_name} ${formData.last_name}`,
+                    client_email: formData.email,
+                    client_phone: formData.phone,
+                    subject: formData.subject,
+                    message: formData.message,
+                    admin_email: 'info@amllending.com'
+                };
+
+                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
+
+                alert('✅ Your message has been sent successfully! We will respond within 24 hours.');
+                document.getElementById('contactForm').reset();
+
+            } catch (error) {
+                console.error('Contact Form Error:', error);
+                alert('❌ There was an error sending your message: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        });
+
+        // ===================== CALLBACK FORM SUBMISSION =====================
+        document.getElementById('callbackForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('cbSubmitBtn');
+            const originalBtnText = submitBtn.innerHTML;
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '&#128339; Sending...';
+
+            try {
+                const formData = {
+                    name: document.getElementById('cbName').value,
+                    phone: document.getElementById('cbPhone').value
+                };
+
+                // Insert into callback_requests table
+                const { data, error } = await supabaseClient
+                    .from('callback_requests')
+                    .insert([formData])
+                    .select();
+
+                if (error) throw error;
+
+                // Send Email via EmailJS
+                const emailData = {
+                    form_type: 'callback_request',
+                    client_name: formData.name,
+                    client_phone: formData.phone,
+                    admin_email: 'info@amllending.com'
+                };
+
+                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
+
+                alert('✅ Callback request sent! We will call you within 1 hour.');
+                document.getElementById('callbackForm').reset();
+
+            } catch (error) {
+                console.error('Callback Form Error:', error);
+                alert('❌ There was an error sending your callback request: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        });
+    </script>
 
 </body>
 </html>
