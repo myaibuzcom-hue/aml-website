@@ -1244,11 +1244,23 @@
                     admin_email: 'info@amllending.com'
                 };
 
-                // Send Client Confirmation Email (Template 1)
-                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateClient, emailData);
+                // --- SEND CLIENT CONFIRMATION ---
+                const clientParams = {
+                    ...emailData,
+                    from_email: 'help@amllending.com',
+                    reply_to: 'support@amllending.com',
+                    to_email: emailData.client_email
+                };
+                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateClient, clientParams);
 
-                // Send Admin Notification Email (Template 2)
-                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
+                // --- SEND ADMIN NOTIFICATION ---
+                const adminParams = {
+                    ...emailData,
+                    from_email: 'help@amllending.com',
+                    reply_to: 'support@amllending.com',
+                    to_email: 'support@amllending.com'
+                };
+                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, adminParams);
 
                 // 6. Success Message
                 alert('✅ Application submitted successfully! We will review your application and get back to you within 24 hours. Please check your email for confirmation.');
