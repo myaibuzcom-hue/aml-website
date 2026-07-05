@@ -815,7 +815,6 @@
                 
                 <!-- LEFT COLUMN: Application Form -->
                 <div class="app-form-container">
-                    <!-- ADDED ID="loanApplicationForm" TO THE FORM -->
                     <form id="loanApplicationForm">
                         <!-- Step 1 -->
                         <div class="form-step-title"><span class="step-icon">&#128100;</span> 1. Personal Information</div>
@@ -1141,19 +1140,19 @@
     <script>
         // ===================== CONFIGURATION =====================
         // REPLACE THESE WITH YOUR ACTUAL KEYS
-        const SUPABASE_URL = 'https://ejuykwilrdzyavbpuwty.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM';
-        
-        // EmailJS Config - You need to sign up at emailjs.com and get these
-        const EMAILJS_PUBLIC_KEY = '3ScenjU80QSOfq1_-';
-        const EMAILJS_SERVICE_ID = 'service_l7ouze8';
-        const EMAILJS_TEMPLATE_CLIENT = 'template_qnh9ouz'; // Template 1
-        const EMAILJS_TEMPLATE_ADMIN = 'template_muxh2qa';   // Template 2
+        const CONFIG = {
+            supabaseUrl: 'https://ejuykwilrdzyavbpuwty.supabase.co',
+            supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM',
+            emailjsPublicKey: '3ScenjU80QSOfq1_-',
+            emailjsServiceId: 'service_l7ouze8',
+            emailjsTemplateClient: 'template_qnh9ouz',
+            emailjsTemplateAdmin: 'template_muxh2qa'
+        };
 
         // Initialize Supabase
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
         // Initialize EmailJS
-        emailjs.init(EMAILJS_PUBLIC_KEY);
+        emailjs.init(CONFIG.emailjsPublicKey);
 
         // ===================== FORM SUBMISSION LOGIC =====================
         document.getElementById('loanApplicationForm').addEventListener('submit', async function(e) {
@@ -1193,7 +1192,7 @@
                 };
 
                 // 3. Insert data into Supabase
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('applications')
                     .insert([formData])
                     .select();
@@ -1216,36 +1215,33 @@
                         const file = input.files[0];
                         const filePath = `applications/${applicationId}/${Date.now()}_${file.name}`;
                         
-                        const { error: uploadError } = await supabase.storage
+                        const { error: uploadError } = await supabaseClient.storage
                             .from('loan_documents')
                             .upload(filePath, file);
 
                         if (uploadError) {
                             console.warn('Upload warning for file:', file.name, uploadError);
-                            // We don't throw here; we let the application proceed even if a file fails
                         }
                     }
                 }
 
-                // 5. Send Emails via EmailJS (using the 2 allowed templates)
-                // Note: We pass 'form_type' to differentiate which form sent the data
+                // 5. Send Emails via EmailJS
                 const emailData = {
-                    form_type: 'loan_application', // <--- CRITICAL FOR EMAILJS
+                    form_type: 'loan_application',
                     application_id: applicationId,
                     client_name: `${formData.first_name} ${formData.last_name}`,
                     client_email: formData.email,
                     client_phone: formData.phone,
                     business_name: formData.business_name,
                     loan_amount: formData.loan_amount,
-                    admin_email: 'info@amllending.com',
-                    // ... any other fields you want to pass to your email templates
+                    admin_email: 'info@amllending.com'
                 };
 
                 // Send Client Confirmation Email (Template 1)
-                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, emailData);
+                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateClient, emailData);
 
                 // Send Admin Notification Email (Template 2)
-                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, emailData);
+                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
 
                 // 6. Success Message
                 alert('✅ Application submitted successfully! We will review your application and get back to you within 24 hours. Please check your email for confirmation.');
