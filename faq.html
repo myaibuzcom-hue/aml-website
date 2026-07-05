@@ -66,6 +66,8 @@
         .logo .logo-icon {
             color: var(--gold);
             font-size: 1.5rem;
+            /* FIX: Just use the actual emoji character here */
+            content: "🔍"; 
         }
         .logo .logo-gold {
             color: var(--gold);
@@ -397,8 +399,9 @@
         .faq-search-box .search-input-wrap input::placeholder {
             color: #666;
         }
+        /* FIX: Use standard unicode instead of HTML entity inside CSS */
         .faq-search-box .search-input-wrap::before {
-            content: '&#128269;';
+            content: "🔍";
             position: absolute;
             left: 15px;
             top: 50%;
@@ -695,7 +698,7 @@
     <header class="header-container">
         <!-- Logo -->
         <div class="logo">
-            <span class="logo-icon">&#128269</span>
+            <span class="logo-icon">🔍</span>
             <div>
                 <span class="logo-gold">AML</span> LENDING GROUP
                 <span class="tagline">EMPOWERING BUSINESSES SINCE 2015</span>
