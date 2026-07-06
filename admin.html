@@ -442,7 +442,7 @@
                 <div class="table-widget">
                     <div class="tw-header">
                         <h4>Recent Loan Applications</h4>
-                        <a href="apply.html">View All &rarr;</a>
+                        <a href="#" onclick="alert('Full list coming soon!'); return false;">View All &rarr;</a>
                     </div>
                     <table>
                         <thead>
@@ -465,7 +465,7 @@
                 <div class="table-widget">
                     <div class="tw-header">
                         <h4>Recent Broker Submissions</h4>
-                        <a href="broker-application.html">View All &rarr;</a>
+                        <a href="#" onclick="alert('Full list coming soon!'); return false;">View All &rarr;</a>
                     </div>
                     <table>
                         <thead>
@@ -473,11 +473,12 @@
                                 <th>Broker</th>
                                 <th>Company</th>
                                 <th>Status</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="brokerTableBody">
                             <tr>
-                                <td colspan="3" style="text-align:center; color:#888;">Loading data...</td>
+                                <td colspan="4" style="text-align:center; color:#888;">Loading data...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -615,13 +616,13 @@
             } catch (error) {
                 console.error('Dashboard Load Error:', error);
                 document.getElementById('appTableBody').innerHTML = `<tr><td colspan="4" style="text-align:center; color:#ff4d4d;">Error loading data: ${error.message}</td></tr>`;
-                document.getElementById('brokerTableBody').innerHTML = `<tr><td colspan="3" style="text-align:center; color:#ff4d4d;">Error loading data: ${error.message}</td></tr>`;
+                document.getElementById('brokerTableBody').innerHTML = `<tr><td colspan="4" style="text-align:center; color:#ff4d4d;">Error loading data: ${error.message}</td></tr>`;
             }
         }
 
-        // ===================== UPDATE APPLICATION STATUS =====================
-        async function updateStatus(appId, newStatus) {
-            if (!confirm(`Are you sure you want to mark this application as "${newStatus}"?`)) return;
+        // ===================== UPDATE STATUS =====================
+        async function updateApplicationStatus(appId, newStatus) {
+            if (!confirm(`Are you sure you want to mark application #${appId} as "${newStatus}"?`)) return;
 
             try {
                 const { error } = await supabaseClient
@@ -632,6 +633,26 @@
                 if (error) throw error;
 
                 alert(`✅ Application #${appId} has been marked as "${newStatus}".`);
+                loadDashboardData(); // Refresh the table instantly
+
+            } catch (error) {
+                console.error('Update Error:', error);
+                alert('❌ Error updating status: ' + error.message);
+            }
+        }
+
+        async function updateBrokerStatus(brokerId, newStatus) {
+            if (!confirm(`Are you sure you want to mark broker #${brokerId} as "${newStatus}"?`)) return;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('brokers')
+                    .update({ status: newStatus })
+                    .eq('id', brokerId);
+
+                if (error) throw error;
+
+                alert(`✅ Broker #${brokerId} has been marked as "${newStatus}".`);
                 loadDashboardData(); // Refresh the table instantly
 
             } catch (error) {
@@ -655,8 +676,8 @@
                     <td>$${parseInt(app.loan_amount).toLocaleString()}</td>
                     <td><span class="status-badge ${app.status}">${app.status.charAt(0).toUpperCase() + app.status.slice(1)}</span></td>
                     <td>
-                        <button class="btn-action btn-approve" onclick="updateStatus(${app.id}, 'approved')">Approve</button>
-                        <button class="btn-action btn-deny" onclick="updateStatus(${app.id}, 'denied')">Deny</button>
+                        <button class="btn-action btn-approve" onclick="updateApplicationStatus(${app.id}, 'approved')">Approve</button>
+                        <button class="btn-action btn-deny" onclick="updateApplicationStatus(${app.id}, 'denied')">Deny</button>
                     </td>
                 </tr>
             `).join('');
@@ -665,7 +686,7 @@
         function renderBrokerTable(brokers) {
             const tbody = document.getElementById('brokerTableBody');
             if (!brokers || brokers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#888;">No brokers yet.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#888;">No brokers yet.</td></tr>`;
                 return;
             }
             // Show only the latest 3
@@ -675,6 +696,10 @@
                     <td>${broker.first_name} ${broker.last_name}</td>
                     <td>${broker.company_name || 'N/A'}</td>
                     <td><span class="status-badge ${broker.status}">${broker.status.charAt(0).toUpperCase() + broker.status.slice(1)}</span></td>
+                    <td>
+                        <button class="btn-action btn-approve" onclick="updateBrokerStatus(${broker.id}, 'approved')">Approve</button>
+                        <button class="btn-action btn-deny" onclick="updateBrokerStatus(${broker.id}, 'denied')">Deny</button>
+                    </td>
                 </tr>
             `).join('');
         }
