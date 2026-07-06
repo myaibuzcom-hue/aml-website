@@ -290,31 +290,40 @@
         }
 
         @media (max-width: 992px) {
-            .loans-hero-container {
-                flex-direction: column;
-                gap: 20px;
-            }
-            .loans-content {
-                flex: 0 0 100%;
-                text-align: center;
-                padding-right: 0;
-            }
-            .loans-content h1 {
-                font-size: 2.8rem;
-            }
-            .loans-content p {
-                max-width: 100%;
-                margin: 0 auto 2rem;
-            }
-            .loans-image-wrapper {
-                flex: 0 0 100%;
-                height: 300px;
-                width: 100%;
-            }
-            .loans-image {
-                border-radius: 20px 20px 0 0;
-            }
-        }
+    .loans-hero-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .loans-content {
+        flex: 0 0 100%;
+        text-align: center;
+        padding-right: 0;
+    }
+    .loans-content h1 {
+        font-size: 2.8rem;
+    }
+    .loans-content p {
+        max-width: 100%;
+        margin: 0 auto 2rem;
+    }
+    .loans-image-wrapper {
+        flex: 0 0 100%;
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+        border-radius: 20px 20px 0 0;
+    }
+    .loans-image-wrapper .loans-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 300px;
+        background-size: cover;
+        background-position: center center;
+        border-radius: 20px 20px 0 0;
+        border: 2px solid rgba(201,164,76,0.2);
+    }
+}
         @media (max-width: 480px) {
             .loans-content h1 {
                 font-size: 2.2rem;
