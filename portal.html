@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="shortcut icon" href="/favicon-32x32.png">
     <title>Client Portal - AML Lending Group</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -217,7 +216,7 @@
     <section class="search-box">
         <div class="container">
             <form id="statusForm">
-                <input type="text" id="appIdInput" placeholder="Enter your Application ID (e.g., 123456)" required>
+                <input type="text" id="appIdInput" placeholder="Enter your Application ID (e.g., 11)" required>
                 <button type="submit">Check Status</button>
             </form>
             <div class="loading-msg" id="loadingMsg">&#128339; Retrieving your application data...</div>
@@ -297,7 +296,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // ===================== CONFIGURATION =====================
-        // REPLACE THESE WITH YOUR ACTUAL SUPABASE KEYS
         const CONFIG = {
             supabaseUrl: 'https://ejuykwilrdzyavbpuwty.supabase.co',
             supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM'
@@ -307,10 +305,15 @@
         document.getElementById('statusForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const appId = document.getElementById('appIdInput').value.trim();
+            let appId = document.getElementById('appIdInput').value.trim();
             const statusCard = document.getElementById('statusCard');
             const loadingMsg = document.getElementById('loadingMsg');
             const errorMsg = document.getElementById('errorMsg');
+
+            // ===== FIX: Strip out '#' if the user copied it from the email =====
+            if (appId.startsWith('#')) {
+                appId = appId.substring(1);
+            }
 
             statusCard.style.display = 'none';
             errorMsg.style.display = 'none';
@@ -357,10 +360,10 @@
                     tlReview.classList.add('completed');
                     tlDecision.classList.add('completed');
                     tlFunding.classList.remove('completed');
-                } else if (status === 'funded') {
+                } else if (status === 'denied') {
                     tlReview.classList.add('completed');
-                    tlDecision.classList.add('completed');
-                    tlFunding.classList.add('completed');
+                    tlDecision.classList.remove('completed');
+                    tlFunding.classList.remove('completed');
                 }
 
                 statusCard.style.display = 'block';
