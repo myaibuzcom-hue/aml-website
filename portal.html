@@ -208,7 +208,7 @@
     <section class="portal-hero">
         <div class="container">
             <h1>Application <span class="highlight-gold">Status</span></h1>
-            <p>Enter your Application ID below to view the current status of your loan.</p>
+            <p>Enter your Application ID below to view the current status of your loan or broker application.</p>
         </div>
     </section>
 
@@ -310,7 +310,7 @@
             const loadingMsg = document.getElementById('loadingMsg');
             const errorMsg = document.getElementById('errorMsg');
 
-            // ===== FIX: Strip out '#' if the user copied it from the email =====
+            // Strip '#' if copied from email
             if (appId.startsWith('#')) {
                 appId = appId.substring(1);
             }
@@ -320,24 +320,41 @@
             loadingMsg.style.display = 'block';
 
             try {
-                const { data, error } = await supabaseClient
+                // Try to find in Applications table first
+                let { data, error } = await supabaseClient
                     .from('applications')
                     .select('*')
                     .eq('id', appId)
                     .single();
 
-                loadingMsg.style.display = 'none';
-
+                // If not found, try the Brokers table
                 if (error || !data) {
-                    errorMsg.style.display = 'block';
-                    return;
+                    const { data: brokerData, error: brokerError } = await supabaseClient
+                        .from('brokers')
+                        .select('*')
+                        .eq('id', appId)
+                        .single();
+
+                    if (brokerError || !brokerData) {
+                        loadingMsg.style.display = 'none';
+                        errorMsg.style.display = 'block';
+                        return;
+                    }
+
+                    // Found in Brokers table
+                    data = brokerData;
                 }
+
+                loadingMsg.style.display = 'none';
 
                 // Populate Data
                 document.getElementById('displayId').textContent = data.id;
                 document.getElementById('displayName').textContent = `${data.first_name} ${data.last_name}`;
-                document.getElementById('displayBusiness').textContent = data.business_name || 'N/A';
-                document.getElementById('displayAmount').textContent = `$${parseInt(data.loan_amount).toLocaleString()}`;
+                document.getElementById('displayBusiness').textContent = data.business_name || data.company_name || 'N/A';
+                
+                // Handle loan amount or broker-specific amounts
+                const amount = data.loan_amount ? `$${parseInt(data.loan_amount).toLocaleString()}` : 'Broker Application';
+                document.getElementById('displayAmount').textContent = amount;
 
                 const status = data.status || 'pending';
                 document.getElementById('displayStatusBadge').innerHTML = 
