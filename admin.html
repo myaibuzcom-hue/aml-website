@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Load Supabase Library EARLY in the head so it's ready when the page loads -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* ===================== RESET & VARIABLES ===================== */
         * {
@@ -545,7 +547,7 @@
             document.getElementById('pError').style.display = 'none';
         }
 
-        // ===================== SUPABASE CONFIG (REPLACE WITH YOUR KEYS) =====================
+        // ===================== SUPABASE CONFIG =====================
         const CONFIG = {
             supabaseUrl: 'https://ejuykwilrdzyavbpuwty.supabase.co',
             supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM'
@@ -635,9 +637,6 @@
             `).join('');
         }
     </script>
-
-    <!-- Load Supabase Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </body>
 </html>
