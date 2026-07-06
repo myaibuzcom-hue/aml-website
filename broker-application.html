@@ -1065,18 +1065,12 @@
                 };
 
                 // 3. Insert data into Supabase (brokers table)
-                //const { data, error } = await supabaseClient
-                //    .from('brokers')
-                //    .insert([formData])
-                //    .select();
+                const { data, error } = await supabaseClient
+                    .from('brokers')
+                    .insert([formData])
+                    .select();
 
-                //if (error) throw error;
-                
-                // --- TEMPORARY FALLBACK (Skipping Supabase) ---
-                console.log('✅ Supabase is offline. Sending email-only fallback.');
-                // Create a dummy ID for the email reference
-                const applicationId = Date.now().toString().slice(-6);
-                // --- END FALLBACK ---
+                if (error) throw error;
 
                 const applicationId = data[0].id;
 
