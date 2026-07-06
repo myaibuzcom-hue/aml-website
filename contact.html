@@ -640,7 +640,7 @@
                         <div class="i-icon">&#9993;</div>
                         <div>
                             <h4>Email</h4>
-                            <p><a href="mailto:info@amllending.com">info@amllending.com</a></p>
+                            <p><a href="mailto:help@amllending.com">help@amllending.com</a></p>
                             <p style="font-size:0.8rem; margin-top:2px;">Support: <a href="mailto:support@amllending.com">support@amllending.com</a></p>
                         </div>
                     </div>
@@ -738,7 +738,7 @@
                     <h4>Contact Info</h4>
                     <p><strong>Address:</strong> Houston, TX, USA</p>
                     <p><strong>Phone:</strong> +1 713 587 6261</p>
-                    <p><strong>Email:</strong> info@amllending.com</p>
+                    <p><strong>Email:</strong> help@amllending.com</p>
                     <p><strong>Support:</strong> support@amllending.com</p>
                 </div>
             </div>
@@ -818,7 +818,7 @@
                     client_phone: formData.phone,
                     subject: formData.subject,
                     message: formData.message,
-                    admin_email: 'info@amllending.com'
+                    admin_email: 'help@amllending.com'
                 };
 
                 await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
@@ -870,7 +870,7 @@
                     form_type: 'callback_request',
                     client_name: formData.name,
                     client_phone: formData.phone,
-                    admin_email: 'info@amllending.com'
+                    admin_email: 'help@amllending.com'
                 };
                 
                 await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, adminParams);
