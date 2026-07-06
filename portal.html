@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Status - AML Lending Group</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --gold: #c9a44c;
+            --dark: #0a0e17;
+            --white: #ffffff;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body {
+            font-family: var(--font-body);
+            color: #e0e0e0;
+            background-color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+
+        /* Header */
+        .header-container {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 2rem; background-color: var(--dark);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo { font-family: var(--font-heading); font-weight: 700; font-size: 1.2rem; color: var(--white); display: flex; align-items: center; gap: 10px; }
+        .logo .gold { color: var(--gold); }
+        .logo .tagline { font-size: 0.6rem; font-weight: 400; color: #888; display: block; }
+
+        /* Hero */
+        .portal-hero { padding: 60px 0 40px; text-align: center; }
+        .portal-hero h1 { font-family: var(--font-heading); font-weight: 700; font-size: 2.8rem; color: var(--white); margin-bottom: 0.5rem; }
+        .portal-hero h1 .highlight-gold { color: var(--gold); }
+        .portal-hero p { color: #b0b0b0; font-size: 1.1rem; max-width: 500px; margin: 0 auto; }
+
+        /* Search Box */
+        .search-box { margin: 40px 0 60px; }
+        .search-box form { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        .search-box input {
+            flex: 1; min-width: 250px; padding: 14px 20px; border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03);
+            color: var(--white); font-size: 1rem; font-family: var(--font-body);
+        }
+        .search-box input:focus { outline: none; border-color: var(--gold); }
+        .search-box button {
+            padding: 14px 30px; background: var(--gold); color: var(--dark);
+            border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background 0.3s;
+        }
+        .search-box button:hover { background: #b08a3b; }
+
+        /* Status Card */
+        .status-card {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px; padding: 30px; text-align: center; display: none;
+        }
+        .status-card h3 { font-family: var(--font-heading); color: var(--white); font-size: 1.5rem; margin-bottom: 15px; }
+        .status-card .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .status-card .detail-row:last-child { border-bottom: none; }
+        .status-card .detail-row span:first-child { color: #b0b0b0; }
+        .status-card .detail-row span:last-child { color: var(--white); font-weight: 500; }
+        .status-badge {
+            display: inline-block; padding: 6px 20px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; margin-top: 10px;
+        }
+        .status-badge.pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .status-badge.approved { background: rgba(76, 175, 80, 0.2); color: #4CAF50; }
+        .status-badge.review { background: rgba(33, 150, 243, 0.2); color: #2196F3; }
+
+        .error-msg { color: #ff4d4d; text-align: center; margin-top: 20px; display: none; }
+        .loading-msg { color: #b0b0b0; text-align: center; margin-top: 20px; display: none; }
+
+        /* Footer */
+        footer { background-color: #070a11; padding: 30px 0 20px; text-align: center; color: #888; font-size: 0.85rem; border-top: 1px solid rgba(255,255,255,0.05); }
+
+        @media (max-width: 480px) {
+            .portal-hero h1 { font-size: 2rem; }
+            .search-box form { flex-direction: column; align-items: center; }
+            .search-box input { width: 100%; min-width: auto; }
+            .search-box button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header-container">
+        <div class="logo">
+            <span class="gold">AML</span> LENDING GROUP
+            <span class="tagline">EMPOWERING BUSINESSES SINCE 2015</span>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="portal-hero">
+        <div class="container">
+            <h1>Check Your <span class="highlight-gold">Application Status</span></h1>
+            <p>Enter your unique Application ID below to see the current status of your business loan application.</p>
+        </div>
+    </section>
+
+    <!-- Search Box -->
+    <section class="search-box">
+        <div class="container">
+            <form id="statusForm">
+                <input type="text" id="appIdInput" placeholder="Enter your Application ID (e.g., 123456)" required>
+                <button type="submit">Check Status</button>
+            </form>
+            <div class="loading-msg" id="loadingMsg">&#128339; Looking up your application...</div>
+            <div class="error-msg" id="errorMsg">Application not found. Please check your ID and try again.</div>
+        </div>
+    </section>
+
+    <!-- Status Result Card -->
+    <section class="status-card" id="statusCard">
+        <div class="container">
+            <h3>Application Details</h3>
+            <div class="detail-row"><span>Application ID</span><span id="displayId">-</span></div>
+            <div class="detail-row"><span>Applicant</span><span id="displayName">-</span></div>
+            <div class="detail-row"><span>Business Name</span><span id="displayBusiness">-</span></div>
+            <div class="detail-row"><span>Loan Amount</span><span id="displayAmount">-</span></div>
+            <div class="detail-row"><span>Current Status</span><span id="displayStatusBadge"><span class="status-badge pending">Loading...</span></span></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 AML Lending Group. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ===================== JAVASCRIPT ===================== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ===================== CONFIGURATION =====================
+        const CONFIG = {
+            supabaseUrl: 'https://ejuykwilrdzyavbpuwty.supabase.co',
+            supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM'
+        };
+        const supabaseClient = supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+
+        document.getElementById('statusForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const appId = document.getElementById('appIdInput').value.trim();
+            const statusCard = document.getElementById('statusCard');
+            const loadingMsg = document.getElementById('loadingMsg');
+            const errorMsg = document.getElementById('errorMsg');
+
+            // Reset UI
+            statusCard.style.display = 'none';
+            errorMsg.style.display = 'none';
+            loadingMsg.style.display = 'block';
+
+            try {
+                // Fetch application by ID
+                const { data, error } = await supabaseClient
+                    .from('applications')
+                    .select('*')
+                    .eq('id', appId)
+                    .single();
+
+                loadingMsg.style.display = 'none';
+
+                if (error || !data) {
+                    errorMsg.style.display = 'block';
+                    return;
+                }
+
+                // Populate Data
+                document.getElementById('displayId').textContent = data.id;
+                document.getElementById('displayName').textContent = `${data.first_name} ${data.last_name}`;
+                document.getElementById('displayBusiness').textContent = data.business_name || 'N/A';
+                document.getElementById('displayAmount').textContent = `$${parseInt(data.loan_amount).toLocaleString()}`;
+
+                const statusBadge = document.getElementById('displayStatusBadge');
+                const status = data.status || 'pending';
+                statusBadge.innerHTML = `<span class="status-badge ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
+
+                statusCard.style.display = 'block';
+
+            } catch (err) {
+                loadingMsg.style.display = 'none';
+                errorMsg.style.display = 'block';
+                console.error(err);
+            }
+        });
+    </script>
+
+</body>
+</html>
