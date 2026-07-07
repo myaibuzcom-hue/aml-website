@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -295,40 +295,40 @@
         }
 
         @media (max-width: 992px) {
-    .apply-hero-container {
-        flex-direction: column;
-        gap: 20px;
-    }
-    .apply-hero-text {
-        flex: 0 0 100%;
-        text-align: center;
-        padding-right: 0;
-    }
-    .apply-hero-text p {
-        max-width: 100%;
-        margin: 0 auto 25px;
-    }
-    .hero-badges {
-        justify-content: center;
-    }
-    .apply-hero-image {
-        flex: 0 0 100%;
-        width: 100%;
-        height: 250px;
-        overflow: hidden;
-        border-radius: 20px 20px 0 0;
-    }
-    .apply-hero-image .hero-img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        min-height: 250px;
-        background-size: cover;
-        background-position: center center;
-        border-radius: 20px 20px 0 0;
-        border: 2px solid rgba(201,164,76,0.2);
-    }
-}
+            .apply-hero-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .apply-hero-text {
+                flex: 0 0 100%;
+                text-align: center;
+                padding-right: 0;
+            }
+            .apply-hero-text p {
+                max-width: 100%;
+                margin: 0 auto 25px;
+            }
+            .hero-badges {
+                justify-content: center;
+            }
+            .apply-hero-image {
+                flex: 0 0 100%;
+                width: 100%;
+                height: 250px;
+                overflow: hidden;
+                border-radius: 20px 20px 0 0;
+            }
+            .apply-hero-image .hero-img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                min-height: 250px;
+                background-size: cover;
+                background-position: center center;
+                border-radius: 20px 20px 0 0;
+                border: 2px solid rgba(201,164,76,0.2);
+            }
+        }
         @media (max-width: 480px) {
             .apply-hero-text h1 {
                 font-size: 2.2rem;
@@ -1144,15 +1144,11 @@
         </div>
     </footer>
 
-    <!-- ===================== JAVASCRIPT INTEGRATION (INJECTED WITHOUT CHANGING DESIGN) ===================== -->
-    
-    <!-- 1. Load Supabase and EmailJS Libraries -->
+    <!-- ===================== JAVASCRIPT INTEGRATION ===================== -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
     <script>
-        // ===================== CONFIGURATION =====================
-        // REPLACE THESE WITH YOUR ACTUAL KEYS
         const CONFIG = {
             supabaseUrl: 'https://ejuykwilrdzyavbpuwty.supabase.co',
             supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM',
@@ -1162,24 +1158,19 @@
             emailjsTemplateAdmin: 'template_muxh2qa'
         };
 
-        // Initialize Supabase
         const supabaseClient = supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
-        // Initialize EmailJS
         emailjs.init(CONFIG.emailjsPublicKey);
 
-        // ===================== FORM SUBMISSION LOGIC =====================
         document.getElementById('loanApplicationForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const submitBtn = document.getElementById('submitBtn');
             const originalBtnText = submitBtn.innerHTML;
             
-            // 1. Disable button and show loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = '&#128339; Submitting...';
 
             try {
-                // 2. Collect form data
                 const formData = {
                     first_name: document.getElementById('firstName').value,
                     last_name: document.getElementById('lastName').value,
@@ -1204,41 +1195,49 @@
                     credit_score_range: document.getElementById('creditScoreRange').value
                 };
 
-                // 3. Insert data into Supabase
                 const { data, error } = await supabaseClient
-                   .from('applications')
-                   .insert([formData])
-                   .select();
+                    .from('applications')
+                    .insert([formData])
+                    .select();
 
                 if (error) throw error;
 
                 const applicationId = data[0].id;
 
-                // 4. Handle File Uploads
+                // ----- UPLOAD FILES (WITH DEBUG LOGGING) -----
                 const fileInputs = [
-                    document.getElementById('fileBankStatements'),
-                    document.getElementById('fileTaxReturns'),
-                    document.getElementById('fileBusinessLicense'),
-                    document.getElementById('fileOther')
+                    { id: 'fileBankStatements', label: 'Bank Statements' },
+                    { id: 'fileTaxReturns', label: 'Tax Returns' },
+                    { id: 'fileBusinessLicense', label: 'Business License' },
+                    { id: 'fileOther', label: 'Other Documents' }
                 ];
 
                 for (let i = 0; i < fileInputs.length; i++) {
-                    const input = fileInputs[i];
+                    const input = document.getElementById(fileInputs[i].id);
                     if (input.files && input.files.length > 0) {
                         const file = input.files[0];
                         const filePath = `applications/${applicationId}/${Date.now()}_${file.name}`;
+                        
+                        console.log(`📤 Uploading ${fileInputs[i].label}: ${filePath}`);
                         
                         const { error: uploadError } = await supabaseClient.storage
                             .from('loan_documents')
                             .upload(filePath, file);
 
                         if (uploadError) {
-                            console.warn('Upload warning for file:', file.name, uploadError);
+                            console.warn('⚠️ Upload warning for file:', file.name, uploadError);
+                        } else {
+                            // Generate public URL
+                            const { data: urlData } = supabaseClient.storage
+                                .from('loan_documents')
+                                .getPublicUrl(filePath);
+                            console.log(`✅ ${fileInputs[i].label} uploaded successfully!`);
+                            console.log(`🔗 Public URL: ${urlData.publicUrl}`);
                         }
                     }
                 }
 
-                // 5. Send Emails via EmailJS
+                // ----- SEND EMAILS -----
                 const emailData = {
                     form_type: 'loan_application',
                     application_id: applicationId,
@@ -1250,13 +1249,9 @@
                     admin_email: 'help@amllending.com'
                 };
 
-                // Send Client Confirmation Email (Template 1)
                 await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateClient, emailData);
-
-                // Send Admin Notification Email (Template 2)
                 await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
 
-                // 6. Success Message
                 alert('✅ Application submitted successfully! We will review your application and get back to you within 24 hours. Please check your email for confirmation.');
                 document.getElementById('loanApplicationForm').reset();
 
@@ -1264,13 +1259,10 @@
                 console.error('Submission Error:', error);
                 alert('❌ There was an error submitting your application: ' + error.message);
             } finally {
-                // 7. Re-enable button
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
             }
         });
     </script>
-
 </body>
 </html>
-<!-- update 1 -->
