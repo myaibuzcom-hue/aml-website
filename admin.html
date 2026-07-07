@@ -75,7 +75,7 @@
         }
         .admin-logout:hover { background: #ff4d4d; color: var(--white); border-color: #ff4d4d; }
 
-        /* Password Overlay */
+        /* Login Overlay */
         #password-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(10, 14, 23, 0.95); z-index: 9999;
@@ -141,6 +141,24 @@
         .modal-box .modal-error { color: #ff4d4d; font-size: 0.85rem; text-align: center; margin-top: 10px; display: none; }
         .modal-box .modal-success { color: #4CAF50; font-size: 0.85rem; text-align: center; margin-top: 10px; display: none; }
 
+        /* Document Viewer Modal */
+        #docModal {
+            display: none; align-items: center; justify-content: center;
+        }
+        #docModal .modal-box { max-width: 600px; }
+        .doc-list { margin-top: 20px; }
+        .doc-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .doc-item:last-child { border-bottom: none; }
+        .doc-item .doc-name { color: #b0b0b0; font-size: 0.9rem; }
+        .doc-item .doc-link {
+            color: var(--gold); font-size: 0.85rem; text-decoration: underline; cursor: pointer;
+        }
+        .doc-item .doc-link:hover { color: #b08a3b; }
+        .no-docs { color: #888; text-align: center; padding: 20px 0; }
+
         /* Dashboard Stats */
         .dashboard-grid { padding: 40px 0 80px; }
         .stats-row {
@@ -175,8 +193,11 @@
             display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
         }
         .table-widget .tw-header h4 { font-family: var(--font-heading); color: var(--white); font-size: 1.1rem; }
-        .table-widget .tw-header a { color: var(--gold); font-size: 0.85rem; }
-        .table-widget .tw-header a:hover { text-decoration: underline; }
+        .table-widget .tw-header .view-all-btn {
+            color: var(--gold); font-size: 0.85rem; cursor: pointer; border: none; background: none;
+            text-decoration: underline;
+        }
+        .table-widget .tw-header .view-all-btn:hover { color: #b08a3b; }
         .table-widget table { width: 100%; border-collapse: collapse; }
         .table-widget table th {
             text-align: left; padding: 12px 0; color: #888; font-weight: 500;
@@ -199,6 +220,13 @@
         .btn-action:hover { opacity: 0.8; }
         .btn-approve { background: #4CAF50; color: white; }
         .btn-deny { background: #ff4d4d; color: white; }
+        .btn-docs {
+            background: rgba(201,164,76,0.15); color: var(--gold);
+            border: 1px solid rgba(201,164,76,0.3); padding: 4px 10px;
+            border-radius: 4px; font-size: 0.7rem; font-weight: 600; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-docs:hover { background: var(--gold); color: var(--dark); }
 
         /* Quick Actions */
         .actions-row h4 { font-family: var(--font-heading); color: var(--white); font-size: 1.1rem; margin-bottom: 20px; }
@@ -234,13 +262,13 @@
 </head>
 <body>
 
-    <!-- ===================== ACCESS DENIED ===================== -->
+    <!-- Access Denied -->
     <div id="access-denied">
         <h1>404</h1>
         <p>Oops! The page you are looking for does not exist.</p>
     </div>
 
-    <!-- ===================== DASHBOARD CONTENT ===================== -->
+    <!-- Dashboard Content -->
     <div id="dashboard-content">
         <div class="admin-header">
             <div class="logo">
@@ -278,20 +306,23 @@
             </div>
 
             <div class="tables-row">
+                <!-- Applications Table -->
                 <div class="table-widget">
                     <div class="tw-header">
-                        <h4>Recent Loan Applications</h4>
-                        <a href="#" onclick="alert('Full list coming soon!'); return false;">View All &rarr;</a>
+                        <h4>Loan Applications</h4>
+                        <button class="view-all-btn" id="toggleAppsBtn" onclick="toggleAppsView()">View All &rarr;</button>
                     </div>
                     <table>
-                        <thead><tr><th>Applicant</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
-                        <tbody id="appTableBody"><tr><td colspan="4" style="text-align:center; color:#888;">Loading data...</td></tr></tbody>
+                        <thead><tr><th>Applicant</th><th>Amount</th><th>Status</th><th>Actions</th><th>Docs</th></tr></thead>
+                        <tbody id="appTableBody"><tr><td colspan="5" style="text-align:center; color:#888;">Loading data...</td></tr></tbody>
                     </table>
                 </div>
+
+                <!-- Brokers Table -->
                 <div class="table-widget">
                     <div class="tw-header">
-                        <h4>Recent Broker Submissions</h4>
-                        <a href="#" onclick="alert('Full list coming soon!'); return false;">View All &rarr;</a>
+                        <h4>Broker Submissions</h4>
+                        <button class="view-all-btn" id="toggleBrokersBtn" onclick="toggleBrokersView()">View All &rarr;</button>
                     </div>
                     <table>
                         <thead><tr><th>Broker</th><th>Company</th><th>Status</th><th>Actions</th></tr></thead>
@@ -320,7 +351,7 @@
         </div>
     </div>
 
-    <!-- ===================== SETTINGS MODAL ===================== -->
+    <!-- Settings Modal -->
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-box">
             <span class="close-modal" onclick="closeSettings()">&times;</span>
@@ -343,7 +374,18 @@
         </div>
     </div>
 
-    <!-- ===================== PASSWORD OVERLAY ===================== -->
+    <!-- Document Viewer Modal -->
+    <div class="modal-overlay" id="docModal">
+        <div class="modal-box">
+            <span class="close-modal" onclick="closeDocs()">&times;</span>
+            <h2 id="docModalTitle">Uploaded Documents</h2>
+            <div class="doc-list" id="docList">
+                <div class="no-docs">No documents uploaded for this application.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Overlay -->
     <div id="password-overlay">
         <div class="password-box">
             <div class="lock-icon">&#128274;</div>
@@ -355,7 +397,6 @@
         </div>
     </div>
 
-    <!-- ===================== JAVASCRIPT ===================== -->
     <script>
         const CONFIG = {
             supabaseUrl: 'https://ejuykwilrdzyavbpuwty.supabase.co',
@@ -363,7 +404,6 @@
         };
         const supabaseClient = supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
 
-        // ===================== LOGIN =====================
         const urlParams = new URLSearchParams(window.location.search);
         const isAdmin = urlParams.get('secure') === 'true';
         let MASTER_PASSWORD = "AML2026";
@@ -408,7 +448,6 @@
             document.getElementById('pError').style.display = 'none';
         }
 
-        // ===================== SETTINGS =====================
         function openSettings() { document.getElementById('settingsModal').style.display = 'flex'; }
         function closeSettings() { document.getElementById('settingsModal').style.display = 'none'; }
 
@@ -452,16 +491,23 @@
             setTimeout(closeSettings, 2000);
         }
 
-        // ===================== DASHBOARD DATA =====================
+        // ===================== STATE MANAGEMENT =====================
+        let allApps = [];
+        let allBrokers = [];
+        let showAllApps = false;
+        let showAllBrokers = false;
+
         async function loadDashboardData() {
             try {
                 const { data: apps } = await supabaseClient.from('applications').select('*').order('created_at', { ascending: false });
-                document.getElementById('totalApps').textContent = apps ? apps.length : 0;
-                renderAppTable(apps);
+                allApps = apps || [];
+                document.getElementById('totalApps').textContent = allApps.length;
+                renderAppTable();
 
                 const { data: brokers } = await supabaseClient.from('brokers').select('*').order('created_at', { ascending: false });
-                document.getElementById('totalBrokers').textContent = brokers ? brokers.length : 0;
-                renderBrokerTable(brokers);
+                allBrokers = brokers || [];
+                document.getElementById('totalBrokers').textContent = allBrokers.length;
+                renderBrokerTable();
 
                 const { count: msgCount } = await supabaseClient.from('contact_messages').select('*', { count: 'exact', head: true });
                 document.getElementById('totalMsgs').textContent = msgCount || 0;
@@ -473,7 +519,18 @@
             }
         }
 
-        // ===================== UPDATE STATUS =====================
+        function toggleAppsView() {
+            showAllApps = !showAllApps;
+            document.getElementById('toggleAppsBtn').textContent = showAllApps ? 'Show Less' : 'View All &rarr;';
+            renderAppTable();
+        }
+
+        function toggleBrokersView() {
+            showAllBrokers = !showAllBrokers;
+            document.getElementById('toggleBrokersBtn').textContent = showAllBrokers ? 'Show Less' : 'View All &rarr;';
+            renderBrokerTable();
+        }
+
         async function updateApplicationStatus(id, status) {
             if (!confirm(`Mark application #${id} as "${status}"?`)) return;
             await supabaseClient.from('applications').update({ status }).eq('id', id);
@@ -486,14 +543,14 @@
             loadDashboardData();
         }
 
-        // ===================== RENDER TABLES =====================
-        function renderAppTable(apps) {
+        function renderAppTable() {
             const tbody = document.getElementById('appTableBody');
-            if (!apps || !apps.length) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#888;">No applications yet.</td></tr>`;
+            if (!allApps || !allApps.length) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#888;">No applications yet.</td></tr>`;
                 return;
             }
-            tbody.innerHTML = apps.slice(0, 3).map(a => `
+            const data = showAllApps ? allApps : allApps.slice(0, 3);
+            tbody.innerHTML = data.map(a => `
                 <tr>
                     <td>${a.first_name} ${a.last_name}</td>
                     <td>$${parseInt(a.loan_amount).toLocaleString()}</td>
@@ -502,17 +559,19 @@
                         <button class="btn-action btn-approve" onclick="updateApplicationStatus(${a.id}, 'approved')">Approve</button>
                         <button class="btn-action btn-deny" onclick="updateApplicationStatus(${a.id}, 'denied')">Deny</button>
                     </td>
+                    <td><button class="btn-docs" onclick="openDocs(${a.id}, '${a.first_name} ${a.last_name}')">📁 View Files</button></td>
                 </tr>
             `).join('');
         }
 
-        function renderBrokerTable(brokers) {
+        function renderBrokerTable() {
             const tbody = document.getElementById('brokerTableBody');
-            if (!brokers || !brokers.length) {
+            if (!allBrokers || !allBrokers.length) {
                 tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#888;">No brokers yet.</td></tr>`;
                 return;
             }
-            tbody.innerHTML = brokers.slice(0, 3).map(b => `
+            const data = showAllBrokers ? allBrokers : allBrokers.slice(0, 3);
+            tbody.innerHTML = data.map(b => `
                 <tr>
                     <td>${b.first_name} ${b.last_name}</td>
                     <td>${b.company_name || 'N/A'}</td>
@@ -524,7 +583,51 @@
                 </tr>
             `).join('');
         }
-    </script>
 
+        // ===================== DOCUMENT VIEWER =====================
+        function openDocs(appId, applicantName) {
+            document.getElementById('docModalTitle').textContent = `📁 Documents - ${applicantName}`;
+            document.getElementById('docModal').style.display = 'flex';
+            loadDocs(appId);
+        }
+
+        function closeDocs() {
+            document.getElementById('docModal').style.display = 'none';
+        }
+
+        async function loadDocs(appId) {
+            const docList = document.getElementById('docList');
+            docList.innerHTML = '<div class="no-docs">Loading documents...</div>';
+
+            try {
+                const { data: files, error } = await supabaseClient.storage
+                    .from('loan_documents')
+                    .list(`applications/${appId}`);
+
+                if (error) throw error;
+
+                if (!files || files.length === 0) {
+                    docList.innerHTML = '<div class="no-docs">No documents uploaded for this application.</div>';
+                    return;
+                }
+
+                docList.innerHTML = files.map(file => {
+                    const { data: publicUrl } = supabaseClient.storage
+                        .from('loan_documents')
+                        .getPublicUrl(`applications/${appId}/${file.name}`);
+                    return `
+                        <div class="doc-item">
+                            <span class="doc-name">📄 ${file.name}</span>
+                            <a href="${publicUrl.publicUrl}" target="_blank" class="doc-link">View / Download</a>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (err) {
+                console.error('Error loading docs:', err);
+                docList.innerHTML = '<div class="no-docs">Error loading documents.</div>';
+            }
+        }
+    </script>
 </body>
 </html>
