@@ -657,7 +657,6 @@
                     <div class="callback-box">
                         <h4>&#128222; Request a Callback</h4>
                         <p style="color:#888; font-size:0.85rem; margin-bottom:15px;">Leave your number and we will call you back within 1 hour.</p>
-                        <!-- ADDED ID="callbackForm" -->
                         <form id="callbackForm">
                             <div class="cb-row">
                                 <input type="text" id="cbName" placeholder="Your Name" required>
@@ -672,7 +671,6 @@
                 <div class="contact-form-wrap">
                     <h2>Send Us a Message</h2>
                     <p>Fill out the form below and our team will respond promptly.</p>
-                    <!-- ADDED ID="contactForm" -->
                     <form id="contactForm">
                         <div class="cf-row">
                             <div class="cf-group">
@@ -761,7 +759,6 @@
 
     <script>
         // ===================== CONFIGURATION =====================
-        // REPLACE THESE WITH YOUR ACTUAL KEYS
         const CONFIG = {
             supabaseUrl: 'https://ejuykwilrdzyavbpuwty.supabase.co',
             supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM',
@@ -771,9 +768,7 @@
             emailjsTemplateAdmin: 'template_muxh2qa'
         };
 
-        // Initialize Supabase
         const supabaseClient = supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
-        // Initialize EmailJS
         emailjs.init(CONFIG.emailjsPublicKey);
 
         // ===================== CONTACT FORM SUBMISSION =====================
@@ -796,21 +791,15 @@
                     message: document.getElementById('cfMessage').value
                 };
 
-                // Insert into contact_messages table
-                //const { data, error } = await supabaseClient
-                //    .from('contact_messages')
-                //    .insert([formData])
-                //    .select();
+                // 1. Insert into contact_messages table (FIXED: Uncommented)
+                const { data, error } = await supabaseClient
+                    .from('contact_messages')
+                    .insert([formData])
+                    .select();
 
-                //if (error) throw error;
+                if (error) throw error;
 
-                // --- TEMPORARY FALLBACK (Skipping Supabase) ---
-                console.log('✅ Supabase is offline. Sending email-only fallback.');
-                // Create a dummy ID for the email reference
-                const applicationId = Date.now().toString().slice(-6);
-                // --- END FALLBACK ---
-
-                // Send Email via EmailJS
+                // 2. Send Email via EmailJS (Fixed: Added admin_email)
                 const emailData = {
                     form_type: 'contact_message',
                     client_name: `${formData.first_name} ${formData.last_name}`,
@@ -821,7 +810,12 @@
                     admin_email: 'help@amllending.com'
                 };
 
-                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
+                // Try sending email, but don't let it crash the user experience
+                try {
+                    await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
+                } catch (emailError) {
+                    console.warn('Admin email failed, but data is safe in DB:', emailError);
+                }
 
                 alert('✅ Your message has been sent successfully! We will respond within 24 hours.');
                 document.getElementById('contactForm').reset();
@@ -859,7 +853,7 @@
 
                 if (error) throw error;
 
-                // Send Email via EmailJS
+                // Send Email via EmailJS (Fixed typo: emailData, not adminParams)
                 const emailData = {
                     form_type: 'callback_request',
                     client_name: formData.name,
@@ -867,8 +861,12 @@
                     admin_email: 'help@amllending.com'
                 };
                 
-                await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, adminParams);
-              
+                // Try sending email, but don't let it crash the user experience
+                try {
+                    await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
+                } catch (emailError) {
+                    console.warn('Admin email failed, but data is safe in DB:', emailError);
+                }
 
                 alert('✅ Callback request sent! We will call you within 1 hour.');
                 document.getElementById('callbackForm').reset();
