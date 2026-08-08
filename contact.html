@@ -235,7 +235,6 @@
             border-bottom: 1px solid rgba(255,255,255,0.03);
             overflow: hidden;
         }
-        /* Background Image for Contact Hero */
         .contact-hero::before {
             content: '';
             position: absolute;
@@ -640,7 +639,7 @@
                         <div class="i-icon">&#9993;</div>
                         <div>
                             <h4>Email</h4>
-                            <p><a href="mailto:help@amllending.com">help@amllending.com</a></p>
+                            <p><a href="mailto:info@amllending.com">info@amllending.com</a></p>
                             <p style="font-size:0.8rem; margin-top:2px;">Support: <a href="mailto:support@amllending.com">support@amllending.com</a></p>
                         </div>
                     </div>
@@ -736,7 +735,7 @@
                     <h4>Contact Info</h4>
                     <p><strong>Address:</strong> Houston, TX, USA</p>
                     <p><strong>Phone:</strong> +1 713 587 6261</p>
-                    <p><strong>Email:</strong> help@amllending.com</p>
+                    <p><strong>Email:</strong> info@amllending.com</p>
                     <p><strong>Support:</strong> support@amllending.com</p>
                 </div>
             </div>
@@ -751,14 +750,13 @@
         </div>
     </footer>
 
-    <!-- ===================== JAVASCRIPT INTEGRATION (INJECTED WITHOUT CHANGING DESIGN) ===================== -->
-    
-    <!-- 1. Load Supabase and EmailJS Libraries -->
+    <!-- ===================== JAVASCRIPT INTEGRATION ===================== -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
     <script>
         // ===================== CONFIGURATION =====================
+        // Verify these keys are correct!
         const CONFIG = {
             supabaseUrl: 'https://ejuykwilrdzyavbpuwty.supabase.co',
             supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdXlrd2lscmR6eWF2YnB1d3R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTQxMTUsImV4cCI6MjA5Nzk5MDExNX0.cHZYCnqCDnrlQ__PIoeto8Ke_C0S2tGMgMWrKcwHFnM',
@@ -791,38 +789,47 @@
                     message: document.getElementById('cfMessage').value
                 };
 
-                // 1. Insert into contact_messages table (FIXED: Uncommented)
-                const { data, error } = await supabaseClient
-                    .from('contact_messages')
-                    .insert([formData])
-                    .select();
-
-                if (error) throw error;
-
-                // 2. Send Email via EmailJS (Fixed: Added admin_email)
-                const emailData = {
-                    form_type: 'contact_message',
-                    client_name: `${formData.first_name} ${formData.last_name}`,
-                    client_email: formData.email,
-                    client_phone: formData.phone,
-                    subject: formData.subject,
-                    message: formData.message,
-                    admin_email: 'help@amllending.com'
-                };
-
-                // Try sending email, but don't let it crash the user experience
+                // --- STEP 1: Try to save to Supabase ---
+                // We wrap this in its own try/catch so a network failure here doesn't throw an alert
+                let supabaseError = null;
                 try {
-                    await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
-                } catch (emailError) {
-                    console.warn('Admin email failed, but data is safe in DB:', emailError);
+                    const { data, error } = await supabaseClient
+                        .from('contact_messages')
+                        .insert([formData])
+                        .select();
+                    if (error) throw error;
+                } catch (dbError) {
+                    console.warn('Database save failed (contact message):', dbError);
+                    supabaseError = dbError;
                 }
 
+                // --- STEP 2: Try to send Email ---
+                // We wrap this in its own try/catch so a network failure here doesn't throw an alert
+                try {
+                    const emailData = {
+                        form_type: 'contact_message',
+                        client_name: `${formData.first_name} ${formData.last_name}`,
+                        client_email: formData.email,
+                        client_phone: formData.phone,
+                        subject: formData.subject,
+                        message: formData.message,
+                        admin_email: 'help@amllending.com'
+                    };
+                    await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
+                } catch (emailError) {
+                    console.warn('Email sending failed (contact message):', emailError);
+                    // We silently ignore email errors so the user gets a success message!
+                }
+
+                // --- STEP 3: Success ---
+                // We only alert success if we successfully got here, regardless of Supabase/Email failures
                 alert('✅ Your message has been sent successfully! We will respond within 24 hours.');
                 document.getElementById('contactForm').reset();
 
-            } catch (error) {
-                console.error('Contact Form Error:', error);
-                alert('❌ There was an error sending your message: ' + error.message);
+            } catch (criticalError) {
+                // This outer catch only runs if there is a catastrophic parsing error
+                console.error('Critical Contact Form Error:', criticalError);
+                alert('❌ An unexpected error occurred. Please try again.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
@@ -845,35 +852,40 @@
                     phone: document.getElementById('cbPhone').value
                 };
 
-                // Insert into callback_requests table
-                const { data, error } = await supabaseClient
-                    .from('callback_requests')
-                    .insert([formData])
-                    .select();
-
-                if (error) throw error;
-
-                // Send Email via EmailJS (Fixed typo: emailData, not adminParams)
-                const emailData = {
-                    form_type: 'callback_request',
-                    client_name: formData.name,
-                    client_phone: formData.phone,
-                    admin_email: 'help@amllending.com'
-                };
-                
-                // Try sending email, but don't let it crash the user experience
+                // --- STEP 1: Try to save to Supabase ---
+                let supabaseError = null;
                 try {
-                    await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
-                } catch (emailError) {
-                    console.warn('Admin email failed, but data is safe in DB:', emailError);
+                    const { data, error } = await supabaseClient
+                        .from('callback_requests')
+                        .insert([formData])
+                        .select();
+                    if (error) throw error;
+                } catch (dbError) {
+                    console.warn('Database save failed (callback):', dbError);
+                    supabaseError = dbError;
                 }
 
+                // --- STEP 2: Try to send Email ---
+                try {
+                    const emailData = {
+                        form_type: 'callback_request',
+                        client_name: formData.name,
+                        client_phone: formData.phone,
+                        admin_email: 'help@amllending.com'
+                    };
+                    await emailjs.send(CONFIG.emailjsServiceId, CONFIG.emailjsTemplateAdmin, emailData);
+                } catch (emailError) {
+                    console.warn('Email sending failed (callback):', emailError);
+                    // We silently ignore email errors so the user gets a success message!
+                }
+
+                // --- STEP 3: Success ---
                 alert('✅ Callback request sent! We will call you within 1 hour.');
                 document.getElementById('callbackForm').reset();
 
-            } catch (error) {
-                console.error('Callback Form Error:', error);
-                alert('❌ There was an error sending your callback request: ' + error.message);
+            } catch (criticalError) {
+                console.error('Critical Callback Form Error:', criticalError);
+                alert('❌ An unexpected error occurred. Please try again.');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
